@@ -5,6 +5,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class HelperClass {
 
+    private int num_of_ticks = 1440 ;
+    private double PI = 22 / 7;
+    private double wheel_radius = 10.16;
+    private double wheel_circumference = (2 * PI * wheel_radius);
 
 
 
@@ -126,6 +130,161 @@ public class HelperClass {
         right_back_wheel.setPower(dc_motor_power_adapter(power));
         right_front_wheel.setPower(dc_motor_power_adapter(power));
     }
+
+
+
+
+
+    /**
+     * METHOD: cm_to_ticks
+     * <p>
+     * Used to convert cm to ticks
+     * <p>
+     * parameters: double distance
+     *
+     * return int
+     */
+    private int cm_to_ticks(double distance) {
+
+        int ticks_to_go = (int)((distance * num_of_ticks) / wheel_circumference);
+        return ticks_to_go;
+    }
+
+
+
+
+
+    /**
+     *METHOD: left_side_position
+     *
+     * set the position of motors of the left side motors
+     *
+     * parameters:DcMotor left_back_motor ,DcMotor left_front_motor , double distance
+     *
+     * return void
+     */
+
+    public void left_side_position (DcMotor left_back_wheel , DcMotor left_front_wheel ,double distance )
+    {
+
+        left_back_wheel.setTargetPosition(cm_to_ticks(distance));
+        left_front_wheel.setTargetPosition(cm_to_ticks(distance));
+
+        left_back_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left_front_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+
+
+
+
+    /**
+     *METHOD: right_side_position
+     *
+     *
+     *
+     * set the position of motors of the right side motors
+     *
+     * parameters:DcMotor right_back_motor ,DcMotor right_front_motor , double distance
+     *
+     * return void
+     */
+
+    public void right_side_position (DcMotor right_back_wheel , DcMotor right_front_wheel,double distance)
+    {
+        right_back_wheel.setTargetPosition(cm_to_ticks(distance));
+        right_front_wheel.setTargetPosition(cm_to_ticks(distance));
+
+
+        right_back_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right_front_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+
+
+
+
+
+
+
+    /**
+     *METHOD: left_is_busy
+     *
+     * check if the left side motors have reached their pre set position or not
+     *
+     * parameters:DcMotor left_back_motor ,DcMotor left_front_motor
+     *
+     * return boolean
+     */
+    public boolean left_is_busy (DcMotor left_back_wheel , DcMotor left_front_wheel) //wait
+    {
+        return(left_back_wheel.isBusy() && left_front_wheel.isBusy());
+    }
+
+
+
+
+
+
+
+    /**
+     *METHOD: right_is_busy
+     *
+     * check if the right side motors have reached their pre set position or not
+     *
+     * parameters:DcMotor right_back_motor ,DcMotor right_front_motor
+     *
+     * return boolean
+     */
+
+    public boolean right_is_busy (DcMotor right_back_wheel , DcMotor right_front_wheel)// wait
+    {
+        return(right_back_wheel.isBusy() && right_front_wheel.isBusy());
+    }
+
+
+
+
+
+
+    /**
+     *METHOD: move_tank_with_encoder
+     *
+     * move using the encoder
+     *
+     * parameters: DcMotor left_back_wheel , DcMotor left_front_wheel,
+     *                                        DcMotor right_back_wheel, DcMotor right_front_wheel,
+     *                                        double left_side_power, double right_side_power,double distance
+     *
+     * return void
+     */
+    public void move_tank_with_encoder(DcMotor left_back_wheel , DcMotor left_front_wheel,
+                                       DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                       double left_side_power, double right_side_power,double distance){
+
+        left_back_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        left_front_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right_back_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right_front_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        left_side_position(left_back_wheel,left_front_wheel,distance);
+        right_side_position(right_back_wheel,right_front_wheel,distance);
+
+        set_left_side_power(left_back_wheel,left_front_wheel,left_side_power);
+        set_right_side_power(right_back_wheel,right_front_wheel,right_side_power);
+
+        while(left_is_busy( left_back_wheel , left_front_wheel) && right_is_busy(right_back_wheel ,right_front_wheel)) {
+
+        }
+
+        set_left_side_power(left_back_wheel,left_front_wheel,0);
+        set_right_side_power(right_back_wheel,right_front_wheel,0);
+
+
+
+    }
+
 
 
 
