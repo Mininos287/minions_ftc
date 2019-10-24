@@ -11,6 +11,7 @@ public class HelperClass {
     private double wheel_circumference = (2 * PI * wheel_radius);
     private double robot_radius = 10.16; // habda
     private double robot_spin_circumference = (2 * PI * robot_radius) ;
+    private double robot_turn_circumference = (2 * PI * (2*robot_radius)) ;
 
 
 
@@ -360,6 +361,38 @@ public class HelperClass {
     }
 
 */
+
+
+
+
+
+
+
+    /**
+     *METHOD: Hankash_Turn
+     *
+     *  Turn the robot
+     *
+     * parameters: right_back_wheel, right_front_wheel,
+     *                              left_back_wheel, left_front_wheel,
+     *                              power , Given_Degree , direction
+     *
+     * return void
+     */
+
+    public void Hankash_Turn(DcMotor right_back_wheel, DcMotor right_front_wheel,
+                             DcMotor left_back_wheel, DcMotor left_front_wheel,
+                             double power , int Given_Degree , char direction)
+    {
+        double num_of_rotations = (robot_turn_circumference/wheel_circumference);
+        double degrees_per_rotation = 360 / num_of_rotations ;
+        double distance = (Given_Degree*wheel_circumference/degrees_per_rotation);
+        if(direction == 'R') {
+            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel, power, 0, distance);
+        }else if(direction == 'L'){
+            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel, 0, power, distance);
+        }
+    }
 
 
 
