@@ -99,39 +99,20 @@ public class HelperClass {
 
 
 
-
-
     /**
-     * METHOD: set_left_side_power
+     * METHOD: side_power
      *
-     * Provide the two wheels on the left side with the same power
+     * Provide the two wheels on the same side with the same power
      *
-     * parameters: double power
-     * return double
+     * parameters: double power , DcMotor first_motor , DcMotor second_motor
+     * return void
      */
-    private void set_left_side_power(DcMotor left_back_wheel, DcMotor left_front_wheel, double power){
-        left_back_wheel.setPower(dc_motor_power_adapter(power));
-        left_front_wheel.setPower(dc_motor_power_adapter(power));
+    private void side_power(DcMotor first_motor, DcMotor second_motor, double power){
+        first_motor.setPower(dc_motor_power_adapter(power));
+        second_motor.setPower(dc_motor_power_adapter(power));
     }
 
 
-
-
-
-
-    /**
-     * METHOD: set_right_side_power
-     *
-     * Provide the two wheels on the right side with the same power
-     *
-     * parameters: right_back_wheel,right_front_wheel, double power
-     *
-     * return double
-     */
-    private void set_right_side_power(DcMotor right_back_wheel, DcMotor right_front_wheel, double power){
-        right_back_wheel.setPower(dc_motor_power_adapter(power));
-        right_front_wheel.setPower(dc_motor_power_adapter(power));
-    }
 
 
 
@@ -156,50 +137,26 @@ public class HelperClass {
 
 
 
+
+
     /**
-     *METHOD: left_side_position
+     *METHOD: side_position
      *
-     * set the position of motors of the left side motors
+     * set the position of motors of the same side motors
      *
-     * parameters:DcMotor left_back_motor ,DcMotor left_front_motor , double distance
+     * parameters:DcMotor first_motor , DcMotor second_motor, double distance
      *
      * return void
      */
 
-    public void left_side_position (DcMotor left_back_wheel , DcMotor left_front_wheel ,double distance )
+    public void side_position (DcMotor first_motor , DcMotor second_motor ,double distance )
     {
 
-        left_back_wheel.setTargetPosition(cm_to_ticks(distance));
-        left_front_wheel.setTargetPosition(cm_to_ticks(distance));
+        first_motor.setTargetPosition(cm_to_ticks(distance));
+        second_motor.setTargetPosition(cm_to_ticks(distance));
 
-        left_back_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        left_front_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-
-
-
-
-
-    /**
-     *METHOD: right_side_position
-     *
-     *
-     *
-     * set the position of motors of the right side motors
-     *
-     * parameters:DcMotor right_back_motor ,DcMotor right_front_motor , double distance
-     *
-     * return void
-     */
-
-    public void right_side_position (DcMotor right_back_wheel , DcMotor right_front_wheel,double distance)
-    {
-        right_back_wheel.setTargetPosition(cm_to_ticks(distance));
-        right_front_wheel.setTargetPosition(cm_to_ticks(distance));
-
-
-        right_back_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        right_front_wheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
 
@@ -208,41 +165,21 @@ public class HelperClass {
 
 
 
-
     /**
-     *METHOD: left_is_busy
+     *METHOD: side_is_busy
      *
-     * check if the left side motors have reached their pre set position or not
+     * check if the same side motors have reached their pre set position or not
      *
-     * parameters:DcMotor left_back_motor ,DcMotor left_front_motor
+     * parameters:DcMotor first_motor , DcMotor second_motor
      *
      * return boolean
      */
-    public boolean left_is_busy (DcMotor left_back_wheel , DcMotor left_front_wheel) //wait
+    public boolean side_is_busy (DcMotor first_motor , DcMotor second_motor) //wait
     {
-        return(left_back_wheel.isBusy() && left_front_wheel.isBusy());
+        return(first_motor.isBusy() && second_motor.isBusy());
     }
 
 
-
-
-
-
-
-    /**
-     *METHOD: right_is_busy
-     *
-     * check if the right side motors have reached their pre set position or not
-     *
-     * parameters:DcMotor right_back_motor ,DcMotor right_front_motor
-     *
-     * return boolean
-     */
-
-    public boolean right_is_busy (DcMotor right_back_wheel , DcMotor right_front_wheel)// wait
-    {
-        return(right_back_wheel.isBusy() && right_front_wheel.isBusy());
-    }
 
 
 
@@ -256,7 +193,7 @@ public class HelperClass {
      *
      * parameters: DcMotor left_back_wheel , DcMotor left_front_wheel,
      *                                        DcMotor right_back_wheel, DcMotor right_front_wheel,
-     *                                        double left_side_power, double right_side_power,double distance
+     *                                        double side_power,double distance
      *
      * return void
      */
@@ -270,18 +207,18 @@ public class HelperClass {
         right_front_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-        left_side_position(left_back_wheel,left_front_wheel,distance);
-        right_side_position(right_back_wheel,right_front_wheel,distance);
+        side_position(left_back_wheel,left_front_wheel,distance);
+        side_position(right_back_wheel,right_front_wheel,distance);
 
-        set_left_side_power(left_back_wheel,left_front_wheel,left_side_power);
-        set_right_side_power(right_back_wheel,right_front_wheel,right_side_power);
+        side_power(left_back_wheel,left_front_wheel,left_side_power);
+        side_power(right_back_wheel,right_front_wheel,right_side_power);
 
-        while(left_is_busy( left_back_wheel , left_front_wheel) && right_is_busy(right_back_wheel ,right_front_wheel)) {
+        while(side_is_busy( left_back_wheel , left_front_wheel) && side_is_busy(right_back_wheel ,right_front_wheel)) {
 
         }
 
-        set_left_side_power(left_back_wheel,left_front_wheel,0);
-        set_right_side_power(right_back_wheel,right_front_wheel,0);
+        side_power(left_back_wheel,left_front_wheel,0);
+        side_power(right_back_wheel,right_front_wheel,0);
 
 
 
@@ -297,7 +234,9 @@ public class HelperClass {
      * METHOD: move_tank_without_encoder
      *
      * Used to give the same power to the right side and the same power to the left side
-     * parameters: power
+     * parameters: DcMotor left_back_wheel, DcMotor left_front_wheel,
+     *                                           DcMotor right_back_wheel, DcMotor right_front_wheel,
+     *                                            side_power
      *
      * return double
      */
@@ -305,9 +244,9 @@ public class HelperClass {
                                           DcMotor right_back_wheel, DcMotor right_front_wheel,
                                           double left_side_power, double right_side_power){
 
-        set_left_side_power(left_back_wheel, left_front_wheel, left_side_power);
+        side_power(left_back_wheel, left_front_wheel, left_side_power);
 
-        set_left_side_power(right_back_wheel, right_front_wheel, right_side_power);
+        side_power(right_back_wheel, right_front_wheel, right_side_power);
     }
 
 
@@ -393,25 +332,6 @@ public class HelperClass {
             move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel, 0, power, distance);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
