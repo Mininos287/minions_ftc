@@ -3,6 +3,8 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import static java.lang.Boolean.FALSE;
+
 public class HelperClass {
 
     private int num_of_ticks = 1440 ;
@@ -199,7 +201,7 @@ public class HelperClass {
      */
     public void move_tank_with_encoder(DcMotor left_back_wheel , DcMotor left_front_wheel,
                                        DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                       double left_side_power, double right_side_power,double distance){
+                                       double left_side_power, double right_side_power,double distance,boolean break_at_end){
 
         left_back_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         left_front_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -217,9 +219,12 @@ public class HelperClass {
 
         }
 
-        side_power(left_back_wheel,left_front_wheel,0);
-        side_power(right_back_wheel,right_front_wheel,0);
 
+
+        if(break_at_end == 1) {
+            side_power(left_back_wheel, left_front_wheel, 0);
+            side_power(right_back_wheel, right_front_wheel, 0);
+        }
 
 
     }
@@ -332,6 +337,80 @@ public class HelperClass {
             move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel, 0, power, distance);
         }
     }
+
+
+    /**
+     *METHOD: acceleration
+     *
+     *  accelerate the power of robot
+     *
+     * parameters: right_back_wheel, right_front_wheel,
+     *                              left_back_wheel, left_front_wheel,
+     *                              power, distance, number of stages
+     *
+     * return void
+     */
+
+    public void acceleration(DcMotor left_back_wheel,DcMotor left_front_wheel,DcMotor right_back_wheel,DcMotor right_front_wheel, double power,double distance,int number_of_stages){
+        double distance_in_stage = distance/number_of_stages;
+        double power_in_stage = power/number_of_stages;
+        double total_power =0;
+        for(int done_stages=0; done_stages<number_of_stages;done_stages++){
+            total_power+=power_in_stage;
+            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel,total_power, total_power, distance_in_stage,FALSE);
+
+        }
+    }
+
+
+
+    /**
+     *METHOD: deceleration
+     *
+     *  decelerate the power of robot
+     *
+     * parameters: right_back_wheel, right_front_wheel,
+     *                              left_back_wheel, left_front_wheel,
+     *                              power, distance, number of stages
+     *
+     * return void
+     */
+
+
+    public void deceleration(DcMotor left_back_wheel,DcMotor left_front_wheel,DcMotor right_back_wheel,DcMotor right_front_wheel,double power,double distance,int number_of_stages) {
+        double distance_in_stage = distance / number_of_stages;
+        double power_in_stage = power / number_of_stages;
+        double total_power = power
+        for (int done_stages = 0; done_stages < number_of_stages; done_stages++) {
+            total_power -= power_in_stage;
+            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel,total_power, total_power, distance_in_stage,FALSE);
+
+        }
+
+        /**
+         *METHOD: acceleration_move_deceleration
+         *
+         *  used to decrease the moment of inertia
+         *
+         * parameters: right_back_wheel, right_front_wheel,
+         *                              left_back_wheel, left_front_wheel,
+         *                              power,acceleration_distance,deceleration_distance,
+         *                              total_1`
+         *                              -+
+         *                          distance, number of stages
+         *
+         * return void
+         */
+
+
+        public void acceleration_move_deceleration(DcMotor left_back_wheel,DcMotor left_front_wheel,DcMotor right_back_wheel,DcMotor right_front_wheel,double acceleration_distance,double total_distance,double deceleration_distance,double power,int number_of_stages){
+         acceleration( left_back_wheel, left_front_wheel, right_back_wheel,  right_front_wheel,power,acceleration_distance,number_of_stages);
+         move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel,  right_front_wheel,power,power,total_distance,FALSE);
+         deceleration(left_back_wheel, left_front_wheel, right_back_wheel,  right_front_wheel,power,deceleration_distance,number_of_stages);
+
+
+        }
+
 
 
 
