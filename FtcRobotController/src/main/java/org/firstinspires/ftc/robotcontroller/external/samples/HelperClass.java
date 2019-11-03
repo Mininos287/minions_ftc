@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 
 public class HelperClass {
 
@@ -277,10 +278,10 @@ public class HelperClass {
         double distance = (Given_Degree*wheel_circumference/degrees_per_rotation);
 
         if(direction == 'R'){
-            move_tank_with_encoder(right_back_wheel,right_front_wheel,left_back_wheel, left_front_wheel,power,-power,distance );
+            move_tank_with_encoder(right_back_wheel,right_front_wheel,left_back_wheel, left_front_wheel,power,-power,distance,TRUE );
         }
         else if(direction == 'L'){
-            move_tank_with_encoder(right_back_wheel,right_front_wheel,left_back_wheel, left_front_wheel,-power,power,distance );
+            move_tank_with_encoder(right_back_wheel,right_front_wheel,left_back_wheel, left_front_wheel,-power,power,distance,TRUE );
         }
     }
 
@@ -332,9 +333,9 @@ public class HelperClass {
         double degrees_per_rotation = 360 / num_of_rotations ;
         double distance = (Given_Degree*wheel_circumference/degrees_per_rotation);
         if(direction == 'R') {
-            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel, power, 0, distance);
+            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel, power, 0, distance,TRUE);
         }else if(direction == 'L'){
-            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel, 0, power, distance);
+            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel, 0, power, distance,TRUE);
         }
     }
 
@@ -383,9 +384,10 @@ public class HelperClass {
         double total_power = power
         for (int done_stages = 0; done_stages < number_of_stages; done_stages++) {
             total_power -= power_in_stage;
-            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel,total_power, total_power, distance_in_stage,FALSE);
+            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel, total_power, total_power, distance_in_stage, FALSE);
 
         }
+    }
 
         /**
          *METHOD: acceleration_move_deceleration
