@@ -222,13 +222,14 @@ public class HelperClass {
 
 
 
-        if(break_at_end == 1) {
+        if(break_at_end == TRUE) {
             side_power(left_back_wheel, left_front_wheel, 0);
             side_power(right_back_wheel, right_front_wheel, 0);
         }
 
 
     }
+
 
 
 
@@ -246,14 +247,20 @@ public class HelperClass {
      *
      * return double
      */
-    public void move_tank_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
-                                          DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                          double left_side_power, double right_side_power){
+    public void move_tank_without_encoder(DcMotor first_motor, DcMotor second_motor,
+                                          DcMotor third_motor, DcMotor fourth_motor,
+                                          double first_side_power, double second_side_power){
 
-        side_power(left_back_wheel, left_front_wheel, left_side_power);
+        side_power(first_motor, second_motor, first_side_power);
 
-        side_power(right_back_wheel, right_front_wheel, right_side_power);
+        side_power(third_motor, fourth_motor, second_side_power);
     }
+
+
+
+
+
+
 
 
 
@@ -340,6 +347,14 @@ public class HelperClass {
     }
 
 
+
+
+
+
+
+
+
+
     /**
      *METHOD: acceleration
      *
@@ -362,6 +377,12 @@ public class HelperClass {
 
         }
     }
+
+
+
+
+
+
 
 
 
@@ -389,6 +410,10 @@ public class HelperClass {
         }
     }
 
+
+
+
+
         /**
          *METHOD: acceleration_move_deceleration
          *
@@ -412,6 +437,114 @@ public class HelperClass {
 
 
         }
+
+
+    /**
+     *METHOD: move_forward
+     *
+     *  used to move the robot backward/forward
+     *
+     * parameters: left_back_wheel, right_front_wheel,
+     *                     left_front_wheel,right_back_wheel,
+     *                     first_side_power,second_side_power
+     *
+     * return void
+     */
+
+
+        public void move_forward(DcMotor left_back_wheel, DcMotor left_front_wheel,
+                                 DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                 double first_side_power, double second_side_power){
+            move_tank_without_encoder(left_back_wheel, right_front_wheel,
+                    left_front_wheel,right_back_wheel,
+                    first_side_power,second_side_power);
+
+        }
+
+    /**
+     *METHOD: move_side
+     *
+     *  used to move the robot right/left
+     *
+     * parameters: left_back_wheel, right_front_wheel,
+     *                 left_front_wheel,right_back_wheel,
+     *                 first_side_power,second_side_power
+     *
+     * return void
+     */
+
+    public void move_side(DcMotor left_back_wheel, DcMotor left_front_wheel,
+                             DcMotor right_back_wheel, DcMotor right_front_wheel,
+                             double first_side_power, double second_side_power){
+        move_tank_without_encoder(left_back_wheel, right_front_wheel,
+                left_front_wheel,right_back_wheel,
+                first_side_power,second_side_power);
+
+    }
+
+    /**
+     *METHOD: move_diagonal_right
+     *
+     *  used to move the robot diagonally right backward/forward
+     *
+     * parameters: left_back_wheel, right_front_wheel,
+     *                 left_front_wheel,right_back_wheel,
+     *                 first_side_power,second_side_power
+     *
+     * return void
+     */
+
+    public void move_diagonal_right(DcMotor left_back_wheel, DcMotor left_front_wheel,
+                             DcMotor right_back_wheel, DcMotor right_front_wheel,
+                             double first_side_power, double second_side_power){
+        move_tank_without_encoder(left_back_wheel, right_front_wheel,
+                left_front_wheel,right_back_wheel,
+                first_side_power,second_side_power);
+
+    }
+
+    /**
+     *METHOD: move_diagonal_left
+     *
+     *  used to move the robot diagonally left backward/forward
+     *
+     * parameters: left_back_wheel, right_front_wheel,
+     *                 left_front_wheel,right_back_wheel,
+     *                 first_side_power,second_side_power
+     *
+     * return void
+     */
+    public void move_diagonal_left(DcMotor left_back_wheel, DcMotor left_front_wheel,
+                                   DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                   double first_side_power, double second_side_power){
+        move_tank_without_encoder(left_back_wheel, right_front_wheel,
+                left_front_wheel,right_back_wheel,
+                first_side_power,second_side_power);
+
+    }
+
+    /**
+     *METHOD:  spin_without_encoder
+     *
+     *  used to spin the robot without encoder clockwise or anti-clockwise
+     *
+     * parameters: left_back_wheel, left_front_wheel,
+     *                right_back_wheel,right_front_wheel,
+     *                 first_side_power,second_side_power
+     *
+     * return void
+     */
+
+    public void spin_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
+                                   DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                   double first_side_power, double second_side_power){
+        move_tank_without_encoder(left_back_wheel, left_front_wheel,
+               right_back_wheel,right_front_wheel,
+                first_side_power,second_side_power);
+
+    }
+
+
 
 
 
