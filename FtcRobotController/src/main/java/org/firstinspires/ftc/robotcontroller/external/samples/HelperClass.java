@@ -190,7 +190,7 @@ public class HelperClass {
 
 
     /**
-     *METHOD: move_tank_with_encoder
+     *METHOD: move_holonomic_with_encoder
      *
      * move using the encoder
      *
@@ -200,36 +200,35 @@ public class HelperClass {
      *
      * return void
      */
-    public void move_tank_with_encoder(DcMotor left_back_wheel , DcMotor left_front_wheel,
-                                       DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                       double left_side_power, double right_side_power,double distance,boolean break_at_end){
+    public void move_holonomic_with_encoder(DcMotor first_motor , DcMotor second_motor,
+                                       DcMotor third_motor, DcMotor fourth_motor,
+                                       double first_power, double second_power,double distance,boolean break_at_end){
 
-        left_back_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left_front_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right_back_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right_front_wheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-        side_position(left_back_wheel,left_front_wheel,distance);
-        side_position(right_back_wheel,right_front_wheel,distance);
+        side_position(first_motor,second_motor,distance);
+        side_position(third_motor,fourth_motor,distance);
 
-        side_power(left_back_wheel,left_front_wheel,left_side_power);
-        side_power(right_back_wheel,right_front_wheel,right_side_power);
+        side_power(first_motor,second_motor,first_power);
+        side_power(third_motor,fourth_motor,second_power);
 
-        while(side_is_busy( left_back_wheel , left_front_wheel) && side_is_busy(right_back_wheel ,right_front_wheel)) {
+        while(side_is_busy( first_motor , second_motor) && side_is_busy(third_motor ,fourth_motor)) {
 
         }
 
 
 
         if(break_at_end == TRUE) {
-            side_power(left_back_wheel, left_front_wheel, 0);
-            side_power(right_back_wheel, right_front_wheel, 0);
+            side_power(first_motor, second_motor, 0);
+            side_power(third_motor, fourth_motor, 0);
         }
 
 
     }
-
 
 
 
@@ -262,99 +261,6 @@ public class HelperClass {
 
 
 
-
-
-
-    /**
-     *METHOD: Hankash_spin
-     *
-     ' Spin the robot
-     *
-     * parameters:DcMotor right_back_motor ,DcMotor right_front_motor, left_back_wheel, left_front_wheel,
-     *                               power , Given_Degree , direction
-     *
-     * return void
-     *
-     */
-
-    public void Hankash_spin(DcMotor right_back_wheel, DcMotor right_front_wheel,
-                             DcMotor left_back_wheel, DcMotor left_front_wheel,
-                             double power , int Given_Degree , char direction){
-        double num_of_rotations = (robot_spin_circumference/wheel_circumference);
-        double degrees_per_rotation = 360 / num_of_rotations ;
-        double distance = (Given_Degree*wheel_circumference/degrees_per_rotation);
-
-        if(direction == 'R'){
-            move_tank_with_encoder(right_back_wheel,right_front_wheel,left_back_wheel, left_front_wheel,power,-power,distance,TRUE );
-        }
-        else if(direction == 'L'){
-            move_tank_with_encoder(right_back_wheel,right_front_wheel,left_back_wheel, left_front_wheel,-power,power,distance,TRUE );
-        }
-    }
-
-
-
-     /*
-
-    // for memory
-
-    public double degress_of_turning (double degress )
-    {
-        return(degress * distance_between_wheels * degconv );
-    }
-
-
-
-
-    public double degress_of_turningat (double degress )
-    {
-      return ( 2 * 3.14 * distance_between_wheels * degress / 360  )
-
-    }
-
-*/
-
-
-
-
-
-
-
-    /**
-     *METHOD: Hankash_Turn
-     *
-     *  Turn the robot
-     *
-     * parameters: right_back_wheel, right_front_wheel,
-     *                              left_back_wheel, left_front_wheel,
-     *                              power , Given_Degree , direction
-     *
-     * return void
-     */
-
-    public void Hankash_Turn(DcMotor right_back_wheel, DcMotor right_front_wheel,
-                             DcMotor left_back_wheel, DcMotor left_front_wheel,
-                             double power , int Given_Degree , char direction)
-    {
-        double num_of_rotations = (robot_turn_circumference/wheel_circumference);
-        double degrees_per_rotation = 360 / num_of_rotations ;
-        double distance = (Given_Degree*wheel_circumference/degrees_per_rotation);
-        if(direction == 'R') {
-            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel, power, 0, distance,TRUE);
-        }else if(direction == 'L'){
-            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel, 0, power, distance,TRUE);
-        }
-    }
-
-
-
-
-
-
-
-
-
-
     /**
      *METHOD: acceleration
      *
@@ -373,7 +279,7 @@ public class HelperClass {
         double total_power =0;
         for(int done_stages=0; done_stages<number_of_stages;done_stages++){
             total_power+=power_in_stage;
-            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel,total_power, total_power, distance_in_stage,FALSE);
+            move_holonomic_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel,total_power, total_power, distance_in_stage,FALSE);
 
         }
     }
@@ -402,10 +308,10 @@ public class HelperClass {
     public void deceleration(DcMotor left_back_wheel,DcMotor left_front_wheel,DcMotor right_back_wheel,DcMotor right_front_wheel,double power,double distance,int number_of_stages) {
         double distance_in_stage = distance / number_of_stages;
         double power_in_stage = power / number_of_stages;
-        double total_power = power
+        double total_power = power ;
         for (int done_stages = 0; done_stages < number_of_stages; done_stages++) {
             total_power -= power_in_stage;
-            move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel, total_power, total_power, distance_in_stage, FALSE);
+            move_holonomic_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel, right_front_wheel, total_power, total_power, distance_in_stage, FALSE);
 
         }
     }
@@ -430,9 +336,11 @@ public class HelperClass {
          */
 
 
-        public void acceleration_move_deceleration(DcMotor left_back_wheel,DcMotor left_front_wheel,DcMotor right_back_wheel,DcMotor right_front_wheel,double acceleration_distance,double total_distance,double deceleration_distance,double power,int number_of_stages){
+        public void acceleration_move_deceleration(DcMotor left_back_wheel,DcMotor left_front_wheel,DcMotor right_back_wheel,DcMotor right_front_wheel,
+                                                   double acceleration_distance,double total_distance,double deceleration_distance,
+                                                   double power,int number_of_stages){
          acceleration( left_back_wheel, left_front_wheel, right_back_wheel,  right_front_wheel,power,acceleration_distance,number_of_stages);
-         move_tank_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel,  right_front_wheel,power,power,total_distance,FALSE);
+            move_holonomic_with_encoder(left_back_wheel, left_front_wheel, right_back_wheel,  right_front_wheel,power,power,total_distance,FALSE);
          deceleration(left_back_wheel, left_front_wheel, right_back_wheel,  right_front_wheel,power,deceleration_distance,number_of_stages);
 
 
@@ -440,7 +348,7 @@ public class HelperClass {
 
 
     /**
-     *METHOD: move_forward
+     *METHOD: move_without_encoder
      *
      *  used to move the robot backward/forward
      *
@@ -452,76 +360,81 @@ public class HelperClass {
      */
 
 
-        public void move_forward(DcMotor left_back_wheel, DcMotor left_front_wheel,
+        public void move_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
                                  DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                 double first_side_power, double second_side_power){
+                                 double power ,char direction )
+        {
+            if(direction == 'F')
+            {
+                move_tank_without_encoder(left_back_wheel, right_front_wheel,
+                        left_front_wheel, right_back_wheel,
+                        power,power);
+            }else if(direction == 'B')
+            {
             move_tank_without_encoder(left_back_wheel, right_front_wheel,
-                    left_front_wheel,right_back_wheel,
-                    first_side_power,second_side_power);
+                    left_front_wheel, right_back_wheel,
+                    -power,-power);
+            }
+
+
 
         }
 
     /**
-     *METHOD: move_side
+     *METHOD: move_side_without_encoder
      *
      *  used to move the robot right/left
      *
-     * parameters: left_back_wheel, right_front_wheel,
-     *                 left_front_wheel,right_back_wheel,
-     *                 first_side_power,second_side_power
+     * parameters: ( left_back_wheel,  left_front_wheel,
+     *                               right_back_wheel,  right_front_wheel,
+     *                               power,  direction
      *
      * return void
      */
 
-    public void move_side(DcMotor left_back_wheel, DcMotor left_front_wheel,
+    public void move_side_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
                              DcMotor right_back_wheel, DcMotor right_front_wheel,
-                             double first_side_power, double second_side_power){
+                             double power, char direction )
+
+    {
+        if(direction == 'R') {
+            move_tank_without_encoder(left_back_wheel, right_front_wheel,
+                    left_front_wheel, right_back_wheel,
+                    -power, power );
+        }else if(direction == 'L') {
         move_tank_without_encoder(left_back_wheel, right_front_wheel,
-                left_front_wheel,right_back_wheel,
-                first_side_power,second_side_power);
+                left_front_wheel, right_back_wheel,
+                power, -power );
+    }
 
     }
 
     /**
-     *METHOD: move_diagonal_right
+     *METHOD: move_diagonal
      *
      *  used to move the robot diagonally right backward/forward
      *
      * parameters: left_back_wheel, right_front_wheel,
      *                 left_front_wheel,right_back_wheel,
-     *                 first_side_power,second_side_power
+     *                 power,direction
      *
      * return void
      */
 
-    public void move_diagonal_right(DcMotor left_back_wheel, DcMotor left_front_wheel,
+    public void move_diagonal(DcMotor left_back_wheel, DcMotor left_front_wheel,
                              DcMotor right_back_wheel, DcMotor right_front_wheel,
-                             double first_side_power, double second_side_power){
-        move_tank_without_encoder(left_back_wheel, right_front_wheel,
-                left_front_wheel,right_back_wheel,
-                first_side_power,second_side_power);
-
+                             double power, char direction )
+    {
+        if(direction == 'R'){
+            move_tank_without_encoder(left_back_wheel, right_front_wheel, left_front_wheel, right_back_wheel,
+                    0, power);
+            }else if(direction == 'L'){
+            move_tank_without_encoder(left_back_wheel, right_front_wheel,left_front_wheel,right_back_wheel,
+                    power,0);
+        }
     }
 
-    /**
-     *METHOD: move_diagonal_left
-     *
-     *  used to move the robot diagonally left backward/forward
-     *
-     * parameters: left_back_wheel, right_front_wheel,
-     *                 left_front_wheel,right_back_wheel,
-     *                 first_side_power,second_side_power
-     *
-     * return void
-     */
-    public void move_diagonal_left(DcMotor left_back_wheel, DcMotor left_front_wheel,
-                                   DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                   double first_side_power, double second_side_power){
-        move_tank_without_encoder(left_back_wheel, right_front_wheel,
-                left_front_wheel,right_back_wheel,
-                first_side_power,second_side_power);
 
-    }
 
     /**
      *METHOD:  spin_without_encoder
@@ -530,23 +443,156 @@ public class HelperClass {
      *
      * parameters: left_back_wheel, left_front_wheel,
      *                right_back_wheel,right_front_wheel,
-     *                 first_side_power,second_side_power
+     *                 power,direction
      *
      * return void
      */
 
     public void spin_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
                                    DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                   double first_side_power, double second_side_power){
+                                   double power ,char direction )
+    {
+        if(direction == 'C') {
+            move_tank_without_encoder(left_back_wheel, left_front_wheel,
+                    right_back_wheel, right_front_wheel,
+                    power,-power);
+        }else if(direction == 'A') {
         move_tank_without_encoder(left_back_wheel, left_front_wheel,
-               right_back_wheel,right_front_wheel,
-                first_side_power,second_side_power);
+                right_back_wheel, right_front_wheel,
+                -power, power);
+        }
+    }
+
+
+
+    /**
+     *METHOD:  move_with_encoder
+     *
+     *  used to move the robot forword and backword
+     *
+     * parameters: left_back_wheel, left_front_wheel,
+     *                right_back_wheel,right_front_wheel,
+     *                 power,direction distance,break_at_end
+     *
+     * return void
+     */
+
+
+
+    public void move_with_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
+                                          DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                          double power,double distance, boolean break_at_end)
+    {
+
+
+        move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
+                left_front_wheel,right_back_wheel,
+                power,power , distance , break_at_end);
 
     }
 
 
 
+    /**
+     *METHOD:  side__with_encoder
+     *
+     *  used to move the robot right and left
+     *
+     * parameters: left_back_wheel, left_front_wheel,
+     *                right_back_wheel,right_front_wheel,
+     *                 power,direction,distance,break_at_end
+     *
+     * return void
+     */
 
+    public void side__with_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,   //side +++ left
+                                          DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                          double power,double distance, char direction, boolean break_at_end)
+    {
+        if(direction == 'L'){
+
+            move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
+            left_front_wheel,right_back_wheel,
+            power,-power , distance , break_at_end);
+
+            }else if(direction == 'R'){
+
+            move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
+            left_front_wheel,right_back_wheel,
+            -power,power , distance , break_at_end);
+}
+
+    }
+
+
+
+    /**
+     *METHOD:  Hankash_spin_with_encoder
+     *
+     *  used to spin the robot right(clockwise) and left (anti-clockwise)
+     *
+     * parameters: left_back_wheel, left_front_wheel,
+     *                right_back_wheel,right_front_wheel,
+     *                 power,direction distance,break_at_end
+     *
+     * return void
+     */
+
+
+    public void Hankash_spin_with_encoder(DcMotor right_back_wheel, DcMotor right_front_wheel,
+                             DcMotor left_back_wheel, DcMotor left_front_wheel,
+                             double power , int Given_Degree , char direction,boolean break_at_end){
+        double num_of_rotations = (robot_spin_circumference/wheel_circumference);
+        double degrees_per_rotation = 360 / num_of_rotations ;
+        double distance = (Given_Degree*wheel_circumference/degrees_per_rotation);
+
+        if(direction == 'C'){
+            move_holonomic_with_encoder(left_back_wheel,left_front_wheel,right_back_wheel, right_front_wheel,
+                    power,-power,distance,break_at_end );
+        }
+        else if(direction == 'A'){
+            move_holonomic_with_encoder(left_back_wheel,left_front_wheel,right_back_wheel, right_front_wheel,
+                    -power,power,distance,break_at_end );
+        }
+    }
+
+
+
+    /**
+     *METHOD:  move_diagonal_with_encoder
+     *
+     *  used to move the robot right diagonal and left diagonal
+     *
+     * parameters: left_back_wheel, left_front_wheel,
+     *                right_back_wheel,right_front_wheel,
+     *                 power,direction distance,break_at_end
+     *
+     * return void
+     */
+
+
+    public void move_diagonal_with_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
+                                   DcMotor right_back_wheel, DcMotor right_front_wheel,double distance,
+                                   double power, double direction,boolean break_at_end )
+    {
+
+      if(direction == 'R')
+      {
+
+          move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
+                  left_front_wheel, right_back_wheel,
+                  power, 0, distance,break_at_end);
+      }else  if(direction == 'L')
+        {
+
+        move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
+                left_front_wheel, right_back_wheel,
+                0,power, distance,break_at_end);
+         }
+
+
+
+    }
 
 
 
