@@ -507,38 +507,6 @@ public class HelperClass {
 
 
     /**
-     *METHOD:  Hankash_spin_with_encoder
-     *
-     *  used to spin the robot right(clockwise) and left (anti-clockwise)
-     *
-     * parameters: left_back_wheel, left_front_wheel,
-     *                right_back_wheel,right_front_wheel,
-     *                 power,direction distance,break_at_end
-     *
-     * return void
-     */
-
-
-    public void Hankash_spin_with_encoder(DcMotor right_back_wheel, DcMotor right_front_wheel,
-                             DcMotor left_back_wheel, DcMotor left_front_wheel,
-                             double power , int Given_Degree , char direction,boolean break_at_end){
-        double num_of_rotations = (robot_spin_circumference/wheel_circumference);
-        double degrees_per_rotation = 360 / num_of_rotations ;
-        double distance = (Given_Degree*wheel_circumference/degrees_per_rotation);
-
-        if(direction == 'C'){
-            move_holonomic_with_encoder(left_back_wheel,left_front_wheel,right_back_wheel, right_front_wheel,
-                    power,-power,distance,break_at_end );
-        }
-        else if(direction == 'A'){
-            move_holonomic_with_encoder(left_back_wheel,left_front_wheel,right_back_wheel, right_front_wheel,
-                    -power,power,distance,break_at_end );
-        }
-    }
-
-
-
-    /**
      *METHOD:  move_diagonal_with_encoder
      *
      *  used to move the robot right diagonal and left diagonal
@@ -616,6 +584,158 @@ public class HelperClass {
 
 
 
+
+    public void move_arm_without_encoder (DcMotor arm_motor ,double power, char direction)
+    {
+        if (direction == 'U'){
+        arm_motor.setPower(dc_motor_power_adapter(power));
+
+    }else if (direction== 'D'){
+        arm_motor.setPower(dc_motor_power_adapter(power));
+    }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     *METHOD:  Hankash_spin_with_encoder
+     *
+     *  used to spin the robot right(clockwise) and left (anti-clockwise)
+     *
+     * parameters: left_back_wheel, left_front_wheel,
+     *                right_back_wheel,right_front_wheel,
+     *                 power,direction distance,break_at_end
+     *
+     * return void
+     */
+
+
+    public void Hankash_spin_with_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
+                                          DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                          double power , int Given_Degree , char direction,boolean break_at_end){
+        double num_of_rotations = (robot_spin_circumference/wheel_circumference);
+        double degrees_per_rotation = 360 / num_of_rotations ;
+        double distance = (Given_Degree*wheel_circumference/degrees_per_rotation);
+
+        if(direction == 'C'){
+            move_holonomic_with_encoder(left_back_wheel,left_front_wheel,right_back_wheel, right_front_wheel,
+                    power,-power,distance,break_at_end );
+        }
+        else if(direction == 'A'){
+            move_holonomic_with_encoder(left_back_wheel,left_front_wheel,right_back_wheel, right_front_wheel,
+                    -power,power,distance,break_at_end );
+        }
+    }
+
+    /**
+     *METHOD:  spin_acceleration
+     *
+     *  to accelerate the spinning power
+     *
+     * parameters: left_back_wheel, left_front_wheel,
+     *             right_back_wheel, right_front_wheel,
+     *             power,int given_degrees, direction , number_of_stages
+     *
+     * return void
+     */
+
+
+
+    public void spin_acceleration(DcMotor left_back_wheel, DcMotor left_front_wheel,
+                                  DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                  double power,int given_degrees,char direction ,int number_of_stages) {
+        int degrees_in_stage = given_degrees / number_of_stages;
+        double power_in_stage = power / number_of_stages;
+
+        double total_power = 0;
+
+        for (int current_stages = 0; current_stages < number_of_stages; current_stages++) {
+            total_power += power_in_stage;
+            Hankash_spin_with_encoder(right_back_wheel, right_front_wheel,
+                    left_back_wheel, left_front_wheel, total_power, degrees_in_stage, direction, FALSE);
+
+
+        }
+
+
+
+
+
+    }
+    /**
+     *METHOD:  spin_deceleration
+     *
+     *  to decelerate the spinning power
+     *
+     * parameters: left_back_wheel, left_front_wheel,
+     *             right_back_wheel, right_front_wheel,
+     *             power,int given_degrees, direction , number_of_stages
+     *
+     * return void
+     */
+
+    public void spin_deceleration(DcMotor left_back_wheel, DcMotor left_front_wheel,
+                                  DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                  double power,int given_degrees,char direction ,int number_of_stages) {
+        int degrees_in_stage = given_degrees / number_of_stages;
+        double power_in_stage = power / number_of_stages;
+
+        double total_power = power;
+
+        for (int current_stages = 0; current_stages < number_of_stages; current_stages++) {
+            total_power -= power_in_stage;
+            if(current_stages==number_of_stages-1){
+                Hankash_spin_with_encoder(right_back_wheel, right_front_wheel,
+                        left_back_wheel, left_front_wheel, total_power, degrees_in_stage, direction, TRUE);
+
+            }
+            else{
+                Hankash_spin_with_encoder(right_back_wheel, right_front_wheel,
+                        left_back_wheel, left_front_wheel, total_power, degrees_in_stage, direction, FALSE);
+
+            }
+
+        }
+
+    }
+
+
+    /**
+     *METHOD:  spin_acceleration
+     *
+     *  to spin the robot
+     *
+     * parameters:  left_back_wheel,  left_front_wheel,
+     *              right_back_wheel,  right_front_wheel,
+     *              power , acceleration_degrees,  spin_Degree ,
+     *              deceleration_degrees, number_of_stages, direction
+     *
+     * return void
+     */
+
+    public void spin_with_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
+                                  DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                  double power ,int acceleration_degrees, int spin_Degree ,
+                                  int deceleration_degrees,int number_of_stages, char direction){
+
+        spin_acceleration(right_back_wheel,  right_front_wheel, left_back_wheel,
+                left_front_wheel,power,acceleration_degrees,direction,number_of_stages);
+
+        Hankash_spin_with_encoder(right_back_wheel,  right_front_wheel, left_back_wheel,
+                left_front_wheel,power,spin_Degree,direction,FALSE);
+
+        spin_deceleration(right_back_wheel,  right_front_wheel, left_back_wheel,
+                left_front_wheel,power,deceleration_degrees,direction,number_of_stages);
+
+    }
 
 
 

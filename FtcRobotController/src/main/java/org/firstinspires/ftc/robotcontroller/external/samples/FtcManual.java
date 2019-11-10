@@ -4,23 +4,27 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.HelperClass;
 
-@TeleOp(name = "Ahmed&Taha",group = "FTC")
+@TeleOp(name = "FtcManual",group = "FTC")
 
 public class FtcManual extends OpMode {
     private DcMotor left_back_motor = null;
     private DcMotor left_front_motor = null;
     private DcMotor right_back_motor = null;
     private DcMotor right_front_motor = null;
-
+    private DcMotor arm_motor = null;
+    private TouchSensor touch_sensor ;
 
     double move_power = 0 ;
     double diagonal_power = 0 ;
     double side_power = 0 ;
     double spin_power = 0 ;
+    double arm_power = 0 ;
     double stop_power = 0 ;
+
 
     HelperClass helper_class_object = new HelperClass();
 
@@ -30,11 +34,15 @@ public class FtcManual extends OpMode {
         left_front_motor = hardwareMap.get(DcMotor.class, "left_front_motor");
         right_back_motor = hardwareMap.get(DcMotor.class, "right_back_motor");
         right_front_motor = hardwareMap.get(DcMotor.class, "right_front_motor");
+        arm_motor = hardwareMap.get(DcMotor.class, "arm_motor");
+        touch_sensor = hardwareMap.get(TouchSensor.class, "touch_sensor");
+
 
         left_back_motor.setDirection(DcMotor.Direction.FORWARD);
         left_front_motor.setDirection(DcMotor.Direction.FORWARD);
         right_back_motor.setDirection(DcMotor.Direction.FORWARD);
         right_front_motor.setDirection(DcMotor.Direction.FORWARD);
+        arm_motor.setDirection(DcMotor.Direction.FORWARD);
 
 
 
@@ -66,13 +74,19 @@ public class FtcManual extends OpMode {
     public void loop() {
 
 
+        while (! touch_sensor.isPressed()){
+            helper_class_object.move_arm_without_encoder(arm_motor, arm_power ,'U');
+
+        }
+
+
         if (gamepad1.right_bumper) {
 
               move_power = 100 ;
               diagonal_power = 100 ;
               side_power = 100 ;
               spin_power = 100 ;
-
+              arm_power = 15;
 
         } else {
 
@@ -80,6 +94,7 @@ public class FtcManual extends OpMode {
             diagonal_power = 20 ;
             side_power = 20 ;
             spin_power = 20 ;
+            arm_power = 10;
 
 
         }
@@ -130,7 +145,14 @@ public class FtcManual extends OpMode {
                     stop_power, 'F');
         }
 
+        if(gamepad1.y){
+             helper_class_object.move_arm_without_encoder(arm_motor, arm_power ,'U');
+        }else if(gamepad1.a){
+            helper_class_object.move_arm_without_encoder(arm_motor, -arm_power ,'D');
 
+        }else{
+            helper_class_object.move_arm_without_encoder(arm_motor, stop_power ,'U');
+        }
 
 
     }
