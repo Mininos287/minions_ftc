@@ -1,14 +1,11 @@
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HelperClass;
-
-@TeleOp(name = "FtcManual",group = "FTC")
+@TeleOp(name = "org.firstinspires.ftc.teamcode.FtcManual",group = "FTC")
 
 public class FtcManual extends OpMode {
     private DcMotor left_back_motor = null;
@@ -154,6 +151,17 @@ public class FtcManual extends OpMode {
             helper_class_object.move_arm_without_encoder(arm_motor, stop_power ,'U');
         }
 
+        if(gamepad2.dpad_up){
+            // 3abla up
+
+        }
+        else if(gamepad2.dpad_down){
+            //  3abla down
+        }
+
+        else if(gamepad2.dpad_right){
+            //
+        }
 
     }
 }

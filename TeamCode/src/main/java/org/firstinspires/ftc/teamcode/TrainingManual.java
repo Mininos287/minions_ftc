@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor ;
 
 
-@TeleOp(name="Training Manual OpMode", group="TrainingManual")
+@TeleOp(name="Training Manual OpMode", group="org.firstinspires.ftc.teamcode.TrainingManual")
 
 //@Disabled
 public class TrainingManual extends OpMode {

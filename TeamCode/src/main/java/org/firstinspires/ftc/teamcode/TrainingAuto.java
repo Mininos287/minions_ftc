@@ -1,16 +1,12 @@
-package org.firstinspires.ftc.robotcontroller.external.samples;
-
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcontroller.external.samples.HelperClass ;
 
-@Autonomous(name="Training auto opmode",group="TrainingManual")
+@Autonomous(name="Training auto opmode",group="org.firstinspires.ftc.teamcode.TrainingManual")
 //@Disabled
 
 public class TrainingAuto extends LinearOpMode {
