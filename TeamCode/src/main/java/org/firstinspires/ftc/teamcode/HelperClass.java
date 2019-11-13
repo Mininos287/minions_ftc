@@ -552,6 +552,8 @@ public class HelperClass {
     }
 
 
+
+
     public void side__with_encoder(DcMotor left_back_wheel,DcMotor left_front_wheel,DcMotor right_back_wheel,
                                    DcMotor right_front_wheel,
                                    double acceleration_distance,double move_distance,double deceleration_distance,
@@ -738,7 +740,24 @@ public class HelperClass {
 
     }
 
+    public void move_arm_with_emcoder(DcMotor arm_motor,double power , char direction,double distance)
+    {
+        arm_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        arm_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm_motor.setTargetPosition(cm_to_ticks(distance));
+
+if(direction== 'U'){
+
+    arm_motor.setPower(dc_motor_power_adapter(power));
+}else if(direction=='D'){
+
+     arm_motor.setPower(dc_motor_power_adapter(-power));
+}
+while (arm_motor.isBusy());
+        arm_motor.setPower(0);
+    }
 
 
 
