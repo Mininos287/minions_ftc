@@ -84,7 +84,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 @TeleOp(name="SKYSTONE Vuforia Nav", group ="Concept")
 //@Disabled
-public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
+public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode
+{
 
     // IMPORTANT:  For Phone Camera, set 1) the camera source and 2) the orientation, based on how your phone is mounted:
     // 1) Camera Source.  Valid choices are:  BACK (behind screen) or FRONT (selfie side)
@@ -137,7 +138,8 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
 
-    @Override public void runOpMode() {
+    @Override public void runOpMode()
+    {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
@@ -279,14 +281,17 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
         // The two examples below assume that the camera is facing forward out the front of the robot.
 
         // We need to rotate the camera around it's long axis to bring the correct camera forward.
-        if (CAMERA_CHOICE == BACK) {
+        if (CAMERA_CHOICE == BACK)
+        {
             phoneYRotate = -90;
-        } else {
+        } else
+            {
             phoneYRotate = 90;
         }
 
         // Rotate the phone vertical about the X axis if it's in portrait mode
-        if (PHONE_IS_PORTRAIT) {
+        if (PHONE_IS_PORTRAIT)
+        {
             phoneXRotate = 90 ;
         }
 
@@ -301,7 +306,8 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                     .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
 
         /**  Let all the trackable listeners know where the phone is.  */
-        for (VuforiaTrackable trackable : allTrackables) {
+        for (VuforiaTrackable trackable : allTrackables)
+        {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
@@ -318,12 +324,15 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
         // Tap the preview window to receive a fresh image.
 
         targetsSkyStone.activate();
-        while (!isStopRequested()) {
+        while (!isStopRequested())
+        {
 
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
-            for (VuforiaTrackable trackable : allTrackables) {
-                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
+            for (VuforiaTrackable trackable : allTrackables)
+            {
+                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible())
+                {
                     telemetry.addData("Visible Target", trackable.getName());
                     targetVisible = true;
 
@@ -348,7 +357,8 @@ public class ConceptVuforiaSkyStoneNavigation extends LinearOpMode {
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             }
-            else {
+            else
+                {
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.update();

@@ -3,17 +3,18 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-@TeleOp(name = "org.firstinspires.ftc.teamcode.FtcManual",group = "FTC")
+@TeleOp(name = "FtcManual",group = "FTC")
 
 public class FtcManual extends OpMode {
     private DcMotor left_back_motor = null;
     private DcMotor left_front_motor = null;
     private DcMotor right_back_motor = null;
     private DcMotor right_front_motor = null;
-    private DcMotor arm_motor = null;
-    private TouchSensor touch_sensor ;
+   // private DcMotor arm_motor = null;
+   // private TouchSensor touch_sensor ;
 
     double move_power = 0 ;
     double diagonal_power = 0 ;
@@ -31,16 +32,12 @@ public class FtcManual extends OpMode {
         left_front_motor = hardwareMap.get(DcMotor.class, "left_front_motor");
         right_back_motor = hardwareMap.get(DcMotor.class, "right_back_motor");
         right_front_motor = hardwareMap.get(DcMotor.class, "right_front_motor");
-        arm_motor = hardwareMap.get(DcMotor.class, "arm_motor");
-        touch_sensor = hardwareMap.get(TouchSensor.class, "touch_sensor");
+       // arm_motor = hardwareMap.get(DcMotor.class, "arm_motor");
+       // touch_sensor = hardwareMap.get(TouchSensor.class, "touch_sensor");
 
 
-        left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-        left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-        right_back_motor.setDirection(DcMotor.Direction.FORWARD);
-        right_front_motor.setDirection(DcMotor.Direction.FORWARD);
-        arm_motor.setDirection(DcMotor.Direction.FORWARD);
 
+       // arm_motor.setDirection(DcMotor.Direction.FORWARD);
 
 
     }
@@ -71,32 +68,36 @@ public class FtcManual extends OpMode {
     public void loop() {
 
 
-        while (! touch_sensor.isPressed()){
-            helper_class_object.move_arm_without_encoder(arm_motor, arm_power ,'U');
+      //  while (! touch_sensor.isPressed()){
+            //helper_class_object.move_arm_without_encoder(arm_motor, arm_power ,'U');
 
-        }
+      //  }
 
 
         if (gamepad1.right_bumper) {
 
-              move_power = 100 ;
-              diagonal_power = 100 ;
-              side_power = 100 ;
-              spin_power = 100 ;
-              arm_power = 15;
+            move_power = 100 ;
+            diagonal_power = 100 ;
+            side_power = 100 ;
+            spin_power = 100 ;
+            arm_power = 15;
 
         } else {
 
-            move_power = 20 ;
-            diagonal_power = 20 ;
-            side_power = 20 ;
-            spin_power = 20 ;
-            arm_power = 10;
+            move_power = 50 ;
+            diagonal_power = 50 ;
+            side_power = 50 ;
+            spin_power = 50 ;
+            arm_power = 50;
 
 
         }
 
         if (gamepad1.dpad_up) {
+            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
+            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
+            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
+            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             //move forward
             helper_class_object.move_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor,
@@ -104,6 +105,10 @@ public class FtcManual extends OpMode {
         }
 
         else if (gamepad1.dpad_down) {
+            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
+            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
+            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
+            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             //move backward
             helper_class_object.move_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor,
@@ -112,12 +117,20 @@ public class FtcManual extends OpMode {
 
 
         else if (gamepad1.dpad_right) {
+            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
+            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
+            right_back_motor.setDirection(DcMotor.Direction.FORWARD);
+            right_front_motor.setDirection(DcMotor.Direction.FORWARD);
             //move right
             helper_class_object.move_side_without_encoder(left_back_motor, right_front_motor,
                     left_front_motor, right_back_motor,
                     side_power, 'R');
         }
         else if (gamepad1.dpad_left) {
+            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
+            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
+            right_back_motor.setDirection(DcMotor.Direction.FORWARD);
+            right_front_motor.setDirection(DcMotor.Direction.FORWARD);
             //move left
             helper_class_object.move_side_without_encoder(left_back_motor, right_front_motor,
                     left_front_motor, right_back_motor,
@@ -126,29 +139,42 @@ public class FtcManual extends OpMode {
         }
 
         else if (gamepad1.b) {
+            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
+            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
+            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
+            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             //spin clockwise
             helper_class_object.spin_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor, spin_power, 'C');
         }
 
         else if (gamepad1.x) {
+            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
+            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
+            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
+            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             //spin anti-clockwise
             helper_class_object.spin_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor, spin_power, 'A');
 
         }else{
+            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
+            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
+            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
+            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             helper_class_object.move_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor,
                     stop_power, 'F');
         }
 
         if(gamepad1.y){
-             helper_class_object.move_arm_without_encoder(arm_motor, arm_power ,'U');
+
+          //  helper_class_object.move_arm_without_encoder(arm_motor, arm_power ,'U');
         }else if(gamepad1.a){
-            helper_class_object.move_arm_without_encoder(arm_motor, -arm_power ,'D');
+          //  helper_class_object.move_arm_without_encoder(arm_motor, -arm_power ,'D');
 
         }else{
-            helper_class_object.move_arm_without_encoder(arm_motor, stop_power ,'U');
+         //   helper_class_object.move_arm_without_encoder(arm_motor, stop_power ,'U');
         }
 
         if(gamepad2.dpad_up){

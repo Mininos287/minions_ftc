@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.HelperClass;
 public class test extends LinearOpMode {
     HelperClass helper_class_object = new HelperClass();
 
-     private Servo antar_servo = null ;
+    private Servo antar_servo = null ;
     private  Servo abla_servo = null ;
     private DcMotor arm_motor = null;
     private TouchSensor touch_sensor ;

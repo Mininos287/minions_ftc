@@ -201,8 +201,8 @@ public class HelperClass {
      * return void
      */
     public void move_holonomic_with_encoder(DcMotor first_motor , DcMotor second_motor,
-                                       DcMotor third_motor, DcMotor fourth_motor,
-                                       double first_power, double second_power,double distance,boolean break_at_end){
+                                            DcMotor third_motor, DcMotor fourth_motor,
+                                            double first_power, double second_power,double distance,boolean break_at_end){
 
         first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -249,8 +249,8 @@ public class HelperClass {
      * return void
      */
     public void move_holonomic_without_encoder(DcMotor first_motor, DcMotor second_motor,
-                                          DcMotor third_motor, DcMotor fourth_motor,
-                                          double first_side_power, double second_side_power){
+                                               DcMotor third_motor, DcMotor fourth_motor,
+                                               double first_side_power, double second_side_power){
 
         side_power(first_motor, second_motor, first_side_power);
 
@@ -330,11 +330,11 @@ public class HelperClass {
 
             if(done_stages == (number_of_stages-1))
             {
-             move_holonomic_with_encoder(first_motor, second_motor, third_motor, fourth_motor,first_side_total_power,
-            second_side_total_power, distance_in_stage,TRUE);
+                move_holonomic_with_encoder(first_motor, second_motor, third_motor, fourth_motor,first_side_total_power,
+                        second_side_total_power, distance_in_stage,TRUE);
             }else
             { move_holonomic_with_encoder(first_motor, second_motor, third_motor, fourth_motor,first_side_total_power,
-            second_side_total_power, distance_in_stage,FALSE);
+                    second_side_total_power, distance_in_stage,FALSE);
             }
 
 
@@ -359,25 +359,25 @@ public class HelperClass {
      */
 
 
-        public void move_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
-                                 DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                 double power ,char direction )
+    public void move_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
+                                     DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                     double power ,char direction )
+    {
+        if(direction == 'F')
         {
-            if(direction == 'F')
-            {
-                move_holonomic_without_encoder(left_back_wheel, right_front_wheel,
-                        left_front_wheel, right_back_wheel,
-                        power,power);
-            }else if(direction == 'B')
-            {
-                move_holonomic_without_encoder(left_back_wheel, right_front_wheel,
+            move_holonomic_without_encoder(left_back_wheel, right_front_wheel,
                     left_front_wheel, right_back_wheel,
                     power,power);
-            }
-
-
-
+        }else if(direction == 'B')
+        {
+            move_holonomic_without_encoder(left_back_wheel, right_front_wheel,
+                    left_front_wheel, right_back_wheel,
+                    power,power);
         }
+
+
+
+    }
 
     /**
      *METHOD: move_side_without_encoder
@@ -392,8 +392,8 @@ public class HelperClass {
      */
 
     public void move_side_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
-                             DcMotor right_back_wheel, DcMotor right_front_wheel,
-                             double power, char direction )
+                                          DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                          double power, char direction )
 
     {
         if(direction == 'R') {
@@ -402,9 +402,9 @@ public class HelperClass {
                     -power, power );
         }else if(direction == 'L') {
             move_holonomic_without_encoder(left_back_wheel, right_front_wheel,
-                left_front_wheel, right_back_wheel,
-                power, -power );
-    }
+                    left_front_wheel, right_back_wheel,
+                    power, -power );
+        }
 
     }
 
@@ -421,13 +421,13 @@ public class HelperClass {
      */
 
     public void move_diagonal_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
-                              DcMotor right_back_wheel, DcMotor right_front_wheel,
-                              double power, char  direction)
+                                              DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                              double power, char  direction)
     {
         if(direction == 'R'){
             move_holonomic_without_encoder(left_back_wheel, right_front_wheel, left_front_wheel, right_back_wheel,
                     0, power);
-            }else if(direction == 'L'){
+        }else if(direction == 'L'){
             move_holonomic_without_encoder(left_back_wheel, right_front_wheel,left_front_wheel,right_back_wheel,
                     power,0);
         }
@@ -449,8 +449,8 @@ public class HelperClass {
      */
 
     public void spin_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
-                                   DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                   double power ,char direction )
+                                     DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                     double power ,char direction )
     {
         if(direction == 'C') {
             move_holonomic_without_encoder(left_back_wheel, left_front_wheel,
@@ -458,8 +458,8 @@ public class HelperClass {
                     power,-power);
         }else if(direction == 'A') {
             move_holonomic_without_encoder(left_back_wheel, left_front_wheel,
-                right_back_wheel, right_front_wheel,
-                -power, power);
+                    right_back_wheel, right_front_wheel,
+                    -power, power);
         }
     }
 
@@ -480,9 +480,9 @@ public class HelperClass {
 
 
     public void move_with_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
-                                          DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                          double acceleration_distance, double move_distance, double deceleration_distance ,
-                                          double power,int number_of_stages)
+                                  DcMotor right_back_wheel, DcMotor right_front_wheel,
+                                  double acceleration_distance, double move_distance, double deceleration_distance ,
+                                  double power,int number_of_stages)
     {
 
 
@@ -524,27 +524,27 @@ public class HelperClass {
                                            double power,int number_of_stages, char direction,boolean break_at_end)
     {
 
-      if(direction == 'R')
-      {
-          acceleration(left_back_wheel, right_front_wheel,
-                  left_front_wheel, right_back_wheel,power,0,acceleration_distance,number_of_stages);
+        if(direction == 'R')
+        {
+            acceleration(left_back_wheel, right_front_wheel,
+                    left_front_wheel, right_back_wheel,power,0,acceleration_distance,number_of_stages);
 
-          move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
-                  left_front_wheel, right_back_wheel,
-                  0, power, move_distance,break_at_end);
-          deceleration(left_back_wheel, right_front_wheel,
-                  left_front_wheel, right_back_wheel,power,0,deceleration_distance,number_of_stages);
-      }else  if(direction == 'L')
+            move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
+                    left_front_wheel, right_back_wheel,
+                    0, power, move_distance,break_at_end);
+            deceleration(left_back_wheel, right_front_wheel,
+                    left_front_wheel, right_back_wheel,power,0,deceleration_distance,number_of_stages);
+        }else  if(direction == 'L')
         {
             acceleration(left_back_wheel, right_front_wheel,
                     left_front_wheel, right_back_wheel,0,power,acceleration_distance,number_of_stages);
 
-        move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
-                left_front_wheel, right_back_wheel,
-                0,power, move_distance,break_at_end);
+            move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
+                    left_front_wheel, right_back_wheel,
+                    0,power, move_distance,break_at_end);
             deceleration(left_back_wheel, right_front_wheel,
                     left_front_wheel, right_back_wheel,power,0,deceleration_distance,number_of_stages);
-         }
+        }
 
 
 
@@ -590,11 +590,11 @@ public class HelperClass {
     public void move_arm_without_encoder (DcMotor arm_motor ,double power, char direction)
     {
         if (direction == 'U'){
-        arm_motor.setPower(dc_motor_power_adapter(power));
+            arm_motor.setPower(dc_motor_power_adapter(power));
 
-    }else if (direction== 'D'){
-        arm_motor.setPower(dc_motor_power_adapter(power));
-    }
+        }else if (direction== 'D'){
+            arm_motor.setPower(dc_motor_power_adapter(power));
+        }
     }
 
 
@@ -748,23 +748,19 @@ public class HelperClass {
         arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm_motor.setTargetPosition(cm_to_ticks(distance));
 
-if(direction== 'U'){
+        if(direction== 'U'){
 
-    arm_motor.setPower(dc_motor_power_adapter(power));
-}else if(direction=='D'){
+            arm_motor.setPower(dc_motor_power_adapter(power));
+        }else if(direction=='D'){
 
-     arm_motor.setPower(dc_motor_power_adapter(-power));
-}
-while (arm_motor.isBusy());
+            arm_motor.setPower(dc_motor_power_adapter(-power));
+        }
+        while (arm_motor.isBusy());
         arm_motor.setPower(0);
     }
 
 
 
 }
-
-
-
-
 
 
