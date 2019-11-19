@@ -20,71 +20,6 @@ public class HelperClass {
 
 
     /**
-     * METHOD: servo_motor_degrees_adapter
-     *
-     * Used to convert 0 to 180 (servo degree) to 0 and 1
-     *
-     * parameters: double degree
-     * return double
-     */
-    private double servo_motor_degrees_adapter(double degree) {
-        double new_degrees = degree / 180;
-        return new_degrees;
-    }
-
-
-
-
-
-    /**
-     * METHOD: lower_to_higher_servo_degrees
-     *
-     * Move the servo from the smallest number given to the biggest number given by the user
-     *
-     * parameters: double from , double for
-     *
-     * return double new_position
-     */
-    public void lower_to_higher_servo_degrees(Servo servo_motor, double from, double to) {
-
-        for (double position = from; position <= to; position += 1){
-            double new_position = servo_motor_degrees_adapter(position);
-            servo_motor.setPosition(new_position);
-        }
-
-    }
-
-
-
-
-
-
-    /**
-     *METHOD: higher_to_lower_servo_degrees
-     *
-     * Move the servo from the biggest number given to the smallest number given by the user
-     *
-     * parameters: double from , double for
-     *
-     * return double new_position
-     */
-    public void higher_to_lower_servo_degrees(Servo servo_motor, double from, double to) {
-
-        for (double position = from; position >= to; position -= 1) {
-            double new_position = servo_motor_degrees_adapter(position);
-            servo_motor.setPosition(new_position);
-
-
-        }
-
-    }
-
-
-
-
-
-
-    /**
      * METHOD: dc_motor_power_adapter
      *
      * Used to convert from -100 to 100 (power) to -1 and 1
@@ -96,9 +31,6 @@ public class HelperClass {
         double new_power = (power / 100);
         return new_power;
     }
-
-
-
 
 
 
@@ -114,126 +46,6 @@ public class HelperClass {
         first_motor.setPower(dc_motor_power_adapter(power));
         second_motor.setPower(dc_motor_power_adapter(power));
     }
-
-
-
-
-
-
-
-    /**
-     * METHOD: cm_to_ticks
-     * <p>
-     * Used to convert cm to ticks
-     * <p>
-     * parameters: double distance
-     *
-     * return int
-     */
-    private int cm_to_ticks(double distance) {
-
-        int ticks_to_go = (int)((distance * num_of_ticks) / wheel_circumference);
-        return ticks_to_go;
-    }
-
-
-
-
-
-
-
-    /**
-     *METHOD: side_position
-     *
-     * set the position of motors of the same side motors
-     *
-     * parameters:DcMotor first_motor , DcMotor second_motor, double distance
-     *
-     * return void
-     */
-
-    public void side_position (DcMotor first_motor , DcMotor second_motor ,double distance )
-    {
-
-        first_motor.setTargetPosition(cm_to_ticks(distance));
-        second_motor.setTargetPosition(cm_to_ticks(distance));
-
-        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-
-
-
-
-
-
-
-    /**
-     *METHOD: side_is_busy
-     *
-     * check if the same side motors have reached their pre set position or not
-     *
-     * parameters:DcMotor first_motor , DcMotor second_motor
-     *
-     * return boolean
-     */
-    public boolean side_is_busy (DcMotor first_motor , DcMotor second_motor) //wait
-    {
-        return(first_motor.isBusy() && second_motor.isBusy());
-    }
-
-
-
-
-
-
-
-
-    /**
-     *METHOD: move_holonomic_with_encoder
-     *
-     * move using the encoder
-     *
-     * parameters: DcMotor left_back_wheel , DcMotor left_front_wheel,
-     *                                        DcMotor right_back_wheel, DcMotor right_front_wheel,
-     *                                        double side_power,double distance
-     *
-     * return void
-     */
-    public void move_holonomic_with_encoder(DcMotor first_motor , DcMotor second_motor,
-                                            DcMotor third_motor, DcMotor fourth_motor,
-                                            double first_power, double second_power,double distance,boolean break_at_end){
-
-        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        side_position(first_motor,second_motor,distance);
-        side_position(third_motor,fourth_motor,distance);
-
-        side_power(first_motor,second_motor,first_power);
-        side_power(third_motor,fourth_motor,second_power);
-
-        while(side_is_busy( first_motor , second_motor) && side_is_busy(third_motor ,fourth_motor))
-        {
-
-        }
-
-
-
-        if(break_at_end == TRUE)
-        {
-            side_power(first_motor, second_motor, 0);
-            side_power(third_motor, fourth_motor, 0);
-        }
-
-
-    }
-
-
-
 
 
 
@@ -259,93 +71,6 @@ public class HelperClass {
 
 
 
-
-
-
-
-    /**
-     *METHOD: acceleration
-     *
-     *  accelerate the power of robot
-     *
-     * parameters: right_back_wheel, right_front_wheel,
-     *                              left_back_wheel, left_front_wheel,
-     *                              power, distance, number of stages
-     *
-     * return void
-     */
-
-    public void acceleration(DcMotor first_motor,DcMotor second_motor,DcMotor third_motor,DcMotor fourth_motor,
-                             double first_power,double second_power,double distance,int number_of_stages){
-        double distance_in_stage = distance/number_of_stages;
-        double first_power_in_stage = first_power/number_of_stages;
-        double second_power_in_stage = second_power/number_of_stages;
-
-        double first_side_total_power =0;
-        double second_side_total_power =0;
-
-        for(int done_stages=0; done_stages<number_of_stages;done_stages++){
-            first_side_total_power+=first_power_in_stage;
-            second_side_total_power+=second_power_in_stage;
-
-            move_holonomic_with_encoder(first_motor, second_motor, third_motor, fourth_motor,first_side_total_power,
-                    second_side_total_power, distance_in_stage,FALSE);
-
-        }
-    }
-
-
-
-
-
-
-
-
-
-    /**
-     *METHOD: deceleration
-     *
-     *  decelerate the power of robot
-     *
-     * parameters: right_back_wheel, right_front_wheel,
-     *                              left_back_wheel, left_front_wheel,
-     *                              power, distance, number of stages
-     *
-     * return void
-     */
-
-    public void deceleration(DcMotor first_motor,DcMotor second_motor,DcMotor third_motor,DcMotor fourth_motor,
-                             double first_power,double second_power,double distance,int number_of_stages){
-        double distance_in_stage = distance/number_of_stages;
-        double first_power_in_stage = first_power/number_of_stages;
-        double second_power_in_stage = second_power/number_of_stages;
-
-        double first_side_total_power =first_power;
-        double second_side_total_power =second_power;
-
-        for(int done_stages=0; done_stages<number_of_stages;done_stages++)
-        {
-            first_side_total_power-=first_power_in_stage;
-            second_side_total_power-=second_power_in_stage;
-
-            if(done_stages == (number_of_stages-1))
-            {
-                move_holonomic_with_encoder(first_motor, second_motor, third_motor, fourth_motor,first_side_total_power,
-                        second_side_total_power, distance_in_stage,TRUE);
-            }else
-            { move_holonomic_with_encoder(first_motor, second_motor, third_motor, fourth_motor,first_side_total_power,
-                    second_side_total_power, distance_in_stage,FALSE);
-            }
-
-
-
-        }
-    }
-
-
-
-
-
     /**
      *METHOD: move_without_encoder
      *
@@ -357,7 +82,6 @@ public class HelperClass {
      *
      * return void
      */
-
 
     public void move_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
                                      DcMotor right_back_wheel, DcMotor right_front_wheel,
@@ -462,6 +186,223 @@ public class HelperClass {
                     -power, power);
         }
     }
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+    /**
+     * METHOD: cm_to_ticks
+     * <p>
+     * Used to convert cm to ticks
+     * <p>
+     * parameters: double distance
+     *
+     * return int
+     */
+    private int cm_to_ticks(double distance) {
+
+        int ticks_to_go = (int)((distance * num_of_ticks) / wheel_circumference);
+        return ticks_to_go;
+    }
+
+
+
+
+
+
+
+    /**
+     *METHOD: side_position
+     *
+     * set the position of motors of the same side motors
+     *
+     * parameters:DcMotor first_motor , DcMotor second_motor, double distance
+     *
+     * return void
+     */
+
+    public void side_position (DcMotor first_motor , DcMotor second_motor ,double distance )
+    {
+
+        first_motor.setTargetPosition(cm_to_ticks(distance));
+        second_motor.setTargetPosition(cm_to_ticks(distance));
+
+        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+
+
+
+
+
+
+    /**
+     *METHOD: side_is_busy
+     *
+     * check if the same side motors have reached their pre set position or not
+     *
+     * parameters:DcMotor first_motor , DcMotor second_motor
+     *
+     * return boolean
+     */
+    public boolean side_is_busy (DcMotor first_motor , DcMotor second_motor) //wait
+    {
+        return(first_motor.isBusy() && second_motor.isBusy());
+    }
+
+
+
+
+
+
+
+
+    /**
+     *METHOD: move_holonomic_with_encoder
+     *
+     * move using the encoder
+     *
+     * parameters: DcMotor left_back_wheel , DcMotor left_front_wheel,
+     *                                        DcMotor right_back_wheel, DcMotor right_front_wheel,
+     *                                        double side_power,double distance
+     *
+     * return void
+     */
+    public void move_holonomic_with_encoder(DcMotor first_motor , DcMotor second_motor,
+                                            DcMotor third_motor, DcMotor fourth_motor,
+                                            double first_power, double second_power,double distance,boolean break_at_end){
+
+        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        side_position(first_motor,second_motor,distance);
+        side_position(third_motor,fourth_motor,distance);
+
+        side_power(first_motor,second_motor,first_power);
+        side_power(third_motor,fourth_motor,second_power);
+
+        while(side_is_busy( first_motor , second_motor) && side_is_busy(third_motor ,fourth_motor))
+        {
+        }
+
+        if(break_at_end == TRUE)
+        {
+            side_power(first_motor, second_motor, 0);
+            side_power(third_motor, fourth_motor, 0);
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     *METHOD: acceleration
+     *
+     *  accelerate the power of robot
+     *
+     * parameters: right_back_wheel, right_front_wheel,
+     *                              left_back_wheel, left_front_wheel,
+     *                              power, distance, number of stages
+     *
+     * return void
+     */
+
+    public void acceleration(DcMotor first_motor,DcMotor second_motor,DcMotor third_motor,DcMotor fourth_motor,
+                             double first_power,double second_power,double distance,int number_of_stages){
+        double distance_in_stage = distance/number_of_stages;
+        double first_power_in_stage = first_power/number_of_stages;
+        double second_power_in_stage = second_power/number_of_stages;
+
+        double first_side_total_power =0;
+        double second_side_total_power =0;
+
+        for(int done_stages=0; done_stages<number_of_stages;done_stages++){
+            first_side_total_power+=first_power_in_stage;
+            second_side_total_power+=second_power_in_stage;
+
+            move_holonomic_with_encoder(first_motor, second_motor, third_motor, fourth_motor,first_side_total_power,
+                    second_side_total_power, distance_in_stage,FALSE);
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+    /**
+     *METHOD: deceleration
+     *
+     *  decelerate the power of robot
+     *
+     * parameters: right_back_wheel, right_front_wheel,
+     *                              left_back_wheel, left_front_wheel,
+     *                              power, distance, number of stages
+     *
+     * return void
+     */
+
+    public void deceleration(DcMotor first_motor,DcMotor second_motor,DcMotor third_motor,DcMotor fourth_motor,
+                             double first_power,double second_power,double distance,int number_of_stages){
+        double distance_in_stage = distance/number_of_stages;
+        double first_power_in_stage = first_power/number_of_stages;
+        double second_power_in_stage = second_power/number_of_stages;
+
+        double first_side_total_power =first_power;
+        double second_side_total_power =second_power;
+
+        for(int done_stages=0; done_stages<number_of_stages;done_stages++)
+        {
+            first_side_total_power-=first_power_in_stage;
+            second_side_total_power-=second_power_in_stage;
+
+            if(done_stages == (number_of_stages-1))
+            {
+                move_holonomic_with_encoder(first_motor, second_motor, third_motor, fourth_motor,first_side_total_power,
+                        second_side_total_power, distance_in_stage,TRUE);
+            }else
+            { move_holonomic_with_encoder(first_motor, second_motor, third_motor, fourth_motor,first_side_total_power,
+                    second_side_total_power, distance_in_stage,FALSE);
+            }
+
+
+
+        }
+    }
+
+
+
+
+
+
+
 
 
 
@@ -585,7 +526,7 @@ public class HelperClass {
     }
 
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void move_arm_without_encoder (DcMotor arm_motor ,double power, char direction)
     {
@@ -660,6 +601,7 @@ public class HelperClass {
         double total_power = 0;
 
         for (int current_stages = 0; current_stages < number_of_stages; current_stages++) {
+
             total_power += power_in_stage;
             Hankash_spin_with_encoder(right_back_wheel, right_front_wheel,
                     left_back_wheel, left_front_wheel, total_power, degrees_in_stage, direction, FALSE);
@@ -702,7 +644,6 @@ public class HelperClass {
             else{
                 Hankash_spin_with_encoder(right_back_wheel, right_front_wheel,
                         left_back_wheel, left_front_wheel, total_power, degrees_in_stage, direction, FALSE);
-
             }
 
         }
@@ -711,18 +652,6 @@ public class HelperClass {
     }
 
 
-    /**
-     *METHOD:  spin_acceleration
-     *
-     *  to spin the robot
-     *
-     * parameters:  left_back_wheel,  left_front_wheel,
-     *              right_back_wheel,  right_front_wheel,
-     *              power , acceleration_degrees,  spin_Degree ,
-     *              deceleration_degrees, number_of_stages, direction
-     *
-     * return void
-     */
 
     public void spin_with_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
                                   DcMotor right_back_wheel, DcMotor right_front_wheel,
@@ -739,6 +668,86 @@ public class HelperClass {
                 left_front_wheel,power,deceleration_degrees,direction,number_of_stages);
 
     }
+
+
+
+
+
+    /**
+     * METHOD: servo_motor_degrees_adapter
+     *
+     * Used to convert 0 to 180 (servo degree) to 0 and 1
+     *
+     * parameters: double degree
+     * return double
+     */
+    private double servo_motor_degrees_adapter(double degree) {
+        double new_degrees = degree / 180;
+        return new_degrees;
+    }
+
+
+
+
+
+    /**
+     * METHOD: lower_to_higher_servo_degrees
+     *
+     * Move the servo from the smallest number given to the biggest number given by the user
+     *
+     * parameters: double from , double for
+     *
+     * return double new_position
+     */
+    public void lower_to_higher_servo_degrees(Servo servo_motor, double from, double to) {
+
+        for (double position = from; position <= to; position += 1){
+            double new_position = servo_motor_degrees_adapter(position);
+            servo_motor.setPosition(new_position);
+        }
+
+    }
+
+
+
+
+
+
+    /**
+     *METHOD: higher_to_lower_servo_degrees
+     *
+     * Move the servo from the biggest number given to the smallest number given by the user
+     *
+     * parameters: double from , double for
+     *
+     * return double new_position
+     */
+    public void higher_to_lower_servo_degrees(Servo servo_motor, double from, double to) {
+
+        for (double position = from; position >= to; position -= 1) {
+            double new_position = servo_motor_degrees_adapter(position);
+            servo_motor.setPosition(new_position);
+
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void move_arm_with_emcoder(DcMotor arm_motor,double power , char direction,double distance)
     {
