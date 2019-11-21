@@ -289,7 +289,30 @@ public class Ftc_Auto extends LinearOpMode {
                     if (robotLocationTransform != null) {
                         lastLocation = robotLocationTransform;
                     }
-                    break;
+                    //break;
+
+                    if(target_name == "Stone Target"){
+
+                        telemetry.addData("hi", "%s",target_name);
+                        VectorF translation = lastLocation.getTranslation();
+                        telemetry.addData("hi", "%f",translation.get(0));
+                        if((translation.get(0)/10) < (-15)){
+                            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
+                            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
+                            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
+                            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
+
+                            telemetry.addData("Pos (CM)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                                    translation.get(0) /10 , translation.get(1) /10 , translation.get(2) / 10);
+
+                            helper_class_object.move_without_encoder(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,'F');
+
+                        }
+
+                    }else{
+                        helper_class_object.move_without_encoder(left_back_motor,left_front_motor,right_back_motor,right_front_motor,0,'F');
+
+                    }
 
                 }else{
                     target_name = "none" ;
@@ -298,28 +321,7 @@ public class Ftc_Auto extends LinearOpMode {
 
             }
 
-            if(target_name == "Stone Target"){
 
-                telemetry.addData("hi", "%s",target_name);
-                VectorF translation = lastLocation.getTranslation();
-                telemetry.addData("hi", "%f",translation.get(0));
-                if((translation.get(0)/10) < (-15)){
-                    left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-                    left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-                    right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-                    right_front_motor.setDirection(DcMotor.Direction.REVERSE);
-
-                     telemetry.addData("Pos (CM)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                            translation.get(0) /10 , translation.get(1) /10 , translation.get(2) / 10);
-
-                    helper_class_object.move_without_encoder(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,'F');
-
-                }
-
-            }else{
-                helper_class_object.move_without_encoder(left_back_motor,left_front_motor,right_back_motor,right_front_motor,0,'F');
-
-            }
 /*
             // Provide feedback as to where the robot is located (if we know).
             if (targetVisible) {

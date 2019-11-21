@@ -104,8 +104,10 @@ public class Test_Encoder extends OpMode {
             right_back_motor.setDirection(DcMotor.Direction.REVERSE);
             right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             //move forward
-            helper_class_object.move_with_encoder(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,20,100,0,move_power,5);
+           helper_class_object.move_with_encoder(left_back_motor, left_front_motor,
+                   right_back_motor, right_front_motor,100,100,100,move_power,5);
+
+           // helper_class_object.acceleration(left_back_motor,left_front_motor,right_back_motor,right_front_motor,10,10,50,5);
         }
 
         else if (gamepad1.dpad_down) {
@@ -114,8 +116,10 @@ public class Test_Encoder extends OpMode {
             right_back_motor.setDirection(DcMotor.Direction.REVERSE);
             right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             //move backward
-            helper_class_object.move_with_encoder(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,20,100,0,-move_power,5);
+             helper_class_object.move_with_encoder(left_back_motor, left_front_motor,
+                     right_back_motor, right_front_motor,20,1000,20,-move_power,5);
+
+
         }
 
 
@@ -126,7 +130,8 @@ public class Test_Encoder extends OpMode {
             right_front_motor.setDirection(DcMotor.Direction.FORWARD);
             //move right
             helper_class_object.side__with_encoder(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,20,100,0,side_power,5,'R',FALSE);
+                    right_back_motor, right_front_motor,20,100,20,side_power,5,'R',TRUE);
+
         }
         else if (gamepad1.dpad_left) {
             left_back_motor.setDirection(DcMotor.Direction.FORWARD);
@@ -135,7 +140,7 @@ public class Test_Encoder extends OpMode {
             right_front_motor.setDirection(DcMotor.Direction.FORWARD);
             //move left
             helper_class_object.side__with_encoder(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,20,100,0,side_power,5,'L',FALSE);
+                    right_back_motor, right_front_motor,20,100,0,side_power,5,'L',TRUE);
 
 
         }

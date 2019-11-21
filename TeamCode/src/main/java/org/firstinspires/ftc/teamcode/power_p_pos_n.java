@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -16,7 +16,7 @@ public class power_p_pos_n extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
 
-        left_motor = hardwareMap.get(DcMotor.class, "left_motor");
+        left_motor = hardwareMap.get(DcMotor.class, "left_back_motor");
 
         left_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -30,7 +30,7 @@ public class power_p_pos_n extends LinearOpMode {
 
             left_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            left_motor.setPower(.5);
+            left_motor.setPower(.25);
 
 
             while (left_motor.isBusy()) {

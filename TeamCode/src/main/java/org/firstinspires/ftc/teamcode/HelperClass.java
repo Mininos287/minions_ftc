@@ -1,16 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-public class HelperClass {
+public class HelperClass   {
 
     private int num_of_ticks = 1440 ;
     private double PI = 22 / 7;
-    private double wheel_radius = 10.16;
+    private double wheel_radius = 10.16/2;
     private double wheel_circumference = (2 * PI * wheel_radius);
     private double robot_radius = 10.16; // habda
     private double robot_spin_circumference = (2 * PI * robot_radius) ;
@@ -231,8 +231,8 @@ public class HelperClass {
     public void side_position (DcMotor first_motor , DcMotor second_motor ,double distance )
     {
 
-        first_motor.setTargetPosition(cm_to_ticks(distance));
-        second_motor.setTargetPosition(cm_to_ticks(distance));
+        first_motor.setTargetPosition((cm_to_ticks(distance)));
+        second_motor.setTargetPosition((cm_to_ticks(distance)));
 
         first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -280,17 +280,19 @@ public class HelperClass {
                                             DcMotor third_motor, DcMotor fourth_motor,
                                             double first_power, double second_power,double distance,boolean break_at_end){
 
+
         first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         side_position(first_motor,second_motor,distance);
         side_position(third_motor,fourth_motor,distance);
 
         side_power(first_motor,second_motor,first_power);
         side_power(third_motor,fourth_motor,second_power);
-
+//
         while(side_is_busy( first_motor , second_motor) && side_is_busy(third_motor ,fourth_motor))
         {
         }
@@ -331,20 +333,26 @@ public class HelperClass {
      */
 
     public void acceleration(DcMotor first_motor,DcMotor second_motor,DcMotor third_motor,DcMotor fourth_motor,
-                             double first_power,double second_power,double distance,int number_of_stages){
-        double distance_in_stage = distance/number_of_stages;
-        double first_power_in_stage = first_power/number_of_stages;
-        double second_power_in_stage = second_power/number_of_stages;
+                             double first_power,double second_power,double distance,int number_of_stages)
+    {
 
         double first_side_total_power =0;
         double second_side_total_power =0;
 
-        for(int done_stages=0; done_stages<number_of_stages;done_stages++){
-            first_side_total_power+=first_power_in_stage;
-            second_side_total_power+=second_power_in_stage;
+        double distance_in_stage = distance/(double) number_of_stages;
+        double first_power_in_stage = first_power /(double)number_of_stages;
+        double second_power_in_stage = second_power/(double)number_of_stages;
 
-            move_holonomic_with_encoder(first_motor, second_motor, third_motor, fourth_motor,first_side_total_power,
-                    second_side_total_power, distance_in_stage,FALSE);
+
+        for(int done_stages=0; done_stages<number_of_stages;++done_stages){
+
+            first_side_total_power = first_side_total_power + first_power_in_stage;
+            second_side_total_power = second_side_total_power  +second_power_in_stage;
+
+
+
+                move_holonomic_with_encoder(first_motor, second_motor, third_motor, fourth_motor,first_side_total_power,
+                        second_side_total_power, distance_in_stage,FALSE);
 
         }
     }
@@ -371,17 +379,16 @@ public class HelperClass {
 
     public void deceleration(DcMotor first_motor,DcMotor second_motor,DcMotor third_motor,DcMotor fourth_motor,
                              double first_power,double second_power,double distance,int number_of_stages){
-        double distance_in_stage = distance/number_of_stages;
-        double first_power_in_stage = first_power/number_of_stages;
-        double second_power_in_stage = second_power/number_of_stages;
+        double distance_in_stage = distance/(double)number_of_stages;
+        double first_power_in_stage = first_power/(double)number_of_stages;
+        double second_power_in_stage = second_power/(double)number_of_stages;
 
         double first_side_total_power =first_power;
         double second_side_total_power =second_power;
 
         for(int done_stages=0; done_stages<number_of_stages;done_stages++)
         {
-            first_side_total_power-=first_power_in_stage;
-            second_side_total_power-=second_power_in_stage;
+
 
             if(done_stages == (number_of_stages-1))
             {
@@ -392,7 +399,8 @@ public class HelperClass {
                     second_side_total_power, distance_in_stage,FALSE);
             }
 
-
+            first_side_total_power-=first_power_in_stage;
+            second_side_total_power-=second_power_in_stage;
 
         }
     }
@@ -427,6 +435,7 @@ public class HelperClass {
     {
 
 
+
         acceleration(left_back_wheel, right_front_wheel,
                 left_front_wheel, right_back_wheel,power,power,acceleration_distance,number_of_stages);
 
@@ -435,9 +444,11 @@ public class HelperClass {
                 left_front_wheel,right_back_wheel,
                 power,power , move_distance , FALSE);
 
+/*
 
         deceleration(left_back_wheel, right_front_wheel,
                 left_front_wheel, right_back_wheel,power,power,deceleration_distance,number_of_stages);
+*/
 
     }
 
@@ -465,6 +476,8 @@ public class HelperClass {
                                            double power,int number_of_stages, char direction,boolean break_at_end)
     {
 
+        stop_and_reset(left_back_wheel, right_front_wheel,
+                left_front_wheel, right_back_wheel);
         if(direction == 'R')
         {
             acceleration(left_back_wheel, right_front_wheel,
@@ -500,6 +513,9 @@ public class HelperClass {
                                    double acceleration_distance,double move_distance,double deceleration_distance,
                                    double power,int number_of_stages, char direction,boolean break_at_end)
     {
+        stop_and_reset(left_back_wheel, right_front_wheel,
+                left_front_wheel,right_back_wheel);
+
         if(direction == 'L'){
             acceleration(left_back_wheel, right_front_wheel,
                     left_front_wheel, right_back_wheel,power,-power,acceleration_distance,number_of_stages);
@@ -567,7 +583,7 @@ public class HelperClass {
         double num_of_rotations = (robot_spin_circumference/wheel_circumference);
         double degrees_per_rotation = 360 / num_of_rotations ;
         double distance = (Given_Degree*wheel_circumference/degrees_per_rotation);
-
+        stop_and_reset(left_back_wheel,left_front_wheel,right_back_wheel, right_front_wheel);
         if(direction == 'C'){
             move_holonomic_with_encoder(left_back_wheel,left_front_wheel,right_back_wheel, right_front_wheel,
                     power,-power,distance,break_at_end );
@@ -768,6 +784,15 @@ public class HelperClass {
         arm_motor.setPower(0);
     }
 
+public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
+                           DcMotor third_motor, DcMotor fourth_motor)
+{
+    first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+}
 
 
 }

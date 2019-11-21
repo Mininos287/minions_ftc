@@ -119,5 +119,9 @@ public class TrainingManual extends OpMode {
     public void stop() {
         telemetry.addData("Status", "Stop");
 
+
+
+
+
     }
 }
