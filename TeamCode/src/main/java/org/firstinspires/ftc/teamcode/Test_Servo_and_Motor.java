@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "abdallah",group = "abdallah")
 
-public class Test_Servo extends OpMode {
+public class Test_Servo_and_Motor extends OpMode {
     Servo test_servo= null;
     DcMotor test_dc_motor = null;
 

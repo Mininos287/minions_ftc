@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
+ import static java.lang.Math.round;
 
 public class HelperClass   {
 
@@ -27,9 +28,10 @@ public class HelperClass   {
      * parameter: double power
      * return double
      */
-    private double dc_motor_power_adapter(double power) {
-        double new_power = (power / 100);
-        return new_power;
+    public double dc_motor_power_adapter(double power) {
+        double new_power = (power / 100) ;
+
+         return new_power;
     }
 
 
@@ -43,8 +45,10 @@ public class HelperClass   {
      * return void
      */
     private void side_power(DcMotor first_motor, DcMotor second_motor, double power){
-        first_motor.setPower(dc_motor_power_adapter(power));
-        second_motor.setPower(dc_motor_power_adapter(power));
+
+        first_motor.setPower( (double) round(dc_motor_power_adapter(power) *100) /100);
+        second_motor.setPower( (double) round(dc_motor_power_adapter(power) *100) /100);
+
     }
 
 
@@ -206,7 +210,7 @@ public class HelperClass   {
      *
      * return int
      */
-    private int cm_to_ticks(double distance) {
+    public int cm_to_ticks(double distance) {
 
         int ticks_to_go = (int)((distance * num_of_ticks) / wheel_circumference);
         return ticks_to_go;
@@ -436,20 +440,20 @@ public class HelperClass   {
 
 
 
-        acceleration(left_back_wheel, right_front_wheel,
+        /*acceleration(left_back_wheel, right_front_wheel,
                 left_front_wheel, right_back_wheel,power,power,acceleration_distance,number_of_stages);
-
+*/
 
         move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
                 left_front_wheel,right_back_wheel,
                 power,power , move_distance , FALSE);
 
-/*
 
+/*
         deceleration(left_back_wheel, right_front_wheel,
                 left_front_wheel, right_back_wheel,power,power,deceleration_distance,number_of_stages);
-*/
 
+*/
     }
 
 
@@ -517,26 +521,29 @@ public class HelperClass   {
                 left_front_wheel,right_back_wheel);
 
         if(direction == 'L'){
-            acceleration(left_back_wheel, right_front_wheel,
+          /*  acceleration(left_back_wheel, right_front_wheel,
                     left_front_wheel, right_back_wheel,power,-power,acceleration_distance,number_of_stages);
-
+*/
 
             move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
                     left_front_wheel,right_back_wheel,
                     power,-power ,move_distance , break_at_end);
-
+/*
             deceleration(left_back_wheel, right_front_wheel,
                     left_front_wheel, right_back_wheel,power,-power,deceleration_distance,number_of_stages);
+       */
         }else if(direction == 'R'){
+           /*
             acceleration(left_back_wheel, right_front_wheel,
                     left_front_wheel, right_back_wheel,-power,power,acceleration_distance,number_of_stages);
-
+*/
             move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
                     left_front_wheel,right_back_wheel,
                     -power,power , move_distance , break_at_end);
-
+/*
             deceleration(left_back_wheel, right_front_wheel,
                     left_front_wheel, right_back_wheel,-power,power,deceleration_distance,number_of_stages);
+        */
         }
 
     }
@@ -795,6 +802,259 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
 }
 
 
-}
+
+
+
+
+
+     public void acceleration_deceleration_manual (DcMotor first_motor, DcMotor second_motor,
+                                                  DcMotor third_motor, DcMotor fourth_motor, double power_acceleration,
+                                                  double power_decceleration ,double power,double distanc_acceleration
+                                                            , double diistance , double distance_deceleration)
+    {
+
+        first_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        second_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        third_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fourth_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        first_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
+        second_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
+        third_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
+        fourth_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
+
+        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        first_motor.setPower(dc_motor_power_adapter(power_acceleration*(1/3)));
+        second_motor.setPower(dc_motor_power_adapter(power_acceleration*(1/3)));
+        third_motor.setPower(dc_motor_power_adapter(power_acceleration*(1/3)));
+        fourth_motor.setPower(dc_motor_power_adapter(power_acceleration*(1/3)));
+
+
+        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
+        {
+
+        }
+        first_motor.setPower(dc_motor_power_adapter(0));
+        second_motor.setPower(dc_motor_power_adapter(0));
+        third_motor.setPower(dc_motor_power_adapter(0));
+        fourth_motor.setPower(dc_motor_power_adapter(0));
+
+        //0000000000000000000000000000000000000000000000000000000001
+/*
+
+        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        first_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
+        second_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
+        third_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
+        fourth_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
+
+
+        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        first_motor.setPower(dc_motor_power_adapter(power_acceleration*(2/3)));
+        second_motor.setPower(dc_motor_power_adapter(power_acceleration*(2/3)));
+        third_motor.setPower(dc_motor_power_adapter(power_acceleration*(2/3)));
+        fourth_motor.setPower(dc_motor_power_adapter(power_acceleration*(2/3)));
+
+
+        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
+        {
+
+        }
+        first_motor.setPower(dc_motor_power_adapter(0));
+        second_motor.setPower(dc_motor_power_adapter(0));
+        third_motor.setPower(dc_motor_power_adapter(0));
+        fourth_motor.setPower(dc_motor_power_adapter(0));
+        //0000000000000000000000000000000000000000000000000000000002
+
+        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        first_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
+        second_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
+        third_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
+        fourth_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
+
+
+        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        first_motor.setPower(dc_motor_power_adapter(power_acceleration));
+        second_motor.setPower(dc_motor_power_adapter(power_acceleration));
+        third_motor.setPower(dc_motor_power_adapter(power_acceleration));
+        fourth_motor.setPower(dc_motor_power_adapter(power_acceleration));
+
+
+        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
+        {
+
+        }
+        first_motor.setPower(dc_motor_power_adapter(0));
+        second_motor.setPower(dc_motor_power_adapter(0));
+        third_motor.setPower(dc_motor_power_adapter(0));
+        fourth_motor.setPower(dc_motor_power_adapter(0));
+        //0000000000000000000000000000000000000000000000000000000003
+
+        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        first_motor.setTargetPosition(cm_to_ticks(diistance));
+        second_motor.setTargetPosition(cm_to_ticks(diistance));
+        third_motor.setTargetPosition(cm_to_ticks(diistance));
+        fourth_motor.setTargetPosition(cm_to_ticks(diistance));
+
+        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        first_motor.setPower(dc_motor_power_adapter(power));
+        second_motor.setPower(dc_motor_power_adapter(power));
+        third_motor.setPower(dc_motor_power_adapter(power));
+        fourth_motor.setPower(dc_motor_power_adapter(power));
+
+
+        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
+        {
+
+        }
+        first_motor.setPower(dc_motor_power_adapter(0));
+        second_motor.setPower(dc_motor_power_adapter(0));
+        third_motor.setPower(dc_motor_power_adapter(0));
+        fourth_motor.setPower(dc_motor_power_adapter(0));
+        //0000000000000000000000000000000000000000000000000000000004
+
+        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        first_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
+        second_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
+        third_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
+        fourth_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
+
+        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        first_motor.setPower(dc_motor_power_adapter(power_decceleration));
+        second_motor.setPower(dc_motor_power_adapter(power_decceleration));
+        third_motor.setPower(dc_motor_power_adapter(power_decceleration));
+        fourth_motor.setPower(dc_motor_power_adapter(power_decceleration));
+
+
+        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
+        {
+
+        }
+        first_motor.setPower(dc_motor_power_adapter(0));
+        second_motor.setPower(dc_motor_power_adapter(0));
+        third_motor.setPower(dc_motor_power_adapter(0));
+        fourth_motor.setPower(dc_motor_power_adapter(0));
+        //0000000000000000000000000000000000000000000000000000000005
+
+        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        first_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
+        second_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
+        third_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
+        fourth_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
+
+        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        first_motor.setPower(dc_motor_power_adapter(power_decceleration*(2/3)));
+        second_motor.setPower(dc_motor_power_adapter(power_decceleration*(2/3)));
+        third_motor.setPower(dc_motor_power_adapter(power_decceleration*(2/3)));
+        fourth_motor.setPower(dc_motor_power_adapter(power_decceleration*(2/3)));
+
+
+        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
+        {
+
+        }
+        first_motor.setPower(dc_motor_power_adapter(0));
+        second_motor.setPower(dc_motor_power_adapter(0));
+        third_motor.setPower(dc_motor_power_adapter(0));
+        fourth_motor.setPower(dc_motor_power_adapter(0));
+        //0000000000000000000000000000000000000000000000000000000006
+
+        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        first_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
+        second_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
+        third_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
+        fourth_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
+
+        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        first_motor.setPower(dc_motor_power_adapter(power_decceleration*(1/3)));
+        second_motor.setPower(dc_motor_power_adapter(power_decceleration*(1/3)));
+        third_motor.setPower(dc_motor_power_adapter(power_decceleration*(1/3)));
+        fourth_motor.setPower(dc_motor_power_adapter(power_decceleration*(1/3)));
+
+
+        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
+        {
+
+        }
+
+        first_motor.setPower(dc_motor_power_adapter(0));
+        second_motor.setPower(dc_motor_power_adapter(0));
+        third_motor.setPower(dc_motor_power_adapter(0));
+        fourth_motor.setPower(dc_motor_power_adapter(0));
+        //0000000000000000000000000000000000000000000000000000000007
+*/
+    }
+
+
+
+
+
+
+
+
+    }
 
 

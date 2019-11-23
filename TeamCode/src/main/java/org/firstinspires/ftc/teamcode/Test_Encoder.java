@@ -73,7 +73,7 @@ public class Test_Encoder extends OpMode {
             right_back_motor.setDirection(DcMotor.Direction.REVERSE);
             right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             helper_class_object.move_diagonal_with_encoder(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,20,100,0,diagonal_power,5,'R',TRUE);
+                    right_back_motor, right_front_motor,20,200,0,diagonal_power,5,'R',TRUE);
 
         }else if(gamepad1.dpad_up && gamepad1.dpad_left){
             left_back_motor.setDirection(DcMotor.Direction.FORWARD);
@@ -81,21 +81,21 @@ public class Test_Encoder extends OpMode {
             right_back_motor.setDirection(DcMotor.Direction.REVERSE);
             right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             helper_class_object.move_diagonal_with_encoder(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,20,100,0,diagonal_power,5,'L',TRUE);
+                    right_back_motor, right_front_motor,20,250,0,diagonal_power,5,'L',TRUE);
         }else if(gamepad1.dpad_down &&gamepad1.dpad_right){
             left_back_motor.setDirection(DcMotor.Direction.FORWARD);
             left_front_motor.setDirection(DcMotor.Direction.FORWARD);
             right_back_motor.setDirection(DcMotor.Direction.REVERSE);
             right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             helper_class_object.move_diagonal_with_encoder(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,20,100,0,-diagonal_power,5,'L',TRUE);
+                    right_back_motor, right_front_motor,20,300,0,-diagonal_power,5,'L',TRUE);
         }else if(gamepad1.dpad_down && gamepad1.dpad_left){
             left_back_motor.setDirection(DcMotor.Direction.FORWARD);
             left_front_motor.setDirection(DcMotor.Direction.FORWARD);
             right_back_motor.setDirection(DcMotor.Direction.REVERSE);
             right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             helper_class_object.move_diagonal_with_encoder(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,20,100,0,-diagonal_power,5,'R',TRUE);
+                    right_back_motor, right_front_motor,20,150,0,-diagonal_power,5,'R',TRUE);
         }
 
         else if (gamepad1.dpad_up) {
@@ -105,7 +105,7 @@ public class Test_Encoder extends OpMode {
             right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             //move forward
            helper_class_object.move_with_encoder(left_back_motor, left_front_motor,
-                   right_back_motor, right_front_motor,100,100,100,move_power,5);
+                   right_back_motor, right_front_motor,100,5,100,move_power,3);
 
            // helper_class_object.acceleration(left_back_motor,left_front_motor,right_back_motor,right_front_motor,10,10,50,5);
         }
@@ -117,7 +117,7 @@ public class Test_Encoder extends OpMode {
             right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             //move backward
              helper_class_object.move_with_encoder(left_back_motor, left_front_motor,
-                     right_back_motor, right_front_motor,20,1000,20,-move_power,5);
+                     right_back_motor, right_front_motor,20,15,20,-move_power,5);
 
 
         }
@@ -130,7 +130,7 @@ public class Test_Encoder extends OpMode {
             right_front_motor.setDirection(DcMotor.Direction.FORWARD);
             //move right
             helper_class_object.side__with_encoder(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,20,100,20,side_power,5,'R',TRUE);
+                    right_back_motor, right_front_motor,20,25,20,side_power,5,'R',TRUE);
 
         }
         else if (gamepad1.dpad_left) {
@@ -140,7 +140,7 @@ public class Test_Encoder extends OpMode {
             right_front_motor.setDirection(DcMotor.Direction.FORWARD);
             //move left
             helper_class_object.side__with_encoder(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,20,100,0,side_power,5,'L',TRUE);
+                    right_back_motor, right_front_motor,20,35,0,side_power,5,'L',TRUE);
 
 
         }
