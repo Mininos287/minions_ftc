@@ -76,7 +76,7 @@ public class Ftc_Auto extends LinearOpMode {
         double arm_power = 0 ;
         double stop_power = 0 ;
 
-
+int flag = 0 ;
         HelperClass helper_class_object = new HelperClass();
 
         left_back_motor = hardwareMap.get(DcMotor.class, "left_back_motor");
@@ -255,6 +255,15 @@ public class Ftc_Auto extends LinearOpMode {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
+
+
+        // Note: To use the remote camera preview:
+        // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
+        // Tap the preview window to receive a fresh image.
+
+        targetsSkyStone.activate();
+
+
         // WARNING:
         // In this sample, we do not wait for PLAY to be pressed.  Target Tracking is started immediately when INIT is pressed.
         // This sequence is used to enable the new remote DS Camera Preview feature to be used with this sample.
@@ -263,63 +272,75 @@ public class Ftc_Auto extends LinearOpMode {
 
         waitForStart();
 
-        // Note: To use the remote camera preview:
-        // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
-        // Tap the preview window to receive a fresh image.
 
-        targetsSkyStone.activate();
+        while (opModeIsActive()) {
 
-        while (opModeIsActive())
-        {
 
-            // check all the trackable targets to see which one (if any) is visible.
-            targetVisible = false;
-            for (VuforiaTrackable trackable : allTrackables)
-            {
-                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible())
-                {
-                    target_name = trackable.getName() ;
+            while (flag == 0){
+                // check all the trackable targets to see which one (if any) is visible.
+                targetVisible = false;
 
-                    telemetry.addData("Visible Target", trackable.getName() );
+            for (VuforiaTrackable trackable : allTrackables) {
+
+                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                    target_name = trackable.getName();
+
+                    telemetry.addData("Visible Target", trackable.getName());
+                    telemetry.update();
+
                     targetVisible = true;
 
                     // getUpdatedRobotLocation() will return null if no new information is available since
                     // the last time that call was made, or if the trackable is not currently visible.
-                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
-                    if (robotLocationTransform != null) {
+                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                    if(robotLocationTransform != null){
                         lastLocation = robotLocationTransform;
                     }
-                    //break;
 
-                    if(target_name == "Stone Target"){
+                    if (target_name == "Stone Target"){
 
-                        telemetry.addData("hi", "%s",target_name);
+                        telemetry.addData("hi", "%s", target_name);
                         VectorF translation = lastLocation.getTranslation();
-                        telemetry.addData("hi", "%f",translation.get(0));
-                        if((translation.get(0)/10) < (-15)){
+                        telemetry.addData("hi", "%f", translation.get(0));
+                        telemetry.update();
+
+                        if ((translation.get(0) / 10) < (-25)) {
+
                             left_back_motor.setDirection(DcMotor.Direction.FORWARD);
                             left_front_motor.setDirection(DcMotor.Direction.FORWARD);
                             right_back_motor.setDirection(DcMotor.Direction.REVERSE);
                             right_front_motor.setDirection(DcMotor.Direction.REVERSE);
 
                             telemetry.addData("Pos (CM)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                                    translation.get(0) /10 , translation.get(1) /10 , translation.get(2) / 10);
+                                    translation.get(0) / 10, translation.get(1) / 10, translation.get(2) / 10);
+                            telemetry.update();
 
-                            helper_class_object.move_without_encoder(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,'F');
+                            helper_class_object.move_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 25, 'F');
 
+                        }else{
+
+                            flag = 1 ;
                         }
 
-                    }else{
-                        helper_class_object.move_without_encoder(left_back_motor,left_front_motor,right_back_motor,right_front_motor,0,'F');
+
+                    } else {
+                        target_name = "none";
+                        helper_class_object.move_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 0, 'F');
 
                     }
 
-                }else{
-                    target_name = "none" ;
+                } else {
+                    target_name = "none";
+                    helper_class_object.move_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 0, 'F');
 
                 }
-
+waitOneFullHardwareCycle();
             }
+
+        }
+
+
+
 
 
 /*
@@ -340,7 +361,12 @@ public class Ftc_Auto extends LinearOpMode {
             }
 
             */
-            telemetry.update();
+
+
+
+
+
+
         }
 
 

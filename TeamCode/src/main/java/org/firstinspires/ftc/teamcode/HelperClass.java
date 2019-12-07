@@ -5,6 +5,7 @@ package org.firstinspires.ftc.teamcode;
  import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
  import com.qualcomm.robotcore.hardware.TouchSensor;
+ import com.qualcomm.robotcore.util.Range;
 
  import org.firstinspires.ftc.robotcore.external.Func;
  import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -13,6 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  import org.firstinspires.ftc.robotcore.external.navigation.Position;
  import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
+ import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 
  import java.util.Locale;
 
@@ -30,7 +32,7 @@ public class HelperClass   {
     private double robot_radius = 10.16; // habda
     private double robot_spin_circumference = (2 * PI * robot_radius) ;
     private double robot_turn_circumference = (2 * PI * (2*robot_radius)) ;
-
+    double  gyro_angel ;
 
 
     public int my_motor_is_busy(DcMotor my_motor,double distance,double power ){
@@ -688,7 +690,6 @@ public class HelperClass   {
 
 
 
-
     }
     /**
      *METHOD:  spin_deceleration
@@ -777,7 +778,7 @@ public class HelperClass   {
      */
     public void lower_to_higher_servo_degrees(Servo servo_motor, double from, double to) {
 
-        for (double position = from; position <= to; position += 1){
+        for (double position = from; position <= to; position += 1.0){
             double new_position = servo_motor_degrees_adapter(position);
             servo_motor.setPosition(new_position);
         }
@@ -800,7 +801,7 @@ public class HelperClass   {
      */
     public void higher_to_lower_servo_degrees(Servo servo_motor, double from, double to) {
 
-        for (double position = from; position >= to; position -= 1) {
+        for (double position = from; position >= to; position -= 1.0) {
             double new_position = servo_motor_degrees_adapter(position);
             servo_motor.setPosition(new_position);
 
@@ -1218,8 +1219,10 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
 
 
 
-    public void move_diagonale_left_with_encoderr(DcMotor left_back_motor,DcMotor left_front_motor,DcMotor right_back_motor,DcMotor right_front_motor
-            ,double distance , double power , boolean break_at_end){
+    public void move_diagonale_left_with_encoderr(DcMotor left_back_motor,DcMotor left_front_motor,
+                                                  DcMotor right_back_motor,DcMotor right_front_motor
+                                                    ,double distance , double power , boolean break_at_end)
+    {
 
         if (power > 0 ) {
             left_back_motor.setTargetPosition(left_back_motor.getCurrentPosition() + cm_to_ticks(distance));
@@ -1274,6 +1277,10 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
 
 
     }
+
+
+
+
 
 
     public void move_diagonale_right_with_encoderr(DcMotor left_back_motor,DcMotor left_front_motor,
@@ -1336,12 +1343,10 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
 
         }
 
-
-
-
-
-
     }
+
+
+
     public void move_side_with_encoderr(DcMotor left_back_motor,DcMotor left_front_motor,DcMotor right_back_motor,DcMotor right_front_motor
             ,double distance , double power , boolean break_at_end){
 
@@ -1450,7 +1455,7 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
                 arm_motor.setTargetPosition(target_ticks);
 
 
-                arm_motor.setPower(dc_motor_power_adapter(-power));
+                arm_motor.setPower(dc_motor_power_adapter(power));
 
                 while ((arm_motor.getCurrentPosition() > target_ticks));
 
@@ -1465,6 +1470,151 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
             arm_motor.setPower(0);
 
         }
+
+    }
+
+    public void spin_with_encoderr(DcMotor left_back_motor, DcMotor left_front_motor,
+                                  DcMotor right_back_motor, DcMotor right_front_motor,
+                                  double power , int Given_Degree , char direction,boolean break_at_end)
+    {
+        double num_of_rotations = (robot_spin_circumference/wheel_circumference);
+        double degrees_per_rotation = 360 / num_of_rotations ;
+        double distance = (Given_Degree*wheel_circumference/degrees_per_rotation);
+
+        if(direction== 'C'){
+            if (power > 0 )
+            {
+                left_back_motor.setTargetPosition(left_back_motor.getCurrentPosition() + cm_to_ticks(distance));
+                left_front_motor.setTargetPosition(left_front_motor.getCurrentPosition() + cm_to_ticks(distance));
+                right_back_motor.setTargetPosition(right_back_motor.getCurrentPosition() + cm_to_ticks(distance));
+                right_front_motor.setTargetPosition(right_front_motor.getCurrentPosition() + cm_to_ticks(distance));
+
+
+                int target_ticks = left_back_motor.getCurrentPosition() + cm_to_ticks(distance);
+
+
+
+                left_back_motor.setPower(dc_motor_power_adapter(power));
+                left_front_motor.setPower(dc_motor_power_adapter(power));
+                right_back_motor.setPower(dc_motor_power_adapter(-power));
+                right_front_motor.setPower(dc_motor_power_adapter(-power));
+
+
+                while ((left_back_motor.getCurrentPosition() > target_ticks) && (left_front_motor.getCurrentPosition() > target_ticks)
+                        && (right_back_motor.getCurrentPosition() < target_ticks) && (right_front_motor.getCurrentPosition() < target_ticks))
+                    ;
+
+
+                left_back_motor.setPower(dc_motor_power_adapter(0));
+                left_front_motor.setPower(dc_motor_power_adapter(0));
+                right_back_motor.setPower(dc_motor_power_adapter(0));
+                right_front_motor.setPower(dc_motor_power_adapter(0));
+
+            }else if(power < 0){
+
+                left_back_motor.setTargetPosition(left_back_motor.getCurrentPosition() - cm_to_ticks(distance));
+                left_front_motor.setTargetPosition(left_front_motor.getCurrentPosition() - cm_to_ticks(distance));
+                right_back_motor.setTargetPosition(right_back_motor.getCurrentPosition() - cm_to_ticks(distance));
+                right_front_motor.setTargetPosition(right_front_motor.getCurrentPosition() - cm_to_ticks(distance));
+
+
+                int target_ticks = left_back_motor.getCurrentPosition() - cm_to_ticks(distance);
+
+
+                left_back_motor.setPower(dc_motor_power_adapter(-power));
+                left_front_motor.setPower(dc_motor_power_adapter(-power));
+                right_back_motor.setPower(dc_motor_power_adapter(power));
+                right_front_motor.setPower(dc_motor_power_adapter(power));
+
+
+                while ((left_back_motor.getCurrentPosition() < target_ticks) && (left_front_motor.getCurrentPosition() < target_ticks)
+                        && (right_back_motor.getCurrentPosition() > target_ticks) && (right_front_motor.getCurrentPosition() > target_ticks))
+                    ;
+
+
+                left_back_motor.setPower(dc_motor_power_adapter(0));
+                left_front_motor.setPower(dc_motor_power_adapter(0));
+                right_back_motor.setPower(dc_motor_power_adapter(0));
+                right_front_motor.setPower(dc_motor_power_adapter(0));
+
+            }else if (power ==0){
+                left_back_motor.setPower(dc_motor_power_adapter(0));
+                left_front_motor.setPower(dc_motor_power_adapter(0));
+                right_back_motor.setPower(dc_motor_power_adapter(0));
+                right_front_motor.setPower(dc_motor_power_adapter(0));
+            }
+
+
+
+        }
+        else if(direction=='A'){
+            if (power > 0 )
+            {
+                left_back_motor.setTargetPosition(left_back_motor.getCurrentPosition() + cm_to_ticks(distance));
+                left_front_motor.setTargetPosition(left_front_motor.getCurrentPosition() + cm_to_ticks(distance));
+                right_back_motor.setTargetPosition(right_back_motor.getCurrentPosition() + cm_to_ticks(distance));
+                right_front_motor.setTargetPosition(right_front_motor.getCurrentPosition() + cm_to_ticks(distance));
+
+
+                int target_ticks = left_back_motor.getCurrentPosition() + cm_to_ticks(distance);
+
+
+
+                left_back_motor.setPower(dc_motor_power_adapter(-power));
+                left_front_motor.setPower(dc_motor_power_adapter(-power));
+                right_back_motor.setPower(dc_motor_power_adapter(power));
+                right_front_motor.setPower(dc_motor_power_adapter(power));
+
+
+                while ((left_back_motor.getCurrentPosition() < target_ticks) && (left_front_motor.getCurrentPosition() < target_ticks)
+                        && (right_back_motor.getCurrentPosition() > target_ticks) && (right_front_motor.getCurrentPosition() > target_ticks))
+                    ;
+
+
+                left_back_motor.setPower(dc_motor_power_adapter(0));
+                left_front_motor.setPower(dc_motor_power_adapter(0));
+                right_back_motor.setPower(dc_motor_power_adapter(0));
+                right_front_motor.setPower(dc_motor_power_adapter(0));
+
+            }else if(power < 0){
+
+                left_back_motor.setTargetPosition(left_back_motor.getCurrentPosition() - cm_to_ticks(distance));
+                left_front_motor.setTargetPosition(left_front_motor.getCurrentPosition() - cm_to_ticks(distance));
+                right_back_motor.setTargetPosition(right_back_motor.getCurrentPosition() - cm_to_ticks(distance));
+                right_front_motor.setTargetPosition(right_front_motor.getCurrentPosition() - cm_to_ticks(distance));
+
+
+                int target_ticks = left_back_motor.getCurrentPosition() - cm_to_ticks(distance);
+
+
+                left_back_motor.setPower(dc_motor_power_adapter(power));
+                left_front_motor.setPower(dc_motor_power_adapter(power));
+                right_back_motor.setPower(dc_motor_power_adapter(-power));
+                right_front_motor.setPower(dc_motor_power_adapter(-power));
+
+
+                while ((left_back_motor.getCurrentPosition() > target_ticks) && (left_front_motor.getCurrentPosition() > target_ticks)
+                        && (right_back_motor.getCurrentPosition() < target_ticks) && (right_front_motor.getCurrentPosition() < target_ticks))
+                    ;
+
+                left_back_motor.setPower(dc_motor_power_adapter(0));
+                left_front_motor.setPower(dc_motor_power_adapter(0));
+                right_back_motor.setPower(dc_motor_power_adapter(0));
+                right_front_motor.setPower(dc_motor_power_adapter(0));
+
+            }else if (power ==0){
+                left_back_motor.setPower(dc_motor_power_adapter(0));
+                left_front_motor.setPower(dc_motor_power_adapter(0));
+                right_back_motor.setPower(dc_motor_power_adapter(0));
+                right_front_motor.setPower(dc_motor_power_adapter(0));
+            }
+
+        }
+
+
+
+
+
 
     }
 

@@ -28,7 +28,7 @@ public class TestArmMotor extends OpMode {
     @Override
     public void init() {
         arm_motor = hardwareMap.get(DcMotor.class, "arm_motor");
-        arm_motor.setDirection(DcMotorSimple.Direction.FORWARD);
+        arm_motor.setDirection(DcMotorSimple.Direction.REVERSE);
         arm_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         touch_sensor = hardwareMap.get(TouchSensor.class, "touch_sensor");
