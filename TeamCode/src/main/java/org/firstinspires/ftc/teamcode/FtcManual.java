@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.Range;
@@ -27,19 +28,20 @@ import static android.os.SystemClock.sleep;
 @TeleOp(name = "FtcManual",group = "FTC")
 
 public class FtcManual extends OpMode {
+
     private DcMotor left_back_motor = null;
     private DcMotor left_front_motor = null;
     private DcMotor right_back_motor = null;
     private DcMotor right_front_motor = null;
 
-//    Servo foundation_servo = null;
-//    Servo second_servo = null;
+    private DcMotor arm_motor = null;
+
     Servo right_foundation_servo = null;
     Servo left_foundation_servo = null ;
+    Servo arm_servo = null;
 
-
-    private DcMotor arm_motor = null;
-    private TouchSensor touch_sensor;
+    private TouchSensor min_end_stop;
+    DigitalChannel max_end_stop;
 
     double move_power = 0;
     double diagonal_power = 0;
@@ -69,15 +71,19 @@ public class FtcManual extends OpMode {
         left_front_motor = hardwareMap.get(DcMotor.class, "left_front_motor");
         right_back_motor = hardwareMap.get(DcMotor.class, "right_back_motor");
         right_front_motor = hardwareMap.get(DcMotor.class, "right_front_motor");
-        right_foundation_servo = hardwareMap.get(Servo.class, "right_foundation_servo");
-        left_foundation_servo = hardwareMap.get(Servo.class, "left_foundation_servo");
+
         arm_motor = hardwareMap.get(DcMotor.class, "arm_motor");
         arm_motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        arm_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        touch_sensor = hardwareMap.get(TouchSensor.class, "touch_sensor");
-//        foundation_servo = hardwareMap.get(Servo.class, "foundation_servo");
-//        second_servo = hardwareMap.get(Servo.class, "second_servo");
+        right_foundation_servo = hardwareMap.get(Servo.class, "right_foundation_servo");
+        left_foundation_servo = hardwareMap.get(Servo.class, "left_foundation_servo");
+        arm_servo = hardwareMap.get(Servo.class, "arm_servo");
+
+
+        min_end_stop = hardwareMap.get(TouchSensor.class, "min_end_stop");
+
+        max_end_stop = hardwareMap.get(DigitalChannel.class, "max_end_stop");
+        max_end_stop.setMode(DigitalChannel.Mode.INPUT);
 
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
@@ -109,10 +115,22 @@ public class FtcManual extends OpMode {
     public void init_loop() {
 
         telemetry.addData("Status", "init_loop");
-//        telemetry.addData("current servo pos", "%f", foundation_servo.getPosition());
-        /*
-         * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-         */
+
+        if(right_foundation_servo.getPosition() != .8){
+            right_foundation_servo.setPosition(0.8);
+
+        }
+
+        if(left_foundation_servo.getPosition() != 0){
+            left_foundation_servo.setPosition(0);
+
+        }
+
+        if(!min_end_stop.isPressed()){
+            helper_class_object.move_arm_without_encoder (arm_motor ,-arm_power);
+
+        }
+
     }
 
 
@@ -121,9 +139,6 @@ public class FtcManual extends OpMode {
         telemetry.addData("Status", "start");
 
 
-        /*
-         * Code to run ONCE when the driver hits PLAY
-         */
     }
 
 
@@ -132,13 +147,10 @@ public class FtcManual extends OpMode {
 
         // Start the logging of measured acceleration
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-        telemetry.addData("hi", "%f", gyro_angel);
-        telemetry.update();
+         telemetry.update();
 
 
-        //  while (! touch_sensor.isPressed()){
 
-        //  }
 
 
         if (gamepad1.right_bumper && gamepad1.left_bumper) {
@@ -270,27 +282,64 @@ public class FtcManual extends OpMode {
 
 
         if (gamepad1.y) {
+            if(max_end_stop.getState() == true ){
+                helper_class_object.move_arm_without_encoder (arm_motor ,arm_power);
 
-            helper_class_object.move_arm(arm_motor,arm_power,500,touch_sensor);
+            }else {
+                helper_class_object.move_arm_without_encoder (arm_motor ,stop_power);
+
+            }
 
 
         } else if (gamepad1.a) {
-            helper_class_object.move_arm(arm_motor,-arm_power,500,touch_sensor);
+            if(!min_end_stop.isPressed()){
+                helper_class_object.move_arm_without_encoder (arm_motor ,-arm_power);
+
+            }else {
+                helper_class_object.move_arm_without_encoder (arm_motor ,stop_power);
+
+            }
 
         }else {
-            telemetry.addData("current position is ","%d",arm_motor.getCurrentPosition());
-            telemetry.update();
+                helper_class_object.move_arm_without_encoder (arm_motor ,stop_power);
+
         }
 
 
         if (gamepad2.dpad_up) {
-            right_foundation_servo.setPosition(0.7);
-            left_foundation_servo.setPosition(0);
+
+            if(right_foundation_servo.getPosition() != .8){
+                right_foundation_servo.setPosition(0.8);
+
+            }
+            if(left_foundation_servo.getPosition() != 0){
+                left_foundation_servo.setPosition(0);
+
+            }
 
         } else if (gamepad2.dpad_down) {
-            right_foundation_servo.setPosition(0);
-            left_foundation_servo.setPosition(0.7);
 
+            if(right_foundation_servo.getPosition() != 0.2){
+                right_foundation_servo.setPosition(0.2);
+
+            }
+            if(left_foundation_servo.getPosition() != 0.5){
+                left_foundation_servo.setPosition(0.5);
+
+            }
+
+        }
+        else if (gamepad2.dpad_right) {
+
+            if (arm_servo.getPosition() != 0.0) {
+                right_foundation_servo.setPosition(0.0);
+            }
+        }
+        else if (gamepad2.dpad_left) {
+
+            if (arm_servo.getPosition() != 1) {
+                right_foundation_servo.setPosition(1);
+            }
         }
 
 

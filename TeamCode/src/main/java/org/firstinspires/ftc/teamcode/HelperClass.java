@@ -66,19 +66,12 @@ public class HelperClass   {
 
 
 
-
-
-
-
-
     /**
-     * METHOD: dc_motor_power_adapter
-     *
      * Used to convert from -100 to 100 (power) to -1 and 1
-     *
-     * parameter: double power
-     * return double
+     * @param power
+     * @return the power divided by 100
      */
+
     public double dc_motor_power_adapter(double power) {
        double new_power = (power / 100) ;
         // double new_power = power ;
@@ -86,16 +79,13 @@ public class HelperClass   {
          return new_power;
     }
 
-
-
     /**
-     * METHOD: side_power
-     *
      * Provide the two wheels on the same side with the same power
-     *
-     * parameters: double power , DcMotor first_motor , DcMotor second_motor
-     * return void
+     * @param first_motor
+     * @param second_motor
+     * @param power
      */
+
     private void side_power(DcMotor first_motor, DcMotor second_motor, double power){
 
         first_motor.setPower(dc_motor_power_adapter(power)  );
@@ -104,20 +94,18 @@ public class HelperClass   {
     }
 
 
-
-
     /**
-     * METHOD: move_holonomic_without_encoder
-     *
      * Used to give the same power to the right side and the same power to the left side
-     * parameters: DcMotor left_back_wheel, DcMotor left_front_wheel,
-     *                                           DcMotor right_back_wheel, DcMotor right_front_wheel,
-     *                                            side_power
-     *
-     * return void
+     * @param first_motor
+     * @param second_motor
+     * @param third_motor
+     * @param fourth_motor
+     * @param first_side_power
+     * @param second_side_power
      */
+
     public void move_holonomic_without_encoder(DcMotor first_motor, DcMotor second_motor,
-                                               DcMotor third_motor, DcMotor fourth_motor,
+                                               DcMotor third_motor , DcMotor fourth_motor ,
                                                double first_side_power, double second_side_power){
 
         side_power(first_motor, second_motor, first_side_power);
@@ -125,18 +113,14 @@ public class HelperClass   {
         side_power(third_motor, fourth_motor, second_side_power);
     }
 
-
-
     /**
-     *METHOD: move_without_encoder
-     *
      *  used to move the robot backward/forward
-     *
-     * parameters: left_back_wheel, right_front_wheel,
-     *                     left_front_wheel,right_back_wheel,
-     *                     first_side_power,second_side_power
-     *
-     * return void
+     * @param left_back_wheel
+     * @param left_front_wheel
+     * @param right_back_wheel
+     * @param right_front_wheel
+     * @param power
+     * @param direction
      */
 
     public void move_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
@@ -160,15 +144,13 @@ public class HelperClass   {
     }
 
     /**
-     *METHOD: move_side_without_encoder
-     *
      *  used to move the robot right/left
-     *
-     * parameters: ( left_back_wheel,  left_front_wheel,
-     *                               right_back_wheel,  right_front_wheel,
-     *                               power,  direction
-     *
-     * return void
+     * @param left_back_wheel
+     * @param left_front_wheel
+     * @param right_back_wheel
+     * @param right_front_wheel
+     * @param power
+     * @param direction
      */
 
     public void move_side_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
@@ -189,15 +171,13 @@ public class HelperClass   {
     }
 
     /**
-     *METHOD: move_diagonal //without encoder
-     *
      *  used to move the robot diagonally right backward/forward
-     *
-     * parameters: left_back_wheel, right_front_wheel,
-     *                 left_front_wheel,right_back_wheel,
-     *                 power,direction
-     *
-     * return void
+     * @param left_back_wheel
+     * @param left_front_wheel
+     * @param right_back_wheel
+     * @param right_front_wheel
+     * @param power
+     * @param direction
      */
 
     public void move_diagonal_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
@@ -213,19 +193,14 @@ public class HelperClass   {
         }
     }
 
-
-
-
     /**
-     *METHOD:  spin_without_encoder
-     *
      *  used to spin the robot without encoder clockwise or anti-clockwise
-     *
-     * parameters: left_back_wheel, left_front_wheel,
-     *                right_back_wheel,right_front_wheel,
-     *                 power,direction
-     *
-     * return void
+     * @param left_back_wheel
+     * @param left_front_wheel
+     * @param right_back_wheel
+     * @param right_front_wheel
+     * @param power
+     * @param direction
      */
 
     public void spin_without_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
@@ -250,38 +225,23 @@ public class HelperClass   {
 
 
 
-
-
-
     /**
-     * METHOD: cm_to_ticks
-     * <p>
      * Used to convert cm to ticks
-     * <p>
-     * parameters: double distance
-     *
-     * return int
+     * @param distance
+     * @return ticks
      */
+
     public int cm_to_ticks(double distance) {
 
         int ticks_to_go = (int)((distance * num_of_ticks) / wheel_circumference);
         return ticks_to_go;
     }
 
-
-
-
-
-
-
     /**
-     *METHOD: side_position
-     *
      * set the position of motors of the same side motors
-     *
-     * parameters:DcMotor first_motor , DcMotor second_motor, double distance
-     *
-     * return void
+     * @param first_motor
+     * @param second_motor
+     * @param distance
      */
 
     public void side_position (DcMotor first_motor , DcMotor second_motor ,double distance )
@@ -294,21 +254,13 @@ public class HelperClass   {
         second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-
-
-
-
-
-
     /**
-     *METHOD: side_is_busy
-     *
      * check if the same side motors have reached their pre set position or not
-     *
-     * parameters:DcMotor first_motor , DcMotor second_motor
-     *
-     * return boolean
+     * @param first_motor
+     * @param second_motor
+     * @return TRUE or FALSE
      */
+
     public boolean side_is_busy (DcMotor first_motor , DcMotor second_motor) //wait
     {
         return(first_motor.isBusy() && second_motor.isBusy());
@@ -320,18 +272,18 @@ public class HelperClass   {
 
 
 
-
     /**
-     *METHOD: move_holonomic_with_encoder
-     *
      * move using the encoder
-     *
-     * parameters: DcMotor left_back_wheel , DcMotor left_front_wheel,
-     *                                        DcMotor right_back_wheel, DcMotor right_front_wheel,
-     *                                        double side_power,double distance
-     *
-     * return void
+     * @param first_motor
+     * @param second_motor
+     * @param third_motor
+     * @param fourth_motor
+     * @param first_power
+     * @param second_motor
+     * @param distance
+     * @param break_at_end
      */
+
     public void move_holonomic_with_encoder(DcMotor first_motor , DcMotor second_motor,
                                             DcMotor third_motor, DcMotor fourth_motor,
                                             double first_power, double second_power,double distance,boolean break_at_end){
@@ -372,23 +324,16 @@ public class HelperClass   {
 
 
 
-
-
-
-
-
-
-
     /**
-     *METHOD: acceleration
-     *
      *  accelerate the power of robot
-     *
-     * parameters: right_back_wheel, right_front_wheel,
-     *                              left_back_wheel, left_front_wheel,
-     *                              power, distance, number of stages
-     *
-     * return void
+     * @param first_motor
+     * @param second_motor
+     * @param third_motor
+     * @param fourth_motor
+     * @param first_power
+     * @param second_motor
+     * @param distance
+     * @param number_of_stages
      */
 
     public void acceleration(DcMotor first_motor,DcMotor second_motor,DcMotor third_motor,DcMotor fourth_motor,
@@ -420,20 +365,16 @@ public class HelperClass   {
 
 
 
-
-
-
-
     /**
-     *METHOD: deceleration
-     *
      *  decelerate the power of robot
-     *
-     * parameters: right_back_wheel, right_front_wheel,
-     *                              left_back_wheel, left_front_wheel,
-     *                              power, distance, number of stages
-     *
-     * return void
+     * @param first_motor
+     * @param second_motor
+     * @param third_motor
+     * @param fourth_motor
+     * @param first_power
+     * @param second_motor
+     * @param distance
+     * @param number_of_stages
      */
 
     public void deceleration(DcMotor first_motor,DcMotor second_motor,DcMotor third_motor,DcMotor fourth_motor,
@@ -468,24 +409,18 @@ public class HelperClass   {
 
 
 
-
-
-
-
-
     /**
-     *METHOD:  move_with_encoder
-     *
      *  used to move the robot forword and backword
-     *
-     * parameters: left_back_wheel, left_front_wheel,
-     *                right_back_wheel,right_front_wheel,
-     *                 power,direction distance,break_at_end
-     *
-     * return void
+     * @param left_back_wheel
+     * @param left_front_wheel
+     * @param right_back_wheel
+     * @param right_front_wheel
+     * @param acceleration_distance
+     * @param move_distance
+     * @param deceleration_distance
+     * @param power
+     * @param number_of_stages
      */
-
-
 
     public void move_with_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
                                   DcMotor right_back_wheel, DcMotor right_front_wheel,
@@ -513,22 +448,19 @@ public class HelperClass   {
 
 
 
-
-
-
-
     /**
-     *METHOD:  move_diagonal_with_encoder
-     *
      *  used to move the robot right diagonal and left diagonal
-     *
-     * parameters: left_back_wheel, left_front_wheel,
-     *                right_back_wheel,right_front_wheel,
-     *                 power,direction distance,break_at_end
-     *
-     * return void
+     * @param left_back_wheel
+     * @param left_front_wheel
+     * @param right_back_wheel
+     * @param right_front_wheel
+     * @param acceleration_distance
+     * @param move_distance
+     * @param deceleration_distance
+     * @param power
+     * @param number_of_stages
+     * @param break_at_end
      */
-
 
     public void move_diagonal_with_encoder(DcMotor left_back_wheel,DcMotor left_front_wheel,DcMotor right_back_wheel,DcMotor right_front_wheel,
                                            double acceleration_distance,double move_distance,double deceleration_distance,
@@ -564,8 +496,19 @@ public class HelperClass   {
 
     }
 
-
-
+    /**
+     *  used to move the robot right/left
+     * @param left_back_wheel
+     * @param left_front_wheel
+     * @param right_back_wheel
+     * @param right_front_wheel
+     * @param acceleration_distance
+     * @param move_distance
+     * @param deceleration_distance
+     * @param power
+     * @param number_of_stages
+     * @param break_at_end
+     */
 
     public void side__with_encoder(DcMotor left_back_wheel,DcMotor left_front_wheel,DcMotor right_back_wheel,
                                    DcMotor right_front_wheel,
@@ -606,38 +549,37 @@ public class HelperClass   {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void move_arm_without_encoder (DcMotor arm_motor ,double power, char direction)
+
+    /**
+     *  used to move the arm
+     * @param power
+     */
+
+
+
+    public void move_arm_without_encoder (DcMotor arm_motor ,double power)
     {
-        if (direction == 'U'){
+
             arm_motor.setPower(dc_motor_power_adapter(power));
 
-        }else if (direction== 'D'){
-            arm_motor.setPower(dc_motor_power_adapter(power));
-        }
+
     }
 
 
 
 
 
-
-
-
-
-
-
     /**
-     *METHOD:  Hankash_spin_with_encoder
-     *
      *  used to spin the robot right(clockwise) and left (anti-clockwise)
-     *
-     * parameters: left_back_wheel, left_front_wheel,
-     *                right_back_wheel,right_front_wheel,
-     *                 power,direction distance,break_at_end
-     *
-     * return void
+     * @param left_back_wheel
+     * @param left_front_wheel
+     * @param right_back_wheel
+     * @param right_front_wheel
+     * @param power
+     * @param Given_Degree
+     * @param direction
+     * @param break_at_end
      */
-
 
     public void Hankash_spin_with_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
                                           DcMotor right_back_wheel, DcMotor right_front_wheel,
@@ -656,19 +598,20 @@ public class HelperClass   {
         }
     }
 
+
+
+
     /**
-     *METHOD:  spin_acceleration
-     *
      *  to accelerate the spinning power
-     *
-     * parameters: left_back_wheel, left_front_wheel,
-     *             right_back_wheel, right_front_wheel,
-     *             power,int given_degrees, direction , number_of_stages
-     *
-     * return void
+     * @param left_back_wheel
+     * @param left_front_wheel
+     * @param right_back_wheel
+     * @param right_front_wheel
+     * @param power
+     * @param given_degrees
+     * @param direction
+     * @param number_of_stages
      */
-
-
 
     public void spin_acceleration(DcMotor left_back_wheel, DcMotor left_front_wheel,
                                   DcMotor right_back_wheel, DcMotor right_front_wheel,
@@ -691,16 +634,18 @@ public class HelperClass   {
 
 
     }
+
+
     /**
-     *METHOD:  spin_deceleration
-     *
      *  to decelerate the spinning power
-     *
-     * parameters: left_back_wheel, left_front_wheel,
-     *             right_back_wheel, right_front_wheel,
-     *             power,int given_degrees, direction , number_of_stages
-     *
-     * return void
+     * @param left_back_wheel
+     * @param left_front_wheel
+     * @param right_back_wheel
+     * @param right_front_wheel
+     * @param power
+     * @param given_degrees
+     * @param direction
+     * @param number_of_stages
      */
 
     public void spin_deceleration(DcMotor left_back_wheel, DcMotor left_front_wheel,
@@ -728,7 +673,19 @@ public class HelperClass   {
 
     }
 
-
+    /**
+     *  to decelerate the spinning power
+     * @param left_back_wheel
+     * @param left_front_wheel
+     * @param right_back_wheel
+     * @param right_front_wheel
+     * @param power
+     * @param acceleration_degrees
+     * @param spin_Degree
+     * @param deceleration_degrees
+     * @param number_of_stages
+     * @param direction
+     */
 
     public void spin_with_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
                                   DcMotor right_back_wheel, DcMotor right_front_wheel,
@@ -746,36 +703,25 @@ public class HelperClass   {
 
     }
 
-
-
-
-
     /**
-     * METHOD: servo_motor_degrees_adapter
-     *
      * Used to convert 0 to 180 (servo degree) to 0 and 1
-     *
-     * parameters: double degree
-     * return double
+     * @param degree
+     * @return the new degrees of the servo
      */
+
     private double servo_motor_degrees_adapter(double degree) {
         double new_degrees = degree / 180;
         return new_degrees;
     }
 
 
-
-
-
     /**
-     * METHOD: lower_to_higher_servo_degrees
-     *
      * Move the servo from the smallest number given to the biggest number given by the user
-     *
-     * parameters: double from , double for
-     *
-     * return double new_position
+     * @param servo_motor
+     * @param from
+     * @param to
      */
+
     public void lower_to_higher_servo_degrees(Servo servo_motor, double from, double to) {
 
         for (double position = from; position <= to; position += 1.0){
@@ -787,18 +733,13 @@ public class HelperClass   {
 
 
 
-
-
-
     /**
-     *METHOD: higher_to_lower_servo_degrees
-     *
      * Move the servo from the biggest number given to the smallest number given by the user
-     *
-     * parameters: double from , double for
-     *
-     * return double new_position
+     * @param servo_motor
+     * @param from
+     * @param to
      */
+
     public void higher_to_lower_servo_degrees(Servo servo_motor, double from, double to) {
 
         for (double position = from; position >= to; position -= 1.0) {
@@ -811,20 +752,12 @@ public class HelperClass   {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * Move the arm
+     * @param arm_motor
+     * @param power
+     * @param distance
+     */
 
     public void move_arm_with_emcoder(DcMotor arm_motor,double power , char direction,double distance)
     {
@@ -854,259 +787,24 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
     fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 }
-
-
-
-
-
-
-
-     public void acceleration_deceleration_manual (DcMotor first_motor, DcMotor second_motor,
-                                                  DcMotor third_motor, DcMotor fourth_motor, double power_acceleration,
-                                                  double power_decceleration ,double power,double distanc_acceleration
-                                                            , double diistance , double distance_deceleration)
-    {
-
-        first_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        second_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        third_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        fourth_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        first_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
-        second_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
-        third_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
-        fourth_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
-
-        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        first_motor.setPower(dc_motor_power_adapter(power_acceleration*(1/3)));
-        second_motor.setPower(dc_motor_power_adapter(power_acceleration*(1/3)));
-        third_motor.setPower(dc_motor_power_adapter(power_acceleration*(1/3)));
-        fourth_motor.setPower(dc_motor_power_adapter(power_acceleration*(1/3)));
-
-
-        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
-        {
-
-        }
-        first_motor.setPower(dc_motor_power_adapter(0));
-        second_motor.setPower(dc_motor_power_adapter(0));
-        third_motor.setPower(dc_motor_power_adapter(0));
-        fourth_motor.setPower(dc_motor_power_adapter(0));
-
-        //0000000000000000000000000000000000000000000000000000000001
-/*
-
-        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        first_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
-        second_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
-        third_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
-        fourth_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
-
-
-        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        first_motor.setPower(dc_motor_power_adapter(power_acceleration*(2/3)));
-        second_motor.setPower(dc_motor_power_adapter(power_acceleration*(2/3)));
-        third_motor.setPower(dc_motor_power_adapter(power_acceleration*(2/3)));
-        fourth_motor.setPower(dc_motor_power_adapter(power_acceleration*(2/3)));
-
-
-        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
-        {
-
-        }
-        first_motor.setPower(dc_motor_power_adapter(0));
-        second_motor.setPower(dc_motor_power_adapter(0));
-        third_motor.setPower(dc_motor_power_adapter(0));
-        fourth_motor.setPower(dc_motor_power_adapter(0));
-        //0000000000000000000000000000000000000000000000000000000002
-
-        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        first_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
-        second_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
-        third_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
-        fourth_motor.setTargetPosition(cm_to_ticks(distanc_acceleration)/3);
-
-
-        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        first_motor.setPower(dc_motor_power_adapter(power_acceleration));
-        second_motor.setPower(dc_motor_power_adapter(power_acceleration));
-        third_motor.setPower(dc_motor_power_adapter(power_acceleration));
-        fourth_motor.setPower(dc_motor_power_adapter(power_acceleration));
-
-
-        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
-        {
-
-        }
-        first_motor.setPower(dc_motor_power_adapter(0));
-        second_motor.setPower(dc_motor_power_adapter(0));
-        third_motor.setPower(dc_motor_power_adapter(0));
-        fourth_motor.setPower(dc_motor_power_adapter(0));
-        //0000000000000000000000000000000000000000000000000000000003
-
-        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        first_motor.setTargetPosition(cm_to_ticks(diistance));
-        second_motor.setTargetPosition(cm_to_ticks(diistance));
-        third_motor.setTargetPosition(cm_to_ticks(diistance));
-        fourth_motor.setTargetPosition(cm_to_ticks(diistance));
-
-        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        first_motor.setPower(dc_motor_power_adapter(power));
-        second_motor.setPower(dc_motor_power_adapter(power));
-        third_motor.setPower(dc_motor_power_adapter(power));
-        fourth_motor.setPower(dc_motor_power_adapter(power));
-
-
-        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
-        {
-
-        }
-        first_motor.setPower(dc_motor_power_adapter(0));
-        second_motor.setPower(dc_motor_power_adapter(0));
-        third_motor.setPower(dc_motor_power_adapter(0));
-        fourth_motor.setPower(dc_motor_power_adapter(0));
-        //0000000000000000000000000000000000000000000000000000000004
-
-        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        first_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
-        second_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
-        third_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
-        fourth_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
-
-        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        first_motor.setPower(dc_motor_power_adapter(power_decceleration));
-        second_motor.setPower(dc_motor_power_adapter(power_decceleration));
-        third_motor.setPower(dc_motor_power_adapter(power_decceleration));
-        fourth_motor.setPower(dc_motor_power_adapter(power_decceleration));
-
-
-        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
-        {
-
-        }
-        first_motor.setPower(dc_motor_power_adapter(0));
-        second_motor.setPower(dc_motor_power_adapter(0));
-        third_motor.setPower(dc_motor_power_adapter(0));
-        fourth_motor.setPower(dc_motor_power_adapter(0));
-        //0000000000000000000000000000000000000000000000000000000005
-
-        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        first_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
-        second_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
-        third_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
-        fourth_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
-
-        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        first_motor.setPower(dc_motor_power_adapter(power_decceleration*(2/3)));
-        second_motor.setPower(dc_motor_power_adapter(power_decceleration*(2/3)));
-        third_motor.setPower(dc_motor_power_adapter(power_decceleration*(2/3)));
-        fourth_motor.setPower(dc_motor_power_adapter(power_decceleration*(2/3)));
-
-
-        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
-        {
-
-        }
-        first_motor.setPower(dc_motor_power_adapter(0));
-        second_motor.setPower(dc_motor_power_adapter(0));
-        third_motor.setPower(dc_motor_power_adapter(0));
-        fourth_motor.setPower(dc_motor_power_adapter(0));
-        //0000000000000000000000000000000000000000000000000000000006
-
-        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        first_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
-        second_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
-        third_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
-        fourth_motor.setTargetPosition(cm_to_ticks(distance_deceleration)/3);
-
-        first_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        second_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        third_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        fourth_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-        first_motor.setPower(dc_motor_power_adapter(power_decceleration*(1/3)));
-        second_motor.setPower(dc_motor_power_adapter(power_decceleration*(1/3)));
-        third_motor.setPower(dc_motor_power_adapter(power_decceleration*(1/3)));
-        fourth_motor.setPower(dc_motor_power_adapter(power_decceleration*(1/3)));
-
-
-        while (first_motor.isBusy()&&second_motor.isBusy()&&third_motor.isBusy()&&fourth_motor.isBusy())
-        {
-
-        }
-
-        first_motor.setPower(dc_motor_power_adapter(0));
-        second_motor.setPower(dc_motor_power_adapter(0));
-        third_motor.setPower(dc_motor_power_adapter(0));
-        fourth_motor.setPower(dc_motor_power_adapter(0));
-        //0000000000000000000000000000000000000000000000000000000007
-*/
-    }
-
+    /**
+     * transform the angle from double to string
+     * @param angleUnit
+     * @param angle
+     * @return string
+     */
 
 
     String formatAngle(AngleUnit angleUnit, double angle) {
         return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
     }
+
+    /**
+     * transform degrees from double to string
+     * @param degrees
+     * @return string
+     */
+
 
     String formatDegrees(double degrees){
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
@@ -1139,6 +837,13 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
     public void spin(DcMotor left_back_motor,DcMotor left_front_motor,DcMotor right_back_motor,DcMotor right_front_motot , double gevin_degre){
 
     }
+    /**
+     * to move straight with encoder
+     * @param left_back_motor
+     * @param left_front_motor
+     * @param right_back_motor
+     * @param right_front_motor
+     */
 
 
 

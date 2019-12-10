@@ -28,12 +28,12 @@ public class Test_Servo_and_Motor extends OpMode {
 
         if (gamepad1.dpad_up){
 //            test_servo.setPosition(0);
-            helper_class_object.higher_to_lower_servo_degrees(test_servo,test_servo.getPosition()*180,0);
+            test_servo.setPosition(0);
              telemetry.addData("servo is", "\t %f",test_servo.getPosition());
         }
         else if (gamepad1.dpad_down){
 //            test_servo.setPosition(1);
-            helper_class_object.lower_to_higher_servo_degrees(test_servo,test_servo.getPosition()*180,180);
+            test_servo.setPosition(1);
 
             telemetry.addData("servo is", "\t %f",test_servo.getPosition());
         }

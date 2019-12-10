@@ -44,11 +44,11 @@ public class test extends LinearOpMode {
         while (opModeIsActive()) {
 
             while (! touch_sensor.isPressed()){
-                helper_class_object.move_arm_without_encoder(arm_motor, 5 ,'U');
+                helper_class_object.move_arm_without_encoder(arm_motor, 5 );
 
             }
 
-            helper_class_object.move_arm_without_encoder(arm_motor, 0 ,'U');
+            helper_class_object.move_arm_without_encoder(arm_motor, 0 );
 
 
 

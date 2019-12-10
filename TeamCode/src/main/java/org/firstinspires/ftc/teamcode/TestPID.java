@@ -77,14 +77,13 @@ public class TestPID extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-if(gamepad1.right_bumper){
-    move_power = 75;
-}else if(gamepad1.right_bumper && gamepad1.left_bumper){
-    move_power = 100 ;
-
-}else{
-    move_power = 50 ;
-}
+            if(gamepad1.right_bumper && gamepad1.left_bumper) {
+                move_power = 60 ;
+            }else if(gamepad1.right_bumper){
+                move_power = 55;
+            }else{
+                move_power = 50 ;
+            }
 
             if (gamepad1.dpad_up){
                 left_back_motor.setDirection(DcMotor.Direction.FORWARD);
@@ -102,6 +101,7 @@ if(gamepad1.right_bumper){
             , double distance , double power ) {
 
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+        telemetry.update();
 
         double gyro_start = gyro_angel ;
         double left_power ;
@@ -118,9 +118,9 @@ if(gamepad1.right_bumper){
 
         double error = 0 ;
         double last_error = 0;
-        double KP = 5;
-        double KI = 0;
-        double KD = 0;
+        double KP = 5;  //.3
+        double KI = 0;  //.001
+        double KD = 0;  //.2
         double probational=0 ;
         double derivative=0 ;
         double integral=0 ;
