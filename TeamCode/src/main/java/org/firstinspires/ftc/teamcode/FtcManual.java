@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -37,8 +38,10 @@ public class FtcManual extends OpMode {
     private DcMotor arm_motor = null;
 
     Servo right_foundation_servo = null;
-    Servo left_foundation_servo = null ;
+    Servo left_foundation_servo = null;
     Servo arm_servo = null;
+    Servo gripper_servo = null;
+    private ModernRoboticsI2cColorSensor color_sensor = null;
 
     private TouchSensor min_end_stop;
     DigitalChannel max_end_stop;
@@ -73,17 +76,22 @@ public class FtcManual extends OpMode {
         right_front_motor = hardwareMap.get(DcMotor.class, "right_front_motor");
 
         arm_motor = hardwareMap.get(DcMotor.class, "arm_motor");
-        arm_motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        arm_motor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         right_foundation_servo = hardwareMap.get(Servo.class, "right_foundation_servo");
         left_foundation_servo = hardwareMap.get(Servo.class, "left_foundation_servo");
         arm_servo = hardwareMap.get(Servo.class, "arm_servo");
+        gripper_servo = hardwareMap.get(Servo.class, "gripper_servo");
 
 
         min_end_stop = hardwareMap.get(TouchSensor.class, "min_end_stop");
 
         max_end_stop = hardwareMap.get(DigitalChannel.class, "max_end_stop");
         max_end_stop.setMode(DigitalChannel.Mode.INPUT);
+
+
+        color_sensor = hardwareMap.get(ModernRoboticsI2cColorSensor.class, "color_sensor");
+
 
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
@@ -106,7 +114,7 @@ public class FtcManual extends OpMode {
         composeTelemetry();
 
 
-
+        telemetry.addData("Status", "init");
 
 
     }
@@ -114,30 +122,60 @@ public class FtcManual extends OpMode {
     @Override
     public void init_loop() {
 
+
+        if (right_foundation_servo.getPosition() != 0.05) {
+            right_foundation_servo.setPosition(0.05);
+
+        }
+        if (left_foundation_servo.getPosition() != 0.7) {
+            left_foundation_servo.setPosition(0.7);
+
+        }
+
+        sleep(1000);
+
+        if (gripper_servo.getPosition() != 1) {
+            gripper_servo.setPosition(1);
+        }
+
+        sleep(1000);
+
+
+        if (arm_servo.getPosition() != 1) {
+            arm_servo.setPosition(1);
+
+        }
+
+        sleep(1000);
+
+        if (right_foundation_servo.getPosition() != .5) {
+            right_foundation_servo.setPosition(0.5);
+
+        }
+        if (left_foundation_servo.getPosition() != 0.15) {
+            left_foundation_servo.setPosition(0.15);
+
+        }
+
+
+//        while (!min_end_stop.isPressed()){
+//            helper_class_object.move_arm_without_encoder (arm_motor ,-arm_power);
+//
+//        }
+//
+//            helper_class_object.move_arm_without_encoder (arm_motor ,stop_power);
+
+
         telemetry.addData("Status", "init_loop");
-
-        if(right_foundation_servo.getPosition() != .8){
-            right_foundation_servo.setPosition(0.8);
-
-        }
-
-        if(left_foundation_servo.getPosition() != 0){
-            left_foundation_servo.setPosition(0);
-
-        }
-
-        if(!min_end_stop.isPressed()){
-            helper_class_object.move_arm_without_encoder (arm_motor ,-arm_power);
-
-        }
 
     }
 
 
     @Override
     public void start() {
-        telemetry.addData("Status", "start");
 
+
+        telemetry.addData("Status", "start");
 
     }
 
@@ -147,10 +185,7 @@ public class FtcManual extends OpMode {
 
         // Start the logging of measured acceleration
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-         telemetry.update();
-
-
-
+        telemetry.update();
 
 
         if (gamepad1.right_bumper && gamepad1.left_bumper) {
@@ -185,96 +220,63 @@ public class FtcManual extends OpMode {
 
 
         if (gamepad1.dpad_up && gamepad1.dpad_right) {
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
+
             helper_class_object.move_diagonal_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor, move_power, 'R');
         } else if (gamepad1.dpad_up && gamepad1.dpad_left) {
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
+
             helper_class_object.move_diagonal_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor, move_power, 'L');
         } else if (gamepad1.dpad_down && gamepad1.dpad_right) {
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
+
             helper_class_object.move_diagonal_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor, -move_power, 'L');
         } else if (gamepad1.dpad_down && gamepad1.dpad_left) {
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
+
             helper_class_object.move_diagonal_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor, -move_power, 'R');
         } else if (gamepad1.dpad_up) {
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
+
             //move forward
             helper_class_object.move_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor,
                     move_power, 'F');
         } else if (gamepad1.dpad_down) {
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
+
             //move backward
             helper_class_object.move_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor,
                     -move_power, 'B');
         } else if (gamepad1.dpad_right) {
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_front_motor.setDirection(DcMotor.Direction.FORWARD);
+
             //move right
             helper_class_object.move_side_without_encoder(left_back_motor, right_front_motor,
                     left_front_motor, right_back_motor,
                     side_power, 'R');
 
         } else if (gamepad1.dpad_left) {
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_front_motor.setDirection(DcMotor.Direction.FORWARD);
+
             //move left
             helper_class_object.move_side_without_encoder(left_back_motor, right_front_motor,
                     left_front_motor, right_back_motor,
                     side_power, 'L');
 
         } else if (gamepad1.b) {
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
+
             //spin clockwise
             helper_class_object.spin_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor, spin_power, 'C');
 
 
         } else if (gamepad1.x) {
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
+
             //spin anti-clockwise
             helper_class_object.spin_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor, spin_power, 'A');
 
 
         } else {
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
+
             helper_class_object.move_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor,
                     stop_power, 'F');
@@ -282,71 +284,82 @@ public class FtcManual extends OpMode {
 
 
         if (gamepad1.y) {
-            if(max_end_stop.getState() == true ){
-                helper_class_object.move_arm_without_encoder (arm_motor ,arm_power);
 
-            }else {
-                helper_class_object.move_arm_without_encoder (arm_motor ,stop_power);
+            if (right_foundation_servo.getPosition() != .5) {
+                right_foundation_servo.setPosition(0.5);
 
             }
+            if (left_foundation_servo.getPosition() != 0.15) {
+                left_foundation_servo.setPosition(0.15);
 
+            }
 
         } else if (gamepad1.a) {
-            if(!min_end_stop.isPressed()){
-                helper_class_object.move_arm_without_encoder (arm_motor ,-arm_power);
 
-            }else {
-                helper_class_object.move_arm_without_encoder (arm_motor ,stop_power);
+            if (right_foundation_servo.getPosition() != 0.05) {
+                right_foundation_servo.setPosition(0.05);
 
             }
-
-        }else {
-                helper_class_object.move_arm_without_encoder (arm_motor ,stop_power);
-
-        }
-
-
-        if (gamepad2.dpad_up) {
-
-            if(right_foundation_servo.getPosition() != .8){
-                right_foundation_servo.setPosition(0.8);
-
-            }
-            if(left_foundation_servo.getPosition() != 0){
-                left_foundation_servo.setPosition(0);
-
-            }
-
-        } else if (gamepad2.dpad_down) {
-
-            if(right_foundation_servo.getPosition() != 0.2){
-                right_foundation_servo.setPosition(0.2);
-
-            }
-            if(left_foundation_servo.getPosition() != 0.5){
-                left_foundation_servo.setPosition(0.5);
+            if (left_foundation_servo.getPosition() != 0.7) {
+                left_foundation_servo.setPosition(0.7);
 
             }
 
         }
-        else if (gamepad2.dpad_right) {
+
+
+        if (gamepad2.y) {
+            if (max_end_stop.getState() == true) {
+                helper_class_object.move_arm_without_encoder(arm_motor, arm_power);
+
+            } else {
+                helper_class_object.move_arm_without_encoder(arm_motor, stop_power);
+
+            }
+        } else if (gamepad2.a) {
+            if (!min_end_stop.isPressed()) {
+                helper_class_object.move_arm_without_encoder(arm_motor, -arm_power);
+
+            } else {
+                helper_class_object.move_arm_without_encoder(arm_motor, stop_power);
+
+            }
+
+        } else {
+            helper_class_object.move_arm_without_encoder(arm_motor, stop_power);
+
+        }
+
+
+
+        if (gamepad2.b) {
 
             if (arm_servo.getPosition() != 0.0) {
-                right_foundation_servo.setPosition(0.0);
+                arm_servo.setPosition(0.0);
             }
-        }
-        else if (gamepad2.dpad_left) {
+        } else if (gamepad2.x) {
 
             if (arm_servo.getPosition() != 1) {
-                right_foundation_servo.setPosition(1);
+                arm_servo.setPosition(1);
+
             }
+
         }
 
 
+        if (gamepad2.dpad_down) {
+
+            if (gripper_servo.getPosition() != 0.0) {
+                gripper_servo.setPosition(0.0);
+            }
+        } else if (gamepad2.dpad_up) {
+
+            if (gripper_servo.getPosition() != 1) {
+                gripper_servo.setPosition(1);
+            }
+        }
 
     }
-
-
     void composeTelemetry() {
 
         // At the beginning of each telemetry update, grab a bunch of data

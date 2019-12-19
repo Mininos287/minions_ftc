@@ -40,11 +40,11 @@ public class TestArmMotor extends OpMode {
 
         if (gamepad1.y) {
 
-            helper_class_object.move_arm(arm_motor,50,500,touch_sensor);
+            helper_class_object.move_arm_with_enocderr(arm_motor,50,500,touch_sensor);
 
         }else if(gamepad1.a){
 
-            helper_class_object.move_arm(arm_motor,-50,500,touch_sensor);
+            helper_class_object.move_arm_with_enocderr(arm_motor,-50,500,touch_sensor);
 
         }
 

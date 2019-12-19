@@ -35,6 +35,7 @@ public class Test_Servo_and_Motor extends OpMode {
 //            test_servo.setPosition(1);
             test_servo.setPosition(1);
 
+
             telemetry.addData("servo is", "\t %f",test_servo.getPosition());
         }
 //        if (gamepad1.dpad_right){

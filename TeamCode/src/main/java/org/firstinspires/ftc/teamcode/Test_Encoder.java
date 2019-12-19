@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
@@ -68,51 +69,15 @@ public class Test_Encoder extends OpMode {
         }
 
 
-        if (gamepad1.dpad_up && gamepad1.dpad_right){
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
 
-            helper_class_object.move_diagonale_right_with_encoderr(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,25,10,TRUE);
-
-        }else if(gamepad1.dpad_up && gamepad1.dpad_left){
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
-
-           helper_class_object.move_diagonale_left_with_encoderr(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,25,25,TRUE);
-
-        }else if(gamepad1.dpad_down &&gamepad1.dpad_right){
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
-
-            helper_class_object.move_diagonale_right_with_encoderr(left_back_motor, left_front_motor,
-                 right_back_motor, right_front_motor,35,-35,TRUE);
-
-        }else if(gamepad1.dpad_down && gamepad1.dpad_left){
-            left_back_motor.setDirection(DcMotor.Direction.FORWARD);
-            left_front_motor.setDirection(DcMotor.Direction.FORWARD);
-            right_back_motor.setDirection(DcMotor.Direction.REVERSE);
-            right_front_motor.setDirection(DcMotor.Direction.REVERSE);
-
-             helper_class_object.move_diagonale_left_with_encoderr(left_back_motor, left_front_motor,
-                   right_back_motor, right_front_motor,70,-20,TRUE);
-        }
-
-        else if (gamepad1.dpad_up) {
+ if (gamepad1.dpad_up) {
             left_back_motor.setDirection(DcMotor.Direction.FORWARD);
             left_front_motor.setDirection(DcMotor.Direction.FORWARD);
             right_back_motor.setDirection(DcMotor.Direction.REVERSE);
             right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             //move forward
-            helper_class_object.move_with_encoderr(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,70,30,TRUE);
+            helper_class_object.move_with_encoder(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
+                    10,100,10,50,5);
 
         }
 
@@ -123,8 +88,8 @@ public class Test_Encoder extends OpMode {
             right_front_motor.setDirection(DcMotor.Direction.REVERSE);
             //move backward
 
-          helper_class_object.move_with_encoderr(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,60,-50,TRUE);
+     helper_class_object.move_with_encoder(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
+             10,100,10,-50,5);
 
         }
 
@@ -135,8 +100,10 @@ public class Test_Encoder extends OpMode {
             right_back_motor.setDirection(DcMotor.Direction.FORWARD);
             right_front_motor.setDirection(DcMotor.Direction.FORWARD);
             //move right
-          helper_class_object.move_side_with_encoderr(left_back_motor, left_front_motor,
-                  right_back_motor, right_front_motor,50,15,TRUE);
+          helper_class_object.side__with_encoder(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
+                  10,100,10,50,5,'L',false
+
+              );
 
         }
         else if (gamepad1.dpad_left) {
@@ -145,8 +112,8 @@ public class Test_Encoder extends OpMode {
             right_back_motor.setDirection(DcMotor.Direction.FORWARD);
             right_front_motor.setDirection(DcMotor.Direction.FORWARD);
             //move left
-          helper_class_object.move_side_with_encoderr(left_back_motor, left_front_motor,
-                    right_back_motor, right_front_motor,40,-10,TRUE);
+          helper_class_object.side__with_encoder(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
+                  10,100,10,50,5,'L',false);
 
 
         }

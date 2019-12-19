@@ -32,43 +32,16 @@ public class HelperClass   {
     private double robot_radius = 10.16; // habda
     private double robot_spin_circumference = (2 * PI * robot_radius) ;
     private double robot_turn_circumference = (2 * PI * (2*robot_radius)) ;
-    double  gyro_angel ;
 
 
-    public int my_motor_is_busy(DcMotor my_motor,double distance,double power ){
 
-        if(power > 0){
-
-            if (my_motor.getCurrentPosition() < cm_to_ticks(distance)){
-                return 1 ;
-            }else{
-                return 0 ;
-            }
-        }else if (power < 0 ){
-
-            int current = my_motor.getCurrentPosition() ;
-            if(current > 0 ){
-                current = current * (-1) ;
-            }
-            if( current < -cm_to_ticks(distance)  ){
-                return 0 ;
-            }else{
-                return  1 ;
-            }
-
-        }else{
-
-        return 0 ;
-
-        }
-     }
 
 
 
 
     /**
      * Used to convert from -100 to 100 (power) to -1 and 1
-     * @param power
+     * @param power power that we will enter between (-100 and 100)
      * @return the power divided by 100
      */
 
@@ -81,9 +54,9 @@ public class HelperClass   {
 
     /**
      * Provide the two wheels on the same side with the same power
-     * @param first_motor
-     * @param second_motor
-     * @param power
+     * @param first_motor it represents the first motor of the robot
+     * @param second_motor it represents the second motor of the robot
+     * @param power power that we will enter between (-100 and 100)
      */
 
     private void side_power(DcMotor first_motor, DcMotor second_motor, double power){
@@ -96,10 +69,10 @@ public class HelperClass   {
 
     /**
      * Used to give the same power to the right side and the same power to the left side
-     * @param first_motor
-     * @param second_motor
-     * @param third_motor
-     * @param fourth_motor
+     * @param first_motor it represents the first motor of the robot
+     * @param second_motor it represents the second motor of the robot
+     * @param third_motor it represents the third motor of the robot
+     * @param fourth_motor it represents the forth motor of the robot
      * @param first_side_power
      * @param second_side_power
      */
@@ -127,6 +100,11 @@ public class HelperClass   {
                                      DcMotor right_back_wheel, DcMotor right_front_wheel,
                                      double power ,char direction )
     {
+        left_back_wheel.setDirection(DcMotor.Direction.FORWARD);
+        left_front_wheel.setDirection(DcMotor.Direction.FORWARD);
+        right_back_wheel.setDirection(DcMotor.Direction.REVERSE);
+        right_front_wheel.setDirection(DcMotor.Direction.REVERSE);
+
         if(direction == 'F')
         {
             move_holonomic_without_encoder(left_back_wheel, right_front_wheel,
@@ -158,6 +136,11 @@ public class HelperClass   {
                                           double power, char direction )
 
     {
+        left_back_wheel.setDirection(DcMotor.Direction.FORWARD);
+        left_front_wheel.setDirection(DcMotor.Direction.FORWARD);
+        right_back_wheel.setDirection(DcMotor.Direction.FORWARD);
+        right_front_wheel.setDirection(DcMotor.Direction.FORWARD);
+
         if(direction == 'R') {
             move_holonomic_without_encoder(left_back_wheel, right_front_wheel,
                     left_front_wheel, right_back_wheel,
@@ -184,10 +167,18 @@ public class HelperClass   {
                                               DcMotor right_back_wheel, DcMotor right_front_wheel,
                                               double power, char  direction)
     {
+        left_back_wheel.setDirection(DcMotor.Direction.FORWARD);
+        left_front_wheel.setDirection(DcMotor.Direction.FORWARD);
+        right_back_wheel.setDirection(DcMotor.Direction.REVERSE);
+        right_front_wheel.setDirection(DcMotor.Direction.REVERSE);
+
+
         if(direction == 'R'){
+
             move_holonomic_without_encoder(left_back_wheel, right_front_wheel, left_front_wheel, right_back_wheel,
                     0, power);
         }else if(direction == 'L'){
+
             move_holonomic_without_encoder(left_back_wheel, right_front_wheel,left_front_wheel,right_back_wheel,
                     power,0);
         }
@@ -207,6 +198,11 @@ public class HelperClass   {
                                      DcMotor right_back_wheel, DcMotor right_front_wheel,
                                      double power ,char direction )
     {
+        left_back_wheel.setDirection(DcMotor.Direction.FORWARD);
+        left_front_wheel.setDirection(DcMotor.Direction.FORWARD);
+        right_back_wheel.setDirection(DcMotor.Direction.REVERSE);
+        right_front_wheel.setDirection(DcMotor.Direction.REVERSE);
+
         if(direction == 'C') {
             move_holonomic_without_encoder(left_back_wheel, left_front_wheel,
                     right_back_wheel, right_front_wheel,
@@ -288,23 +284,24 @@ public class HelperClass   {
                                             DcMotor third_motor, DcMotor fourth_motor,
                                             double first_power, double second_power,double distance,boolean break_at_end){
 
+        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-//        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            if(first_power>0)
+            {
+                side_position(first_motor, second_motor,distance);
+                side_power(first_motor,second_motor,first_power);
 
+            }
+            if(second_power>0)
+            {
+                side_position(third_motor,fourth_motor,distance);
+                side_power(third_motor,fourth_motor,second_power);
 
-            side_position(first_motor, second_motor, distance);
-            side_position(third_motor,fourth_motor,distance);
-
-
-
-        side_power(first_motor,second_motor,first_power);
-        side_power(third_motor,fourth_motor,second_power);
-
-
+            }
             while (side_is_busy(first_motor, second_motor) && side_is_busy(third_motor, fourth_motor)) {
             }
 
@@ -410,7 +407,7 @@ public class HelperClass   {
 
 
     /**
-     *  used to move the robot forword and backword
+     *  used to move the robot forword and backword using encoder
      * @param left_back_wheel
      * @param left_front_wheel
      * @param right_back_wheel
@@ -430,26 +427,26 @@ public class HelperClass   {
 
 
 
-        /*acceleration(left_back_wheel, right_front_wheel,
+        acceleration(left_back_wheel, right_front_wheel,
                 left_front_wheel, right_back_wheel,power,power,acceleration_distance,number_of_stages);
-        */
+
 
         move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
                 left_front_wheel,right_back_wheel,
                 power,power , move_distance , FALSE);
 
 
-        /*
+
         deceleration(left_back_wheel, right_front_wheel,
                 left_front_wheel, right_back_wheel,power,power,deceleration_distance,number_of_stages);
 
-        */
+
     }
 
 
 
     /**
-     *  used to move the robot right diagonal and left diagonal
+     *  used to move the robot right diagonal and left diagonal using encoders
      * @param left_back_wheel
      * @param left_front_wheel
      * @param right_back_wheel
@@ -497,7 +494,7 @@ public class HelperClass   {
     }
 
     /**
-     *  used to move the robot right/left
+     *  used to move the robot right/left using encoders
      * @param left_back_wheel
      * @param left_front_wheel
      * @param right_back_wheel
@@ -570,7 +567,7 @@ public class HelperClass   {
 
 
     /**
-     *  used to spin the robot right(clockwise) and left (anti-clockwise)
+     *  used to spin the robot right(clockwise) and left (anti-clockwise) using encoders
      * @param left_back_wheel
      * @param left_front_wheel
      * @param right_back_wheel
@@ -673,8 +670,8 @@ public class HelperClass   {
 
     }
 
-    /**
-     *  to decelerate the spinning power
+    /** used to spin the robot right(clockwise) and left (anti-clockwise) using encoders
+
      * @param left_back_wheel
      * @param left_front_wheel
      * @param right_back_wheel
@@ -752,31 +749,15 @@ public class HelperClass   {
     }
 
 
+
     /**
-     * Move the arm
-     * @param arm_motor
-     * @param power
-     * @param distance
+     * it's used to stop the encoders and to reset the encoders
+     * @param first_motor
+     * @param second_motor
+     * @param third_motor
+     * @param fourth_motor
      */
 
-    public void move_arm_with_emcoder(DcMotor arm_motor,double power , char direction,double distance)
-    {
-        arm_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        arm_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm_motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm_motor.setTargetPosition(cm_to_ticks(distance));
-
-        if(direction== 'U'){
-
-            arm_motor.setPower(dc_motor_power_adapter(power));
-        }else if(direction=='D'){
-
-            arm_motor.setPower(dc_motor_power_adapter(-power));
-        }
-        while (arm_motor.isBusy());
-        arm_motor.setPower(0);
-    }
 
 public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
                            DcMotor third_motor, DcMotor fourth_motor)
@@ -815,34 +796,15 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
 
 
 
-    void spin_with_gyro(DcMotor left_back_motor,DcMotor left_front_motor,DcMotor right_back_motor,DcMotor right_front_motor,
-                        double gyro_start ,double angel,double power ,char direction){
-
-    if(direction == 'C'){
-
-
-        spin_without_encoder(left_back_motor,left_front_motor,right_back_motor,right_front_motor,power,direction);
-    }else if(direction == 'A'){
-        spin_without_encoder(left_back_motor,left_front_motor,right_back_motor,right_front_motor,power,direction);
-    }
-
-    }
-
-
-
-
-
-
-
-    public void spin(DcMotor left_back_motor,DcMotor left_front_motor,DcMotor right_back_motor,DcMotor right_front_motot , double gevin_degre){
-
-    }
     /**
      * to move straight with encoder
-     * @param left_back_motor
-     * @param left_front_motor
-     * @param right_back_motor
-     * @param right_front_motor
+     * @param left_back_motor it represents the the robot's left back dc motor
+     * @param left_front_motor it represents the the robot's left front dc motor
+     * @param right_back_motor it represents the the robot's right back dc motor
+     * @param right_front_motor it represents the the robot's right front dc motor
+     * @param distance the distance with cms
+     * @param power power that we will enter between (-100 and 100)
+     * @param break_at_end  break at the end of the method or not
      */
 
 
@@ -919,7 +881,16 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
 
 
 
-
+    /**
+     * to move diagonal (left) with encoder
+     * @param left_back_motor it represents the the robot's left back dc motor
+     * @param left_front_motor it represents the the robot's left front dc motor
+     * @param right_back_motor it represents the the robot's right back dc motor
+     * @param right_front_motor it represents the the robot's right front dc motor
+     * @param distance the distance with cms
+     * @param power power that we will enter between (-100 and 100)
+     * @param break_at_end  break at the end of the method or not
+     */
 
 
 
@@ -984,7 +955,16 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
     }
 
 
-
+    /**
+     * to move diagonal (right) with encoder
+     * @param left_back_motor it represents the the robot's left back dc motor
+     * @param left_front_motor it represents the the robot's left front dc motor
+     * @param right_back_motor it represents the the robot's right back dc motor
+     * @param right_front_motor it represents the the robot's right front dc motor
+     * @param distance the distance with cms
+     * @param power power that we will enter between (-100 and 100)
+     * @param break_at_end  break at the end of the method or not
+     */
 
 
 
@@ -1050,7 +1030,16 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
 
     }
 
-
+    /**
+     * to move side with encoder
+     * @param left_back_motor it represents the the robot's left back dc motor
+     * @param left_front_motor it represents the the robot's left front dc motor
+     * @param right_back_motor it represents the the robot's right back dc motor
+     * @param right_front_motor it represents the the robot's right front dc motor
+     * @param distance the distance with cms
+     * @param power power that we will enter between (-100 and 100)
+     * @param break_at_end  break at the end of the method or not
+     */
 
     public void move_side_with_encoderr(DcMotor left_back_motor,DcMotor left_front_motor,DcMotor right_back_motor,DcMotor right_front_motor
             ,double distance , double power , boolean break_at_end){
@@ -1120,10 +1109,17 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
 
 
     }
+    /**
+     * to move the arm
+     * @param arm_motor it represents the dc motor that we use as an arm motor in our robot
+     * @param power power that we will enter between (-100 and 100)
+     * @param ticks the number of ticks that we want the robot to do
+     * @param touch_sensor it represents the touch sensor that we will use in our robot
+     *
+     */
 
 
-
-    public void move_arm ( DcMotor arm_motor,  double power, int ticks,TouchSensor touch_sensor)
+    public void move_arm_with_enocderr ( DcMotor arm_motor,  double power, int ticks,TouchSensor touch_sensor)
     {
 
         if (power>0)
@@ -1177,6 +1173,17 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
         }
 
     }
+    /**
+     *  used to spin the robot right(clockwise) and left (anti-clockwise) using encoders
+     * @param left_back_motor it represents the the robot's left back dc motor
+     * @param left_front_motor it represents the the robot's left front dc motor
+     * @param right_back_motor it represents the the robot's right back dc motor
+     * @param right_front_motor it represents the the robot's right front dc motor
+     * @param power power that we will enter between (-100 and 100)
+     * @param break_at_end break at the end of the method or not
+     * @param direction a letter that represents the diretion
+     * @param Given_Degree the number of degrees that the robot wil spin
+     */
 
     public void spin_with_encoderr(DcMotor left_back_motor, DcMotor left_front_motor,
                                   DcMotor right_back_motor, DcMotor right_front_motor,
