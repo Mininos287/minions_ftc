@@ -217,6 +217,25 @@ public class HelperClass   {
 
 
 
+
+    /**
+     *  used to move the arm
+     * @param power
+     */
+
+
+
+    public void move_arm_without_encoder (DcMotor arm_motor ,double power)
+    {
+
+        arm_motor.setPower(dc_motor_power_adapter(power));
+
+
+    }
+
+
+
+
     ////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -269,6 +288,30 @@ public class HelperClass   {
 
 
     /**
+     * it's used to stop the encoders and to reset the encoders
+     * @param first_motor
+     * @param second_motor
+     * @param third_motor
+     * @param fourth_motor
+     */
+
+
+    public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
+                               DcMotor third_motor, DcMotor fourth_motor)
+    {
+        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+    }
+
+
+
+
+
+
+    /**
      * move using the encoder
      * @param first_motor
      * @param second_motor
@@ -279,42 +322,25 @@ public class HelperClass   {
      * @param distance
      * @param break_at_end
      */
-
     public void move_holonomic_with_encoder(DcMotor first_motor , DcMotor second_motor,
                                             DcMotor third_motor, DcMotor fourth_motor,
                                             double first_power, double second_power,double distance,boolean break_at_end){
-
-        first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
+        stop_and_reset(first_motor,second_motor,third_motor,fourth_motor);
             if(first_power>0)
             {
                 side_position(first_motor, second_motor,distance);
                 side_power(first_motor,second_motor,first_power);
-
             }
             if(second_power>0)
             {
                 side_position(third_motor,fourth_motor,distance);
                 side_power(third_motor,fourth_motor,second_power);
-
             }
             while (side_is_busy(first_motor, second_motor) && side_is_busy(third_motor, fourth_motor)) {
             }
-
-
-
             side_power(first_motor, second_motor, 0);
             side_power(third_motor, fourth_motor, 0);
-
-
-
     }
-
-
 
 
 
@@ -405,300 +431,14 @@ public class HelperClass   {
 
 
 
-
-    /**
-     *  used to move the robot forword and backword using encoder
-     * @param left_back_wheel
-     * @param left_front_wheel
-     * @param right_back_wheel
-     * @param right_front_wheel
-     * @param acceleration_distance
-     * @param move_distance
-     * @param deceleration_distance
-     * @param power
-     * @param number_of_stages
-     */
-
-    public void move_with_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
-                                  DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                  double acceleration_distance, double move_distance, double deceleration_distance ,
-                                  double power,int number_of_stages)
-    {
-
-
-
-        acceleration(left_back_wheel, right_front_wheel,
-                left_front_wheel, right_back_wheel,power,power,acceleration_distance,number_of_stages);
-
-
-        move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
-                left_front_wheel,right_back_wheel,
-                power,power , move_distance , FALSE);
-
-
-
-        deceleration(left_back_wheel, right_front_wheel,
-                left_front_wheel, right_back_wheel,power,power,deceleration_distance,number_of_stages);
-
-
-    }
-
-
-
-    /**
-     *  used to move the robot right diagonal and left diagonal using encoders
-     * @param left_back_wheel
-     * @param left_front_wheel
-     * @param right_back_wheel
-     * @param right_front_wheel
-     * @param acceleration_distance
-     * @param move_distance
-     * @param deceleration_distance
-     * @param power
-     * @param number_of_stages
-     * @param break_at_end
-     */
-
-    public void move_diagonal_with_encoder(DcMotor left_back_wheel,DcMotor left_front_wheel,DcMotor right_back_wheel,DcMotor right_front_wheel,
-                                           double acceleration_distance,double move_distance,double deceleration_distance,
-                                           double power,int number_of_stages, char direction,boolean break_at_end)
-    {
-
-        stop_and_reset(left_back_wheel, right_front_wheel,
-                left_front_wheel, right_back_wheel);
-        if(direction == 'R')
-        {
-           // acceleration(left_back_wheel, right_front_wheel,
-                  //  left_front_wheel, right_back_wheel,power,0,acceleration_distance,number_of_stages);
-
-            move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
-                    left_front_wheel, right_back_wheel,
-                    0, power, move_distance,break_at_end);
-           // deceleration(left_back_wheel, right_front_wheel,
-                  //  left_front_wheel, right_back_wheel,power,0,deceleration_distance,number_of_stages);
-        }else  if(direction == 'L')
-        {
-          //  acceleration(left_back_wheel, right_front_wheel,
-              //      left_front_wheel, right_back_wheel,0,power,acceleration_distance,number_of_stages);
-
-            move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
-                    left_front_wheel, right_back_wheel,
-                    0,power, move_distance,break_at_end);
-           // deceleration(left_back_wheel, right_front_wheel,
-               //     left_front_wheel, right_back_wheel,power,0,deceleration_distance,number_of_stages);
-        }
-
-
-
-
-    }
-
-    /**
-     *  used to move the robot right/left using encoders
-     * @param left_back_wheel
-     * @param left_front_wheel
-     * @param right_back_wheel
-     * @param right_front_wheel
-     * @param acceleration_distance
-     * @param move_distance
-     * @param deceleration_distance
-     * @param power
-     * @param number_of_stages
-     * @param break_at_end
-     */
-
-    public void side__with_encoder(DcMotor left_back_wheel,DcMotor left_front_wheel,DcMotor right_back_wheel,
-                                   DcMotor right_front_wheel,
-                                   double acceleration_distance,double move_distance,double deceleration_distance,
-                                   double power,int number_of_stages, char direction,boolean break_at_end)
-    {
-        stop_and_reset(left_back_wheel, right_front_wheel,
-                left_front_wheel,right_back_wheel);
-
-        if(direction == 'L'){
-          /*  acceleration(left_back_wheel, right_front_wheel,
-                    left_front_wheel, right_back_wheel,power,-power,acceleration_distance,number_of_stages);
-*/
-
-            move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
-                    left_front_wheel,right_back_wheel,
-                    power,-power ,move_distance , break_at_end);
-/*
-            deceleration(left_back_wheel, right_front_wheel,
-                    left_front_wheel, right_back_wheel,power,-power,deceleration_distance,number_of_stages);
-       */
-        }else if(direction == 'R'){
-           /*
-            acceleration(left_back_wheel, right_front_wheel,
-                    left_front_wheel, right_back_wheel,-power,power,acceleration_distance,number_of_stages);
-*/
-            move_holonomic_with_encoder(left_back_wheel, right_front_wheel,
-                    left_front_wheel,right_back_wheel,
-                    -power,power , move_distance , break_at_end);
-/*
-            deceleration(left_back_wheel, right_front_wheel,
-                    left_front_wheel, right_back_wheel,-power,power,deceleration_distance,number_of_stages);
-        */
-        }
-
-    }
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    /**
-     *  used to move the arm
-     * @param power
-     */
-
-
-
-    public void move_arm_without_encoder (DcMotor arm_motor ,double power)
-    {
-
-            arm_motor.setPower(dc_motor_power_adapter(power));
-
-
-    }
 
 
 
 
 
-    /**
-     *  used to spin the robot right(clockwise) and left (anti-clockwise) using encoders
-     * @param left_back_wheel
-     * @param left_front_wheel
-     * @param right_back_wheel
-     * @param right_front_wheel
-     * @param power
-     * @param Given_Degree
-     * @param direction
-     * @param break_at_end
-     */
-
-    public void Hankash_spin_with_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
-                                          DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                          double power , int Given_Degree , char direction,boolean break_at_end){
-        double num_of_rotations = (robot_spin_circumference/wheel_circumference);
-        double degrees_per_rotation = 360 / num_of_rotations ;
-        double distance = (Given_Degree*wheel_circumference/degrees_per_rotation);
-        stop_and_reset(left_back_wheel,left_front_wheel,right_back_wheel, right_front_wheel);
-        if(direction == 'C'){
-            move_holonomic_with_encoder(left_back_wheel,left_front_wheel,right_back_wheel, right_front_wheel,
-                    power,-power,distance,break_at_end );
-        }
-        else if(direction == 'A'){
-            move_holonomic_with_encoder(left_back_wheel,left_front_wheel,right_back_wheel, right_front_wheel,
-                    -power,power,distance,break_at_end );
-        }
-    }
-
-
-
-
-    /**
-     *  to accelerate the spinning power
-     * @param left_back_wheel
-     * @param left_front_wheel
-     * @param right_back_wheel
-     * @param right_front_wheel
-     * @param power
-     * @param given_degrees
-     * @param direction
-     * @param number_of_stages
-     */
-
-    public void spin_acceleration(DcMotor left_back_wheel, DcMotor left_front_wheel,
-                                  DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                  double power,int given_degrees,char direction ,int number_of_stages) {
-        int degrees_in_stage = given_degrees / number_of_stages;
-        double power_in_stage = power / number_of_stages;
-
-        double total_power = 0;
-
-        for (int current_stages = 0; current_stages < number_of_stages; current_stages++) {
-
-            total_power += power_in_stage;
-            Hankash_spin_with_encoder(right_back_wheel, right_front_wheel,
-                    left_back_wheel, left_front_wheel, total_power, degrees_in_stage, direction, FALSE);
-
-
-        }
-
-
-
-
-    }
-
-
-    /**
-     *  to decelerate the spinning power
-     * @param left_back_wheel
-     * @param left_front_wheel
-     * @param right_back_wheel
-     * @param right_front_wheel
-     * @param power
-     * @param given_degrees
-     * @param direction
-     * @param number_of_stages
-     */
-
-    public void spin_deceleration(DcMotor left_back_wheel, DcMotor left_front_wheel,
-                                  DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                  double power,int given_degrees,char direction ,int number_of_stages) {
-        int degrees_in_stage = given_degrees / number_of_stages;
-        double power_in_stage = power / number_of_stages;
-
-        double total_power = power;
-
-        for (int current_stages = 0; current_stages < number_of_stages; current_stages++) {
-            total_power -= power_in_stage;
-            if(current_stages==number_of_stages-1){
-                Hankash_spin_with_encoder(right_back_wheel, right_front_wheel,
-                        left_back_wheel, left_front_wheel, total_power, degrees_in_stage, direction, TRUE);
-
-            }
-            else{
-                Hankash_spin_with_encoder(right_back_wheel, right_front_wheel,
-                        left_back_wheel, left_front_wheel, total_power, degrees_in_stage, direction, FALSE);
-            }
-
-        }
-
-
-    }
-
-    /** used to spin the robot right(clockwise) and left (anti-clockwise) using encoders
-
-     * @param left_back_wheel
-     * @param left_front_wheel
-     * @param right_back_wheel
-     * @param right_front_wheel
-     * @param power
-     * @param acceleration_degrees
-     * @param spin_Degree
-     * @param deceleration_degrees
-     * @param number_of_stages
-     * @param direction
-     */
-
-    public void spin_with_encoder(DcMotor left_back_wheel, DcMotor left_front_wheel,
-                                  DcMotor right_back_wheel, DcMotor right_front_wheel,
-                                  double power ,int acceleration_degrees, int spin_Degree ,
-                                  int deceleration_degrees,int number_of_stages, char direction){
-
-       // spin_acceleration(right_back_wheel,  right_front_wheel, left_back_wheel,
-          //      left_front_wheel,power,acceleration_degrees,direction,number_of_stages);
-
-        Hankash_spin_with_encoder(right_back_wheel,  right_front_wheel, left_back_wheel,
-                left_front_wheel,power,spin_Degree,direction,FALSE);
-
-       // spin_deceleration(right_back_wheel,  right_front_wheel, left_back_wheel,
-           //     left_front_wheel,power,deceleration_degrees,direction,number_of_stages);
-
-    }
 
     /**
      * Used to convert 0 to 180 (servo degree) to 0 and 1
@@ -720,9 +460,10 @@ public class HelperClass   {
      */
 
     public void lower_to_higher_servo_degrees(Servo servo_motor, double from, double to) {
+        double new_position = 0 ;
 
         for (double position = from; position <= to; position += 1.0){
-            double new_position = servo_motor_degrees_adapter(position);
+            new_position = servo_motor_degrees_adapter(position);
             servo_motor.setPosition(new_position);
         }
 
@@ -738,9 +479,9 @@ public class HelperClass   {
      */
 
     public void higher_to_lower_servo_degrees(Servo servo_motor, double from, double to) {
-
+        double new_position = 0 ;
         for (double position = from; position >= to; position -= 1.0) {
-            double new_position = servo_motor_degrees_adapter(position);
+            new_position = servo_motor_degrees_adapter(position);
             servo_motor.setPosition(new_position);
 
 
@@ -748,27 +489,9 @@ public class HelperClass   {
 
     }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-    /**
-     * it's used to stop the encoders and to reset the encoders
-     * @param first_motor
-     * @param second_motor
-     * @param third_motor
-     * @param fourth_motor
-     */
-
-
-public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
-                           DcMotor third_motor, DcMotor fourth_motor)
-{
-    first_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    second_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    third_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    fourth_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-}
-    /**
+  /**
      * transform the angle from double to string
      * @param angleUnit
      * @param angle
@@ -813,43 +536,30 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
                                    DcMotor right_back_motor,DcMotor right_front_motor
                                 ,double distance , double power , boolean break_at_end)
     {
-
         if (power > 0 )
         {
             left_back_motor.setTargetPosition(left_back_motor.getCurrentPosition() + cm_to_ticks(distance));
             left_front_motor.setTargetPosition(left_front_motor.getCurrentPosition() + cm_to_ticks(distance));
             right_back_motor.setTargetPosition(right_back_motor.getCurrentPosition() + cm_to_ticks(distance));
             right_front_motor.setTargetPosition(right_front_motor.getCurrentPosition() + cm_to_ticks(distance));
-
-
             int target_ticks = left_back_motor.getCurrentPosition() + cm_to_ticks(distance);
-
-
-
             left_back_motor.setPower(dc_motor_power_adapter(power));
             left_front_motor.setPower(dc_motor_power_adapter(power));
             right_back_motor.setPower(dc_motor_power_adapter(power));
             right_front_motor.setPower(dc_motor_power_adapter(power));
-
-
-            while ((left_back_motor.getCurrentPosition() < target_ticks) && (left_front_motor.getCurrentPosition() < target_ticks)
-                    && (right_back_motor.getCurrentPosition() < target_ticks) && (right_front_motor.getCurrentPosition() < target_ticks))
-                ;
-
-
+            while ((left_back_motor.getCurrentPosition() < target_ticks) &&
+                    (left_front_motor.getCurrentPosition() < target_ticks)
+                    && (right_back_motor.getCurrentPosition() < target_ticks) &&
+                    (right_front_motor.getCurrentPosition() < target_ticks)) ;
             left_back_motor.setPower(dc_motor_power_adapter(0));
             left_front_motor.setPower(dc_motor_power_adapter(0));
             right_back_motor.setPower(dc_motor_power_adapter(0));
             right_front_motor.setPower(dc_motor_power_adapter(0));
-
         }else if(power < 0){
-
             left_back_motor.setTargetPosition(left_back_motor.getCurrentPosition() - cm_to_ticks(distance));
             left_front_motor.setTargetPosition(left_front_motor.getCurrentPosition() - cm_to_ticks(distance));
             right_back_motor.setTargetPosition(right_back_motor.getCurrentPosition() - cm_to_ticks(distance));
             right_front_motor.setTargetPosition(right_front_motor.getCurrentPosition() - cm_to_ticks(distance));
-
-
             int target_ticks = left_back_motor.getCurrentPosition() - cm_to_ticks(distance);
 
 
@@ -857,27 +567,23 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
             left_front_motor.setPower(dc_motor_power_adapter(power));
             right_back_motor.setPower(dc_motor_power_adapter(power));
             right_front_motor.setPower(dc_motor_power_adapter(power));
-
-
-            while ((left_back_motor.getCurrentPosition() > target_ticks) && (left_front_motor.getCurrentPosition() > target_ticks)
-                    && (right_back_motor.getCurrentPosition() > target_ticks) && (right_front_motor.getCurrentPosition() > target_ticks))
-                ;
-
-
+            while ((left_back_motor.getCurrentPosition() > target_ticks) &&
+                    (left_front_motor.getCurrentPosition() > target_ticks)
+                    && (right_back_motor.getCurrentPosition() > target_ticks) &&
+                    (right_front_motor.getCurrentPosition() > target_ticks)) ;
             left_back_motor.setPower(dc_motor_power_adapter(0));
             left_front_motor.setPower(dc_motor_power_adapter(0));
             right_back_motor.setPower(dc_motor_power_adapter(0));
             right_front_motor.setPower(dc_motor_power_adapter(0));
-
         }else if (power ==0){
             left_back_motor.setPower(dc_motor_power_adapter(0));
             left_front_motor.setPower(dc_motor_power_adapter(0));
             right_back_motor.setPower(dc_motor_power_adapter(0));
             right_front_motor.setPower(dc_motor_power_adapter(0));
         }
-
-
     }
+
+
 
 
 
@@ -891,68 +597,39 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
      * @param power power that we will enter between (-100 and 100)
      * @param break_at_end  break at the end of the method or not
      */
-
-
-
-
     public void move_diagonale_left_with_encoderr(DcMotor left_back_motor,DcMotor left_front_motor,
                                                   DcMotor right_back_motor,DcMotor right_front_motor
                                                     ,double distance , double power , boolean break_at_end)
     {
-
         if (power > 0 ) {
             left_back_motor.setTargetPosition(left_back_motor.getCurrentPosition() + cm_to_ticks(distance));
-
             right_front_motor.setTargetPosition(right_front_motor.getCurrentPosition() + cm_to_ticks(distance));
-
-
             int target_ticks = left_back_motor.getCurrentPosition() + cm_to_ticks(distance);
-
-
             left_back_motor.setPower(dc_motor_power_adapter(power));
-
             right_front_motor.setPower(dc_motor_power_adapter(power));
-
-
-            while ((left_back_motor.getCurrentPosition() < target_ticks) && (right_front_motor.getCurrentPosition() < target_ticks))
-                ;
-
-
+            while ((left_back_motor.getCurrentPosition() < target_ticks) &&
+                    (right_front_motor.getCurrentPosition() < target_ticks)) ;
             left_back_motor.setPower(dc_motor_power_adapter(0));
-
             right_front_motor.setPower(dc_motor_power_adapter(0));
-
         }else if(power < 0){
-
             left_back_motor.setTargetPosition(left_back_motor.getCurrentPosition() - cm_to_ticks(distance));
-
             right_front_motor.setTargetPosition(right_front_motor.getCurrentPosition() - cm_to_ticks(distance));
-
-
             int target_ticks = left_back_motor.getCurrentPosition() - cm_to_ticks(distance);
-
-
             left_back_motor.setPower(dc_motor_power_adapter(power));
-
             right_front_motor.setPower(dc_motor_power_adapter(power));
-
-
-            while ((left_back_motor.getCurrentPosition() > target_ticks) && (right_front_motor.getCurrentPosition() > target_ticks))
-                ;
-
-
+            while ((left_back_motor.getCurrentPosition() > target_ticks) &&
+                    (right_front_motor.getCurrentPosition() > target_ticks)) ;
             left_back_motor.setPower(dc_motor_power_adapter(0));
-
             right_front_motor.setPower(dc_motor_power_adapter(0));
-
         }else if (power ==0){
             left_back_motor.setPower(dc_motor_power_adapter(0));
-
             right_front_motor.setPower(dc_motor_power_adapter(0));
         }
-
-
     }
+
+
+
+
 
 
     /**
@@ -965,70 +642,39 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
      * @param power power that we will enter between (-100 and 100)
      * @param break_at_end  break at the end of the method or not
      */
-
-
-
     public void move_diagonale_right_with_encoderr(DcMotor left_back_motor,DcMotor left_front_motor,
                                                    DcMotor right_back_motor,DcMotor right_front_motor
                                             ,double distance , double power , boolean break_at_end){
-
         if (power > 0 ) {
-
             left_front_motor.setTargetPosition(left_front_motor.getCurrentPosition() + cm_to_ticks(distance));
             right_back_motor.setTargetPosition(right_back_motor.getCurrentPosition() + cm_to_ticks(distance));
-
-
-
             int target_ticks = left_front_motor.getCurrentPosition() + cm_to_ticks(distance);
-
-
-
             left_front_motor.setPower(dc_motor_power_adapter(power));
             right_back_motor.setPower(dc_motor_power_adapter(power));
-
-
-
-            while ((left_front_motor.getCurrentPosition() < target_ticks) && (right_back_motor.getCurrentPosition() < target_ticks))
-                ;
-
-
-
+            while ((left_front_motor.getCurrentPosition() < target_ticks) &&
+                    (right_back_motor.getCurrentPosition() < target_ticks)) ;
             left_front_motor.setPower(dc_motor_power_adapter(0));
             right_back_motor.setPower(dc_motor_power_adapter(0));
-
-
         }else if(power < 0){
-
-
             left_front_motor.setTargetPosition(left_front_motor.getCurrentPosition() - cm_to_ticks(distance));
             right_back_motor.setTargetPosition(right_back_motor.getCurrentPosition() - cm_to_ticks(distance));
-
-
-
             int target_ticks = left_front_motor.getCurrentPosition() - cm_to_ticks(distance);
-
-
             left_front_motor.setPower(dc_motor_power_adapter(power));
             right_back_motor.setPower(dc_motor_power_adapter(power));
-
-
-            while ((left_front_motor.getCurrentPosition() > target_ticks) && (right_back_motor.getCurrentPosition() > target_ticks))
-                ;
-
-
-
+            while ((left_front_motor.getCurrentPosition() > target_ticks) && (right_back_motor.getCurrentPosition() > target_ticks)) ;
             left_front_motor.setPower(dc_motor_power_adapter(0));
             right_back_motor.setPower(dc_motor_power_adapter(0));
-
-
         }else if (power ==0){
-
             left_front_motor.setPower(dc_motor_power_adapter(0));
             right_back_motor.setPower(dc_motor_power_adapter(0));
-
         }
-
     }
+
+
+
+
+
+
 
     /**
      * to move side with encoder
@@ -1061,8 +707,10 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
             right_front_motor.setPower(dc_motor_power_adapter(-power));
 
 
-            while ((left_back_motor.getCurrentPosition() > target_ticks) && (left_front_motor.getCurrentPosition() < target_ticks2)
-                    && (right_back_motor.getCurrentPosition() < target_ticks2) && (right_front_motor.getCurrentPosition() > target_ticks))
+            while ((left_back_motor.getCurrentPosition() > target_ticks) &&
+                    (left_front_motor.getCurrentPosition() < target_ticks2)
+                    && (right_back_motor.getCurrentPosition() < target_ticks2) &&
+                    (right_front_motor.getCurrentPosition() > target_ticks))
                 ;
 
 
@@ -1090,8 +738,10 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
             right_front_motor.setPower(dc_motor_power_adapter(power));
 
 
-            while ((left_back_motor.getCurrentPosition() < target_ticks) && (left_front_motor.getCurrentPosition() > target_ticks2)
-                    && (right_back_motor.getCurrentPosition() > target_ticks2) && (right_front_motor.getCurrentPosition() < target_ticks))
+            while ((left_back_motor.getCurrentPosition() < target_ticks) &&
+                    (left_front_motor.getCurrentPosition() > target_ticks2)
+                    && (right_back_motor.getCurrentPosition() > target_ticks2) &&
+                    (right_front_motor.getCurrentPosition() < target_ticks))
                 ;
 
 
@@ -1109,70 +759,39 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
 
 
     }
+
     /**
      * to move the arm
      * @param arm_motor it represents the dc motor that we use as an arm motor in our robot
      * @param power power that we will enter between (-100 and 100)
      * @param ticks the number of ticks that we want the robot to do
      * @param touch_sensor it represents the touch sensor that we will use in our robot
-     *
      */
-
-
     public void move_arm_with_enocderr ( DcMotor arm_motor,  double power, int ticks,TouchSensor touch_sensor)
     {
-
-        if (power>0)
-        {
-
-
+        if (power>0) {
             int target_ticks = arm_motor.getCurrentPosition() + ticks;
-
-
             if( target_ticks <= 15000 ) {
-
                 arm_motor.setTargetPosition(target_ticks);
-
                 arm_motor.setPower(dc_motor_power_adapter(power));
-
                 while ((arm_motor.getCurrentPosition() < target_ticks));
-
                 arm_motor.setPower(dc_motor_power_adapter(0));
-
-
             } else   {
-
-
             }
-
-
-
         }else if(power<0){
-
-            if(!touch_sensor.isPressed())
-            {
+            if(!touch_sensor.isPressed()) {
                 int target_ticks = arm_motor.getCurrentPosition() - ticks;
-
                 arm_motor.setTargetPosition(target_ticks);
-
-
                 arm_motor.setPower(dc_motor_power_adapter(power));
-
                 while ((arm_motor.getCurrentPosition() > target_ticks));
-
-                arm_motor.setPower(dc_motor_power_adapter(0));
-
-
-            }
-
-
-        }
+                arm_motor.setPower(dc_motor_power_adapter(0)); } }
         else if(power == 0){
             arm_motor.setPower(0);
-
         }
-
     }
+
+
+
     /**
      *  used to spin the robot right(clockwise) and left (anti-clockwise) using encoders
      * @param left_back_motor it represents the the robot's left back dc motor
@@ -1212,8 +831,10 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
                 right_front_motor.setPower(dc_motor_power_adapter(-power));
 
 
-                while ((left_back_motor.getCurrentPosition() > target_ticks) && (left_front_motor.getCurrentPosition() > target_ticks)
-                        && (right_back_motor.getCurrentPosition() < target_ticks) && (right_front_motor.getCurrentPosition() < target_ticks))
+                while ((left_back_motor.getCurrentPosition() > target_ticks) &&
+                        (left_front_motor.getCurrentPosition() > target_ticks)
+                        && (right_back_motor.getCurrentPosition() < target_ticks) &&
+                        (right_front_motor.getCurrentPosition() < target_ticks))
                     ;
 
 
@@ -1239,8 +860,10 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
                 right_front_motor.setPower(dc_motor_power_adapter(power));
 
 
-                while ((left_back_motor.getCurrentPosition() < target_ticks) && (left_front_motor.getCurrentPosition() < target_ticks)
-                        && (right_back_motor.getCurrentPosition() > target_ticks) && (right_front_motor.getCurrentPosition() > target_ticks))
+                while ((left_back_motor.getCurrentPosition() < target_ticks) &&
+                        (left_front_motor.getCurrentPosition() < target_ticks)
+                        && (right_back_motor.getCurrentPosition() > target_ticks) &&
+                        (right_front_motor.getCurrentPosition() > target_ticks))
                     ;
 
 
@@ -1278,8 +901,10 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
                 right_front_motor.setPower(dc_motor_power_adapter(power));
 
 
-                while ((left_back_motor.getCurrentPosition() < target_ticks) && (left_front_motor.getCurrentPosition() < target_ticks)
-                        && (right_back_motor.getCurrentPosition() > target_ticks) && (right_front_motor.getCurrentPosition() > target_ticks))
+                while ((left_back_motor.getCurrentPosition() < target_ticks) &&
+                        (left_front_motor.getCurrentPosition() < target_ticks)
+                        && (right_back_motor.getCurrentPosition() > target_ticks) &&
+                        (right_front_motor.getCurrentPosition() > target_ticks))
                     ;
 
 
@@ -1305,8 +930,10 @@ public void stop_and_reset(DcMotor first_motor, DcMotor second_motor,
                 right_front_motor.setPower(dc_motor_power_adapter(-power));
 
 
-                while ((left_back_motor.getCurrentPosition() > target_ticks) && (left_front_motor.getCurrentPosition() > target_ticks)
-                        && (right_back_motor.getCurrentPosition() < target_ticks) && (right_front_motor.getCurrentPosition() < target_ticks))
+                while ((left_back_motor.getCurrentPosition() > target_ticks) &&
+                        (left_front_motor.getCurrentPosition() > target_ticks)
+                        && (right_back_motor.getCurrentPosition() < target_ticks) &&
+                        (right_front_motor.getCurrentPosition() < target_ticks))
                     ;
 
                 left_back_motor.setPower(dc_motor_power_adapter(0));

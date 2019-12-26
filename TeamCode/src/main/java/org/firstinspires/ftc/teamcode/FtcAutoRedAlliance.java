@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -24,10 +23,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 import java.util.Locale;
 
-import static android.os.SystemClock.sleep;
 
-@Autonomous
-public class Ftcauto_bluealliance extends OpMode {
+@Autonomous(name="FtcAutoRedAlliance" , group = "FTC")
+
+public class FtcAutoRedAlliance extends  LinearOpMode{
+
     private DcMotor left_back_motor = null;
     private DcMotor left_front_motor = null;
     private DcMotor right_back_motor = null;
@@ -42,9 +42,9 @@ public class Ftcauto_bluealliance extends OpMode {
     private TouchSensor min_end_stop;
     DigitalChannel max_end_stop;
 
-    double move_power = 60;
+    double move_power = 65;
     double diagonal_power = 40;
-    double side_power = 60;
+    double side_power = 65;
     double spin_power = 0;
     double arm_power = 0;
     double stop_power = 0;
@@ -61,7 +61,7 @@ public class Ftcauto_bluealliance extends OpMode {
     Orientation angles;
     Acceleration gravity;
     @Override
-    public void init() {
+    public void runOpMode() throws InterruptedException {
         left_back_motor = hardwareMap.get(DcMotor.class, "left_back_motor");
         left_front_motor = hardwareMap.get(DcMotor.class, "left_front_motor");
         right_back_motor = hardwareMap.get(DcMotor.class, "right_back_motor");
@@ -105,48 +105,7 @@ public class Ftcauto_bluealliance extends OpMode {
         // Set up our telemetry dashboard
         composeTelemetry();
 
-
-    }
-
-
-    @Override
-    public void init_loop() {
-        if (right_foundation_servo.getPosition() != 0.05) {
-            right_foundation_servo.setPosition(0.05);
-
-        }
-        if (left_foundation_servo.getPosition() != 0.7) {
-            left_foundation_servo.setPosition(0.7);
-
-        }
-
-        sleep(500);
-
-        if (gripper_servo.getPosition() != 1) {
-            gripper_servo.setPosition(1);
-        }
-
-        sleep(500);
-
-
-        if (arm_servo.getPosition() != 1) {
-            arm_servo.setPosition(1);
-
-        }
-
-        sleep(500);
-
-        if (right_foundation_servo.getPosition() != .5) {
-            right_foundation_servo.setPosition(0.5);
-
-        }
-        if (left_foundation_servo.getPosition() != 0.15) {
-            left_foundation_servo.setPosition(0.15);
-
-        }
-        sleep(500);
-
-
+        waitForStart();
 
         if(gamepad1.y){
             flag = 4 ;
@@ -162,157 +121,15 @@ public class Ftcauto_bluealliance extends OpMode {
             telemetry.update();
         }
 
-        sleep(500);
-    }
 
-
-    @Override
-    public void start() {
 
 
 
 
     }
 
-    @Override
-    public void loop() {
-        if(flag==4){
-            move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,55,move_power);
-             move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,10,stop_power);
-             move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,55,-move_power);
-             move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,200,stop_power);
-             move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,65,move_power);
-         }
-    else if(flag==5){
-            move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,55,move_power);
-             move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,10,-side_power);
-             move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,55,-move_power);
-             move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,190,-side_power);
-             move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,65,move_power);
-
-        }
-    else if(flag==6){
-            move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,55,move_power);
-             move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,-side_power);
-             move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,55,-move_power);
-             move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,180,-side_power);
-             move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,65,move_power);
-
-    }
-
-//
-//
-//    if(gamepad1.dpad_up){
-//        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,55,move_power);
-//
-//    }else if(gamepad1.dpad_down){
-//        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,60,move_power);
-//
-//
-//    }else if(gamepad1.dpad_right){
-//
-//        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,90,move_power);
-//
-//    }else if(gamepad1.dpad_left){
-//
-//        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,30,move_power);
-//
-//    }else if(gamepad2.dpad_up){
-//        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,55,-move_power);
-//
-//
-//    }else if(gamepad2.dpad_down){
-//
-//        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,80,-move_power);
-//
-//    }else if(gamepad2.dpad_right){
-//
-//        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,70,-move_power);
-//
-//    }else if(gamepad2.dpad_left){
-//        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,60,-move_power);
-//
-//
-//    }else if(gamepad2.a){
-//
-//        move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,50,-side_power);
-//
-//    }else if(gamepad2.b){
-//
-//        move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,-side_power);
-//
-//    }else if(gamepad2.x){
-//
-//        move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,60,-side_power);
-//
-//    }else if(gamepad2.y){
-//
-//        move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,40,-side_power);
-//
-//    }else if(gamepad1.a){
-//
-//        move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,50,side_power);
-//
-//    }else if(gamepad1.b){
-//
-//        move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,side_power);
-//
-//    }else if(gamepad1.x){
-//
-//        move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,60,side_power);
-//
-//    }else if(gamepad1.y){
-//
-//        move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,40,side_power);
-//
-//    }
-
-
-
-
-//        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,55,move_power);
-//        sleep(1000);
-//
-//        move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,10,-side_power);
-
-//        if(flag==4){
-//            move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,10,stop_power);
-//        }
-//
-//        else if(flag==5){
-//            move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,10,-side_power);
-//        }
-//
-//        else if(flag==6){
-//            move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,-side_power);
-//        }
-//        sleep(1000);
-//
-//        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,55,-move_power);
-//        sleep(1000);
-//        move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,190,-side_power);
-
-//        if(flag==4){
-//            move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,200,stop_power);
-//        }
-//
-//        else if(flag==5){
-//            move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,190,-side_power);
-//        }
-//
-//        else if(flag==6){
-//            move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,180,-side_power);
-//        }
-//        sleep(1000);
-//
-//        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,65,move_power);
-//        sleep(1000);
-
-    }
-
-
-    public void move_with_pid(DcMotor left_back_motor, DcMotor left_front_motor, DcMotor right_back_motor, DcMotor right_front_motor
-            , double distance , double power ) {
+    public void move_with_pid(DcMotor left_back_motor, DcMotor left_front_motor, DcMotor right_back_motor,
+                              DcMotor right_front_motor, double distance , double power ) {
 
         left_back_motor.setDirection(DcMotor.Direction.FORWARD);
         left_front_motor.setDirection(DcMotor.Direction.FORWARD);
@@ -373,7 +190,7 @@ public class Ftcauto_bluealliance extends OpMode {
                 right_back_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(right_power),-100,100));
                 right_front_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(right_power),-100,100));
 
-                 sleep(1);
+                sleep(1);
 
                 last_error = error ;
 
@@ -387,7 +204,7 @@ public class Ftcauto_bluealliance extends OpMode {
             right_back_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
             right_front_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
 
-             sleep(1);
+            sleep(1);
 
 
 
@@ -435,7 +252,7 @@ public class Ftcauto_bluealliance extends OpMode {
                 right_back_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(right_power),-100,100));
                 right_front_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(right_power),-100,100));
 
-                 sleep(1);
+                sleep(1);
 
                 last_error = error ;
 
@@ -449,7 +266,7 @@ public class Ftcauto_bluealliance extends OpMode {
             right_back_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
             right_front_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
 
-             sleep(1);
+            sleep(1);
         }else if(power == 0){
 
 
@@ -521,7 +338,7 @@ public class Ftcauto_bluealliance extends OpMode {
                 right_back_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(decrese_power), -100, 100));
                 right_front_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(power), -100, 100));
 
-                 sleep(1);
+                sleep(1);
 
                 last_error = error;
 
@@ -534,7 +351,7 @@ public class Ftcauto_bluealliance extends OpMode {
             right_back_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
             right_front_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
 
-             sleep(1);
+            sleep(1);
 
         }else if(power < 0){
             imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
@@ -563,8 +380,10 @@ public class Ftcauto_bluealliance extends OpMode {
 
 
 
-            while ((left_back_motor.getCurrentPosition() < left_back_motor_target_ticks) && (left_front_motor.getCurrentPosition() > left_front_motor_target_ticks)
-                    && (right_back_motor.getCurrentPosition() > right_back_motor_target_ticks) && (right_front_motor.getCurrentPosition() < right__front_motor_target_ticks))
+            while ((left_back_motor.getCurrentPosition() < left_back_motor_target_ticks) &&
+                    (left_front_motor.getCurrentPosition() > left_front_motor_target_ticks)
+                    && (right_back_motor.getCurrentPosition() > right_back_motor_target_ticks) &&
+                    (right_front_motor.getCurrentPosition() < right__front_motor_target_ticks))
             {
 
                 imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
@@ -584,7 +403,7 @@ public class Ftcauto_bluealliance extends OpMode {
                 right_back_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(power),-100,100));
                 right_front_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(decrese_power),-100,100));
 
-                 sleep(1);
+                sleep(1);
 
                 last_error = error ;
 
@@ -598,7 +417,7 @@ public class Ftcauto_bluealliance extends OpMode {
             right_back_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
             right_front_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
 
-           sleep(1);
+            sleep(1);
 
 
         }else if (power ==0){

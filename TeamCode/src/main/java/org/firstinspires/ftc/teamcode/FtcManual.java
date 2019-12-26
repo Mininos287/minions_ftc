@@ -122,52 +122,17 @@ public class FtcManual extends OpMode {
     @Override
     public void init_loop() {
 
-
-        if (right_foundation_servo.getPosition() != 0.05) {
-            right_foundation_servo.setPosition(0.05);
-
-        }
-        if (left_foundation_servo.getPosition() != 0.7) {
-            left_foundation_servo.setPosition(0.7);
-
-        }
-
-        sleep(1000);
-
-        if (gripper_servo.getPosition() != 1) {
-            gripper_servo.setPosition(1);
-        }
-
-        sleep(1000);
-
-
-        if (arm_servo.getPosition() != 1) {
-            arm_servo.setPosition(1);
-
-        }
-
-        sleep(1000);
-
-        if (right_foundation_servo.getPosition() != .5) {
-            right_foundation_servo.setPosition(0.5);
-
-        }
-        if (left_foundation_servo.getPosition() != 0.15) {
-            left_foundation_servo.setPosition(0.15);
-
-        }
-
-        sleep(1000);
-
-//        while (!min_end_stop.isPressed()){
-//            helper_class_object.move_arm_without_encoder (arm_motor ,-arm_power);
-//
-//        }
-//
-//            helper_class_object.move_arm_without_encoder (arm_motor ,stop_power);
-
-
         telemetry.addData("Status", "init_loop");
+
+
+        if (right_foundation_servo.getPosition() != .75) {
+            right_foundation_servo.setPosition(.75);
+
+        }
+        if (left_foundation_servo.getPosition() != .25) {
+            left_foundation_servo.setPosition(.25);
+
+        }
 
     }
 
@@ -286,19 +251,19 @@ public class FtcManual extends OpMode {
 
         if (gamepad1.y) {
 
-            if (right_foundation_servo.getPosition() != .5) {
-                right_foundation_servo.setPosition(0.5);
+            if (right_foundation_servo.getPosition() != .75) {
+                right_foundation_servo.setPosition(.75);
 
             }
-            if (left_foundation_servo.getPosition() != 0.15) {
-                left_foundation_servo.setPosition(0.15);
+            if (left_foundation_servo.getPosition() != .25) {
+                left_foundation_servo.setPosition(.25);
 
             }
 
-        } else if (gamepad1.a) {
+        }else if (gamepad1.a) {
 
-            if (right_foundation_servo.getPosition() != 0.05) {
-                right_foundation_servo.setPosition(0.05);
+            if (right_foundation_servo.getPosition() != .3) {
+                right_foundation_servo.setPosition(.3);
 
             }
             if (left_foundation_servo.getPosition() != 0.7) {
@@ -430,8 +395,8 @@ public class FtcManual extends OpMode {
     }
 
 
-    public void move_left_diagonal_pid(DcMotor left_back_motor, DcMotor left_front_motor, DcMotor right_back_motor, DcMotor right_front_motor
-            , double distance, double power) {
+    public void move_left_diagonal_pid(DcMotor left_back_motor, DcMotor left_front_motor, DcMotor right_back_motor,
+                                       DcMotor right_front_motor, double distance, double power) {
         if (power > 0) {
             left_back_motor.setTargetPosition(left_back_motor.getCurrentPosition() + helper_class_object.cm_to_ticks(distance));
 
@@ -441,7 +406,8 @@ public class FtcManual extends OpMode {
             int target_ticks = left_back_motor.getCurrentPosition() + helper_class_object.cm_to_ticks(distance);
 
 
-            while ((left_back_motor.getCurrentPosition() < target_ticks) && (right_front_motor.getCurrentPosition() < target_ticks)) {
+            while ((left_back_motor.getCurrentPosition() < target_ticks) &&
+                    (right_front_motor.getCurrentPosition() < target_ticks)) {
                 imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
                 double gyro_start = gyro_angel;
@@ -599,8 +565,8 @@ public class FtcManual extends OpMode {
     }
 
 
-    public void move_right_diagonal_pid(DcMotor left_back_motor, DcMotor left_front_motor, DcMotor right_back_motor, DcMotor right_front_motor
-            , double distance, double power) {
+    public void move_right_diagonal_pid(DcMotor left_back_motor, DcMotor left_front_motor, DcMotor right_back_motor,
+                                        DcMotor right_front_motor, double distance, double power) {
         if (power > 0) {
             left_front_motor.setTargetPosition(left_front_motor.getCurrentPosition() + helper_class_object.cm_to_ticks(distance));
 
@@ -766,8 +732,8 @@ public class FtcManual extends OpMode {
 
 
     }
-    public void move_side_with_encoderr(DcMotor left_back_motor,DcMotor left_front_motor,DcMotor right_back_motor,DcMotor right_front_motor
-            ,double distance , double power , boolean break_at_end){
+    public void move_side_with_encoderr(DcMotor left_back_motor,DcMotor left_front_motor,DcMotor right_back_motor,
+                                        DcMotor right_front_motor,double distance , double power , boolean break_at_end){
 
         if (power > 0 ) {
             left_back_motor.setTargetPosition(left_back_motor.getCurrentPosition() - helper_class_object.cm_to_ticks(distance));
@@ -786,8 +752,10 @@ public class FtcManual extends OpMode {
             right_front_motor.setPower(helper_class_object.dc_motor_power_adapter(-power));
 
 
-            while ((left_back_motor.getCurrentPosition() > target_ticks) && (left_front_motor.getCurrentPosition() < target_ticks2)
-                    && (right_back_motor.getCurrentPosition() < target_ticks2) && (right_front_motor.getCurrentPosition() > target_ticks))
+            while ((left_back_motor.getCurrentPosition() > target_ticks) &&
+                    (left_front_motor.getCurrentPosition() < target_ticks2)
+                    && (right_back_motor.getCurrentPosition() < target_ticks2) &&
+                    (right_front_motor.getCurrentPosition() > target_ticks))
             {
                 imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
@@ -882,8 +850,10 @@ public class FtcManual extends OpMode {
             right_front_motor.setPower(helper_class_object.dc_motor_power_adapter(power));
 
 
-            while ((left_back_motor.getCurrentPosition() < target_ticks) && (left_front_motor.getCurrentPosition() > target_ticks2)
-                    && (right_back_motor.getCurrentPosition() > target_ticks2) && (right_front_motor.getCurrentPosition() < target_ticks))
+            while ((left_back_motor.getCurrentPosition() < target_ticks) &&
+                    (left_front_motor.getCurrentPosition() > target_ticks2)
+                    && (right_back_motor.getCurrentPosition() > target_ticks2) &&
+                    (right_front_motor.getCurrentPosition() < target_ticks))
             {
                 imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
@@ -967,138 +937,3 @@ public class FtcManual extends OpMode {
 
 }
 
-/*
-
-
-            double target_angel = 90;
-
-
-            gyro_start = gyro_angel;
-
-            if (gyro_start >= 0) {
-
-                if (gyro_start + target_angel <= 180) {
-
-                    while ((gyro_angel < (gyro_start + target_angel)) && (gyro_angel >= 0)) {
-                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'A');
-                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-                        telemetry.update();
-
-                    }
-                    for (int j = 0; j < 1000; ++j) {
-
-                    }
-                    while ((gyro_angel > (gyro_start + target_angel)) && (gyro_angel >= 0)) {
-                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'C');
-                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-                        telemetry.update();
-
-                    }
-
-                } else if (gyro_start + target_angel > 180) {
-
-                    double moven_angels = 180 - gyro_start;
-                    double remaining_angels = target_angel - moven_angels;
-                    double new_target_angel = -180 + remaining_angels;
-
-
-                    while ((gyro_angel < 180) && (gyro_angel >= 0)) {
-                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'A');
-                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-                        telemetry.update();
-
-                    }
-                    for (int j = 0; j < 1000; ++j) {
-
-                    }
-                    while ((gyro_angel > 180) && (gyro_angel >= 0)) {
-                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'C');
-                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-                        telemetry.update();
-
-                    }
-
-
-                    while ((gyro_angel < new_target_angel) && (gyro_angel <= 0)) {
-                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'A');
-                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-                        telemetry.update();
-
-                    }
-                    for (int j = 0; j < 1000; ++j) {
-
-                    }
-                    while ((gyro_angel > new_target_angel) && (gyro_angel <= 0)) {
-                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'C');
-                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-                        telemetry.update();
-
-
-                    }
-                }
-            } else if (gyro_start < 0) {
-
-                if (gyro_start + target_angel <= 0) {
-
-                    while ((gyro_angel < (gyro_start + target_angel)) && (gyro_angel <= 0)) {
-                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'A');
-                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-                        telemetry.update();
-
-                    }
-                    for (int j = 0; j < 1000; ++j) {
-
-                    }
-                    while ((gyro_angel > (gyro_start + target_angel)) && (gyro_angel <= 0)) {
-                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'C');
-                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-                        telemetry.update();
-
-                    }
-
-
-                } else if (gyro_start + target_angel > 0) {
-
-                    double moven_angels = -gyro_start;
-                    double remaining_angels = target_angel - moven_angels;
-                    double new_target_angel = remaining_angels;
-
-
-                    while ((gyro_angel < 0) && (gyro_angel <= 0)) {
-                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'A');
-                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-                        telemetry.update();
-
-                    }
-                    for (int j = 0; j < 1000; ++j) {
-
-                    }
-                    while ((gyro_angel > 0) && (gyro_angel <= 0)) {
-                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'C');
-                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-                        telemetry.update();
-
-                    }
-
-
-                    while ((gyro_angel < new_target_angel) && (gyro_angel >= 0)) {
-                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'A');
-                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-                        telemetry.update();
-
-                    }
-                    for (int j = 0; j < 1000; ++j) {
-
-                    }
-                    while ((gyro_angel > new_target_angel) && (gyro_angel >= 0)) {
-                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'C');
-                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-                        telemetry.update();
-
-                    }
-
-                }
-            }
-
-
-*/

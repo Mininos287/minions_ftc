@@ -27,7 +27,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 @Autonomous(name="FTC_AUTO" , group = "FTC")
 
-public class Ftc_Auto extends LinearOpMode {
+public class Ftc_Auto_vuforia extends LinearOpMode {
     private DcMotor left_back_motor = null;
     private DcMotor left_front_motor = null;
     private DcMotor right_back_motor = null;
