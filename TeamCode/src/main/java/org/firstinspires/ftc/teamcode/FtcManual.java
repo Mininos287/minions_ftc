@@ -305,8 +305,8 @@ public class FtcManual extends OpMode {
             }
         } else if (gamepad2.x) {
 
-            if (arm_servo.getPosition() != 1) {
-                arm_servo.setPosition(1);
+            if (arm_servo.getPosition() != 0.8) {
+                arm_servo.setPosition(0.8);
 
             }
 

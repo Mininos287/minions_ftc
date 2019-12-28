@@ -13,7 +13,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor ;
 
 //@Disabled
 public class TrainingManual extends OpMode {
-
+int YELLOW_COLOR = 8 ;
     private DcMotor left_motor = null;
     private DcMotor right_motor = null;
     private DcMotor arm_motor = null;
@@ -79,7 +79,6 @@ public class TrainingManual extends OpMode {
         double right_power;
         double arm_power;
 
-
         left_power  = -gamepad1.left_stick_y ;
         right_power = -gamepad1.right_stick_y ;
         arm_power = -gamepad2.left_stick_y  ;
@@ -98,7 +97,7 @@ public class TrainingManual extends OpMode {
         }
 
 
-        if((color_sensor.readUnsignedByte(ModernRoboticsI2cColorSensor.Register.COLOR_NUMBER) == 8)){
+        if((color_sensor.readUnsignedByte(ModernRoboticsI2cColorSensor.Register.COLOR_NUMBER) == YELLOW_COLOR)){
 
             left_claw.setPosition(.7);
             right_claw.setPosition(0);
