@@ -334,8 +334,7 @@ int flag = 0 ;
                     helper_class_object.move_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 0, 'F');
 
                 }
-waitOneFullHardwareCycle();
-            }
+             }
 
         }
 
