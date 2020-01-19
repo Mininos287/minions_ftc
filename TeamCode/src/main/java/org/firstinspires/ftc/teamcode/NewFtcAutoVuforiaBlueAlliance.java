@@ -465,7 +465,7 @@ public class NewFtcAutoVuforiaBlueAlliance extends  LinearOpMode{
 
 
             }
-        }q
+        }
 
         //قدام
         move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,25,move_power,false);

@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -37,10 +39,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
-@TeleOp(name = "TEST_PID",group = "test")
+@Autonomous(name = "FtcAutoVuforiaBlueAlliance_1_1",group = "Ftc")
 
-
-public class TestPID extends LinearOpMode {
+public class FtcAutoVuforiaBlueAlliance_1_1 extends LinearOpMode{
 
     private DcMotor left_back_motor = null;
     private DcMotor left_front_motor = null;
@@ -56,8 +57,8 @@ public class TestPID extends LinearOpMode {
     private TouchSensor min_end_stop;
     DigitalChannel max_end_stop;
 
-    double move_power = 100;
-    double side_power = 100;
+    double move_power = 75;
+    double side_power = 75;
     double arm_power = 100;
     double stop_power = 0;
     int flag=0;
@@ -381,45 +382,204 @@ public class TestPID extends LinearOpMode {
 
         waitForStart();
 
-        while (opModeIsActive()){
-            if(gamepad1.right_bumper && gamepad1.left_bumper) {
-                move_power = 60 ;
-            }else if(gamepad1.right_bumper){
-                move_power = 55;
-            }else{
-                move_power = 50 ;
-            }
+//while (opModeIsActive()) {
+    targetVisible = false;
 
-            if (gamepad1.dpad_up){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,78,move_power,false);
 
-            }else if(gamepad1.dpad_down){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,78,-move_power,false);
 
-            }else  if(gamepad1.dpad_right){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,move_power,false);
+    /*
+     * اتحرك و اقف قدام رابع ستون
+     * */
 
-            }else if(gamepad1.dpad_left){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,-move_power,false);
+    move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 37, move_power, false);
+    sleep(1000);
 
-            }
 
-            if (gamepad2.dpad_up){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,78,move_power,true);
+    for (VuforiaTrackable trackable_1 : allTrackables) {
+        if (((VuforiaTrackableDefaultListener) trackable_1.getListener()).isVisible()) {
+            telemetry.addData("Visible Target", trackable_1.getName());
+            telemetry.update();
+            targetVisible = true;
+            break;
+        }
+    }
 
-            }else if(gamepad2.dpad_down){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,78,-move_power,true);
+    if (targetVisible) {
+        //هنمسك رابع ستون علشان هى كده السكاى ستون
 
-            }else  if(gamepad2.dpad_right){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,move_power,true);
+        /*
+         *اتحرك يمين لحد م تقف قدام رابع ستون
+         * */
 
-            }else if(gamepad2.dpad_left){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,-move_power,true);
+        //اتحرك يمين شويه لحد م تبقى قدام رابع ستون
+        move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 3, 70, false);
 
+        //قدام
+        move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 12, move_power, false);
+
+        //امسك بالجريبر
+        gripper_servo.setPosition(0.0);
+        sleep(500);
+
+        //ارجع لورا
+        move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 20, -move_power, false);
+
+        //اتحرك لحد الازرق
+        move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, BLUE_COLOR, -70, false);
+
+        //ارمى الستون
+        gripper_servo.setPosition(1);
+
+//            ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+//            //اتحرك يمين لحد اول ستون
+//            // انا هكتب مسافه عشوائيه وانتوا ابقوا جربوا
+//            move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,100,side_power, false);
+//            ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+//        //قدام
+//        move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 25, move_power, false);
+//
+//        //امسك بالجريبر
+//        gripper_servo.setPosition(0.0);
+//        sleep(500);
+//
+//        //ارجع لورا
+//        move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 30, -move_power, false);
+//
+//        //اتحرك لحد الازرق
+//        move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, BLUE_COLOR, -70, false);
+//
+//            while (opModeIsActive());
+//
+
+    } else {
+
+        telemetry.addData("Visible Target", "none");
+        telemetry.update();
+
+        //معنى كده ان رابع ستون مش هى السكاى ستون والمفروض اتحرك بالجمب شويه علشان ابقى قدام خامس ستون
+
+        /*
+         * اتحرك بالجمب شويه مسافه ستون واحده
+         * استنى ثانيه
+         */
+
+        move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 15, -side_power, false);
+        sleep(1000);
+
+        for (VuforiaTrackable trackable_2 : allTrackables) {
+            if (((VuforiaTrackableDefaultListener) trackable_2.getListener()).isVisible()) {
+                telemetry.addData("Visible Target", trackable_2.getName());
+                telemetry.update();
+                targetVisible = true;
             }
         }
 
+        if (targetVisible) {
+            //هنمسك خامس ستون علشان هى كده السكاى ستون
+
+                /*
+                اتحرك يمين لحد م تقف قدام خامس ستون
+                 * */
+
+            //اتحرك يمين شويه لحد م تبقى قدام خامس ستون
+            move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 3, side_power, false);
+
+            //قدام
+            move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 15, move_power, false);
+
+            //امسك بالجريبر
+            gripper_servo.setPosition(0.0);
+            sleep(500);
+
+            //ارجع لورا
+            move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 25, -move_power, false);
+
+            //اتحرك لحد الازرق
+            move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, BLUE_COLOR, -70, false);
+
+            //ارمى الستون
+            gripper_servo.setPosition(1);
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+            //اتحرك يمين لحد تانى ستون
+            // انا هكتب مسافه عشوائيه وانتوا ابقوا جربوا
+            move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 125, side_power, false);
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+            //قدام
+            move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 25, move_power, false);
+
+            //امسك بالجريبر
+            gripper_servo.setPosition(0.0);
+            sleep(500);
+
+            //ارجع لورا
+            move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 30, -move_power, false);
+
+            //اتحرك لحد الازرق
+            move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, BLUE_COLOR, -70, false);
+
+//            while (opModeIsActive());
+
+
+        } else {
+
+
+                telemetry.addData("Visible Target", "none");
+                telemetry.update();
+                //معنى كده ان رابع وخامس ستون مش هما السكاى ستون والمفروض اتحرك بالجمب شويه علشان ابقى قدام سادس ستون واكيد هى السكاى ستون فلما اتحرك بالجمب اخدها على طول
+
+                /*
+                 *اتحرك شمال شويه واقف قدام سادس ستون
+                 * */
+
+                //شمال لحد قدام سادس ستون
+                move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 3, -side_power, false);
+
+            //قدام
+            move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 15, move_power, false);
+
+            //امسك بالجريبر
+            gripper_servo.setPosition(0.0);
+            sleep(500);
+
+            //ارجع لورا
+            move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 25, -move_power, false);
+
+            //اتحرك لحد الازرق
+            move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, BLUE_COLOR, -70, false);
+
+            //ارمى الستون
+            gripper_servo.setPosition(1);
+
+            ;;;;;;;;;;;;;;;;;;;;;;;;;;
+            //اتحرك يمين لحد تانى ستون
+            // انا هكتب مسافه عشوائيه وانتوا ابقوا جربوا
+            move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 120, side_power, false);
+            ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+            //قدام
+            move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 25, move_power, false);
+
+            //امسك بالجريبر
+            gripper_servo.setPosition(0.0);
+            sleep(500);
+
+            //ارجع لورا
+            move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 30, -move_power, false);
+
+            //اتحرك لحد الازرق
+            move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, BLUE_COLOR, -70, false);
+
+//            while (opModeIsActive());
+
+
+        }
+            }
+
+//        }
+
+
     }
+
 
     public void move_with_pid(DcMotor left_back_motor, DcMotor left_front_motor, DcMotor right_back_motor,
                               DcMotor right_front_motor, double distance , double power,boolean read_gyro_angel) {
@@ -687,7 +847,7 @@ public class TestPID extends LinearOpMode {
 
             double error = 0 ;
             double last_error = 0;
-            double KP = 5;
+            double KP = 2.7;
             double KI = 0;  //.001
             double KD = 0;  //.2
             double probational=0 ;
@@ -721,7 +881,7 @@ public class TestPID extends LinearOpMode {
 
             double error = 0 ;
             double last_error = 0;
-            double KP = 5;
+            double KP = 3;
             double KI = 0;  //.001
             double KD = 0;  //.2
             double probational=0 ;
@@ -780,7 +940,7 @@ public class TestPID extends LinearOpMode {
             double decrese_power ;
             double error = 0 ;
             double last_error = 0;
-            double KP = 5;
+            double KP = 2;
             double KI = 0;  //.001
             double KD = 0;  //.2
             double probational=0 ;
@@ -826,7 +986,7 @@ public class TestPID extends LinearOpMode {
             double decrese_power ;
             double error = 0 ;
             double last_error = 0;
-            double KP = 5;
+            double KP = 2;
             double KI = 0;  //.001
             double KD = 0;  //.2
             double probational=0 ;
@@ -927,5 +1087,143 @@ public class TestPID extends LinearOpMode {
                     }
                 });
     }
+
+//
+//    public  void spin_anti_clock_wise_with_gyro(DcMotor left_back_motor,DcMotor left_front_motor ,DcMotor right_back_motor, DcMotor right_front_motor
+//                                                ,double target_angel){
+//
+//
+//
+//        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//
+//        double gyro_start = gyro_angel;
+//
+//            if (gyro_start >= 0) {
+//
+//                if (gyro_start + target_angel <= 180) {
+//
+//                    while ((gyro_angel < (gyro_start + target_angel)) && (gyro_angel >= 0)) {
+//                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'A');
+//                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//                        telemetry.update();
+//
+//                    }
+//                    for (int j = 0; j < 1000; ++j) {
+//
+//                    }
+//                    while ((gyro_angel > (gyro_start + target_angel)) && (gyro_angel >= 0)) {
+//                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'C');
+//                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//                        telemetry.update();
+//
+//                    }
+//
+//                } else if (gyro_start + target_angel > 180) {
+//
+//                    double moven_angels = 180 - gyro_start;
+//                    double remaining_angels = target_angel - moven_angels;
+//                    double new_target_angel = -180 + remaining_angels;
+//
+//
+//                    while ((gyro_angel < 180) && (gyro_angel >= 0)) {
+//                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'A');
+//                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//                        telemetry.update();
+//
+//                    }
+//                    for (int j = 0; j < 1000; ++j) {
+//
+//                    }
+//                    while ((gyro_angel > 180) && (gyro_angel >= 0)) {
+//                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'C');
+//                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//                        telemetry.update();
+//
+//                    }
+//
+//
+//                    while ((gyro_angel < new_target_angel) && (gyro_angel <= 0)) {
+//                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'A');
+//                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//                        telemetry.update();
+//
+//                    }
+//                    for (int j = 0; j < 1000; ++j) {
+//
+//                    }
+//                    while ((gyro_angel > new_target_angel) && (gyro_angel <= 0)) {
+//                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'C');
+//                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//                        telemetry.update();
+//
+//
+//                    }
+//                }
+//            } else if (gyro_start < 0) {
+//
+//                if (gyro_start + target_angel <= 0) {
+//
+//                    while ((gyro_angel < (gyro_start + target_angel)) && (gyro_angel <= 0)) {
+//                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'A');
+//                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//                        telemetry.update();
+//
+//                    }
+//                    for (int j = 0; j < 1000; ++j) {
+//
+//                    }
+//                    while ((gyro_angel > (gyro_start + target_angel)) && (gyro_angel <= 0)) {
+//                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'C');
+//                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//                        telemetry.update();
+//
+//                    }
+//
+//
+//                } else if (gyro_start + target_angel > 0) {
+//
+//                    double moven_angels = -gyro_start;
+//                    double remaining_angels = target_angel - moven_angels;
+//                    double new_target_angel = remaining_angels;
+//
+//
+//                    while ((gyro_angel < 0) && (gyro_angel <= 0)) {
+//                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'A');
+//                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//                        telemetry.update();
+//
+//                    }
+//                    for (int j = 0; j < 1000; ++j) {
+//
+//                    }
+//                    while ((gyro_angel > 0) && (gyro_angel <= 0)) {
+//                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'C');
+//                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//                        telemetry.update();
+//
+//                    }
+//
+//
+//                    while ((gyro_angel < new_target_angel) && (gyro_angel >= 0)) {
+//                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'A');
+//                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//                        telemetry.update();
+//
+//                    }
+//                    for (int j = 0; j < 1000; ++j) {
+//
+//                    }
+//                    while ((gyro_angel > new_target_angel) && (gyro_angel >= 0)) {
+//                        helper_class_object.spin_without_encoder(left_back_motor, left_front_motor, right_back_motor, right_front_motor, test_power, 'C');
+//                        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//                        telemetry.update();
+//
+//                    }
+//
+//                }
+//            }
+//
+//
+//    }
 
 }
