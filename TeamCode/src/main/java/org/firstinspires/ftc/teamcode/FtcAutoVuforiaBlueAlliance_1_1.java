@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static android.os.SystemClock.sleep;
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
@@ -57,8 +58,8 @@ public class FtcAutoVuforiaBlueAlliance_1_1 extends LinearOpMode{
     private TouchSensor min_end_stop;
     DigitalChannel max_end_stop;
 
-    double move_power = 75;
-    double side_power = 75;
+    double move_power = 56;
+    double side_power = 56;
     double arm_power = 100;
     double stop_power = 0;
     int flag=0;
@@ -367,8 +368,8 @@ public class FtcAutoVuforiaBlueAlliance_1_1 extends LinearOpMode{
             sleep(1000);
 
         }
-        if (arm_servo.getPosition() != 0) {
-            arm_servo.setPosition(0);
+        if (arm_servo.getPosition() != .2) {
+            arm_servo.setPosition(0.2);
             sleep(1000);
 
         }
@@ -382,7 +383,7 @@ public class FtcAutoVuforiaBlueAlliance_1_1 extends LinearOpMode{
 
         waitForStart();
 
-//while (opModeIsActive()) {
+while (opModeIsActive()) {
     targetVisible = false;
 
 
@@ -391,7 +392,7 @@ public class FtcAutoVuforiaBlueAlliance_1_1 extends LinearOpMode{
      * اتحرك و اقف قدام رابع ستون
      * */
 
-    move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 37, move_power, false);
+    move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 43, move_power, false);
     sleep(1000);
 
 
@@ -425,31 +426,40 @@ public class FtcAutoVuforiaBlueAlliance_1_1 extends LinearOpMode{
         move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 20, -move_power, false);
 
         //اتحرك لحد الازرق
-        move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, BLUE_COLOR, -70, false);
+//        move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, RED_COLOR, -50, false);
+        move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 85, -side_power, false);
 
         //ارمى الستون
         gripper_servo.setPosition(1);
 
-//            ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-//            //اتحرك يمين لحد اول ستون
-//            // انا هكتب مسافه عشوائيه وانتوا ابقوا جربوا
-//            move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,100,side_power, false);
-//            ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-//        //قدام
-//        move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 25, move_power, false);
-//
-//        //امسك بالجريبر
-//        gripper_servo.setPosition(0.0);
-//        sleep(500);
-//
-//        //ارجع لورا
-//        move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 30, -move_power, false);
-//
+            ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+            //اتحرك يمين لحد اول ستون
+            // انا هكتب مسافه عشوائيه وانتوا ابقوا جربوا
+            move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,123,side_power, false);
+            ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+        arm_servo.setPosition(0);
+
+        //قدام
+        move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 25, move_power, false);
+
+        //امسك بالجريبر
+        gripper_servo.setPosition(0.0);
+        sleep(500);
+
+        //ارجع لورا
+        move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 30, -move_power, false);
+
 //        //اتحرك لحد الازرق
-//        move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, BLUE_COLOR, -70, false);
-//
-//            while (opModeIsActive());
-//
+//        move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, RED_COLOR, -100, false);
+
+        move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,127,-side_power, false);
+
+        //ارمى الستون
+        gripper_servo.setPosition(1);
+
+            while (opModeIsActive());
+
 
     } else {
 
@@ -463,7 +473,7 @@ public class FtcAutoVuforiaBlueAlliance_1_1 extends LinearOpMode{
          * استنى ثانيه
          */
 
-        move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 15, -side_power, false);
+        move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 15, -move_power, false);
         sleep(1000);
 
         for (VuforiaTrackable trackable_2 : allTrackables) {
@@ -495,16 +505,17 @@ public class FtcAutoVuforiaBlueAlliance_1_1 extends LinearOpMode{
             move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 25, -move_power, false);
 
             //اتحرك لحد الازرق
-            move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, BLUE_COLOR, -70, false);
+//            move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, RED_COLOR, -50, false);
+            move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 75, -side_power, false);
 
             //ارمى الستون
             gripper_servo.setPosition(1);
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;
+            ;;;;;;;;;;;;;;
             //اتحرك يمين لحد تانى ستون
             // انا هكتب مسافه عشوائيه وانتوا ابقوا جربوا
-            move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 125, side_power, false);
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
+            move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 117, side_power, false);
+            ;;;;;;;;;;;;;;;
             //قدام
             move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 25, move_power, false);
 
@@ -516,9 +527,13 @@ public class FtcAutoVuforiaBlueAlliance_1_1 extends LinearOpMode{
             move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 30, -move_power, false);
 
             //اتحرك لحد الازرق
-            move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, BLUE_COLOR, -70, false);
+//            move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, RED_COLOR, -100, false);
+            move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 120, -side_power, false);
 
-//            while (opModeIsActive());
+            //ارمى الستون
+            gripper_servo.setPosition(1);
+
+            while (opModeIsActive());
 
 
         } else {
@@ -532,8 +547,8 @@ public class FtcAutoVuforiaBlueAlliance_1_1 extends LinearOpMode{
                  *اتحرك شمال شويه واقف قدام سادس ستون
                  * */
 
-                //شمال لحد قدام سادس ستون
-                move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 3, -side_power, false);
+            //شمال لحد قدام سادس ستون
+            move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 6, -side_power, false);
 
             //قدام
             move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 15, move_power, false);
@@ -546,7 +561,8 @@ public class FtcAutoVuforiaBlueAlliance_1_1 extends LinearOpMode{
             move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 25, -move_power, false);
 
             //اتحرك لحد الازرق
-            move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, BLUE_COLOR, -70, false);
+//            move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, RED_COLOR, -50, false);
+            move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 60, -side_power, false);
 
             //ارمى الستون
             gripper_servo.setPosition(1);
@@ -554,8 +570,9 @@ public class FtcAutoVuforiaBlueAlliance_1_1 extends LinearOpMode{
             ;;;;;;;;;;;;;;;;;;;;;;;;;;
             //اتحرك يمين لحد تانى ستون
             // انا هكتب مسافه عشوائيه وانتوا ابقوا جربوا
-            move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 120, side_power, false);
+            move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 103, side_power, false);
             ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
             //قدام
             move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 25, move_power, false);
 
@@ -567,15 +584,19 @@ public class FtcAutoVuforiaBlueAlliance_1_1 extends LinearOpMode{
             move_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 30, -move_power, false);
 
             //اتحرك لحد الازرق
-            move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, BLUE_COLOR, -70, false);
+//            move_side_with_pid_with_color(left_back_motor, left_front_motor, right_back_motor, right_front_motor, RED_COLOR, -100, false);
+            move_side_with_pid(left_back_motor, left_front_motor, right_back_motor, right_front_motor, 105, -side_power, false);
 
-//            while (opModeIsActive());
+            //ارمى الستون
+            gripper_servo.setPosition(1);
+
+            while (opModeIsActive());
 
 
-        }
+                }
             }
 
-//        }
+        }
 
 
     }

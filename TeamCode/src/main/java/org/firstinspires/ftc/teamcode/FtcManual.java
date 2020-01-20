@@ -141,17 +141,13 @@ public class FtcManual extends OpMode {
             sleep(1000);
 
         }
-        if (arm_servo.getPosition() != 0) {
-            arm_servo.setPosition(0);
+        if (arm_servo.getPosition() != .2) {
+            arm_servo.setPosition(0.2);
             sleep(1000);
 
         }
 
-        if (left_foundation_servo.getPosition() != .25) {
-            left_foundation_servo.setPosition(.25);
-            sleep(1000);
 
-        }
     }
 
 
@@ -162,7 +158,11 @@ public class FtcManual extends OpMode {
 
 
         telemetry.addData("Status", "start");
+        if (left_foundation_servo.getPosition() != .25) {
+            left_foundation_servo.setPosition(.25);
+            sleep(1000);
 
+        }
     }
 
 
@@ -174,7 +174,7 @@ public class FtcManual extends OpMode {
         telemetry.update();
 
 
-        if (gamepad1.right_bumper && gamepad1.left_bumper) {
+     /*   if (gamepad1.right_bumper && gamepad1.left_bumper) {
             move_power = 90;
             diagonal_power = 90;
             side_power = 90;
@@ -182,29 +182,29 @@ public class FtcManual extends OpMode {
             arm_power = 25;
 
             test_power = 50;
-        } else if (gamepad1.right_bumper) {
+        } else*/ if (gamepad1.right_bumper) {
 
-            move_power = 80;
-            diagonal_power = 80;
-            side_power = 80;
-            spin_power = 75;
-            arm_power = 25;
+            move_power = 100;
+            diagonal_power = 100;
+            side_power = 100;
+            spin_power = 100;
+            arm_power = 50;
 
             test_power = 20;
 
 
         } else {
 
-            move_power = 60;
-            diagonal_power = 60;
-            side_power = 60;
-            spin_power = 40;
+            move_power = 75;
+            diagonal_power = 75;
+            side_power = 75;
+            spin_power = 50;
             arm_power = 25;
 
             test_power = 15;
         }
 
-/*
+
         if (gamepad1.dpad_up && gamepad1.dpad_right) {
 
             helper_class_object.move_diagonal_without_encoder(left_back_motor, left_front_motor,
@@ -221,7 +221,7 @@ public class FtcManual extends OpMode {
 
             helper_class_object.move_diagonal_without_encoder(left_back_motor, left_front_motor,
                     right_back_motor, right_front_motor, -move_power, 'R');
-        } else */if (gamepad1.dpad_up) {
+        } else if (gamepad1.dpad_up) {
 
             //move forward
             helper_class_object.move_without_encoder(left_back_motor, left_front_motor,
@@ -320,8 +320,8 @@ public class FtcManual extends OpMode {
 
         if (gamepad2.b) {
 
-            if (arm_servo.getPosition() != 0) {
-                arm_servo.setPosition(0);
+            if (arm_servo.getPosition() != .2) {
+                arm_servo.setPosition(0.2);
             }
         } else if (gamepad2.x) {
             

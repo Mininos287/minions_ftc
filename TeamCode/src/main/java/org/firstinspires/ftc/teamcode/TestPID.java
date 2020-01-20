@@ -391,30 +391,34 @@ public class TestPID extends LinearOpMode {
             }
 
             if (gamepad1.dpad_up){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,78,move_power,false);
+                move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,78,move_power,false);
 
             }else if(gamepad1.dpad_down){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,78,-move_power,false);
+                move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,78,-move_power,false);
 
             }else  if(gamepad1.dpad_right){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,move_power,false);
+                move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,move_power,false);
 
             }else if(gamepad1.dpad_left){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,-move_power,false);
+                move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,-move_power,false);
 
             }
 
+if(gamepad1.y){
+    move_side_with_pid_with_color(left_back_motor,left_front_motor,right_back_motor,right_front_motor,10,55,false);
+}
+
             if (gamepad2.dpad_up){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,78,move_power,true);
+                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,78,move_power,false);
 
             }else if(gamepad2.dpad_down){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,78,-move_power,true);
+                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,78,-move_power,false);
 
             }else  if(gamepad2.dpad_right){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,move_power,true);
+                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,move_power,false);
 
             }else if(gamepad2.dpad_left){
-                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,-move_power,true);
+                move_side_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,-move_power,false);
 
             }
         }
