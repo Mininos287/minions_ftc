@@ -343,16 +343,16 @@ public class pid extends LinearOpMode{
 while (opModeIsActive()) {
 
             if (gamepad1.dpad_up) {
-                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,50,100,4,true,true);
+                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,50,100,4,true,false);
 
              } else if (gamepad1.dpad_down) {
-                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,50,-100,4,true,true);
+                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,50,-100,4,true,false);
 
             } else if (gamepad1.dpad_right) {
-                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,100,3,true,true);
+                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,100,3,true,false);
 
             } else if (gamepad1.dpad_left) {
-                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,-100,3,true,true);
+                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,-100,3,true,false);
 
             }
 
@@ -541,14 +541,26 @@ public  void acc_move_deacc_with_pid(DcMotor left_back_motor, DcMotor left_front
 
 //            sleep(1);
         }else if(power == 0){
-            left_back_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            if (berak_at_end == true){
+                left_back_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            left_front_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                left_front_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            right_back_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                right_back_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            right_front_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                right_front_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+            }else{
+                left_back_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+                left_front_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+                right_back_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+                right_front_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+
+            }
             left_back_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
             left_front_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
             right_back_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
