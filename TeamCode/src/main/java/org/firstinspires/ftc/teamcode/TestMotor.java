@@ -24,7 +24,10 @@ public class TestMotor extends OpMode {
 
     }else{
             left_back_motor.setPower(0);
+
+
         }
+
 }
 
 }

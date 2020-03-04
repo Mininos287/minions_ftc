@@ -35,7 +35,8 @@ public class FtcManual extends OpMode {
     private DcMotor right_back_motor = null;
     private DcMotor right_front_motor = null;
 
-    private DcMotor arm_motor = null;
+    private DcMotor arm_up_motor = null;
+    private DcMotor arm_down_motor = null;
 
     Servo right_foundation_servo = null;
     Servo left_foundation_servo = null;
@@ -43,7 +44,7 @@ public class FtcManual extends OpMode {
     Servo gripper_servo = null;
     private ModernRoboticsI2cColorSensor color_sensor = null;
 
-    private TouchSensor min_end_stop;
+    private DigitalChannel min_end_stop;
     DigitalChannel max_end_stop;
 
     double move_power = 0;
@@ -75,8 +76,10 @@ public class FtcManual extends OpMode {
         right_back_motor = hardwareMap.get(DcMotor.class, "right_back_motor");
         right_front_motor = hardwareMap.get(DcMotor.class, "right_front_motor");
 
-        arm_motor = hardwareMap.get(DcMotor.class, "arm_motor");
-        arm_motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        arm_up_motor = hardwareMap.get(DcMotor.class, "arm_up_motor");
+        arm_up_motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        arm_down_motor = hardwareMap.get(DcMotor.class, "arm_down_motor");
+        arm_down_motor.setDirection(DcMotorSimple.Direction.FORWARD);
 
 //        right_foundation_servo = hardwareMap.get(Servo.class, "right_foundation_servo");
         left_foundation_servo = hardwareMap.get(Servo.class, "left_foundation_servo");
@@ -84,7 +87,7 @@ public class FtcManual extends OpMode {
         gripper_servo = hardwareMap.get(Servo.class, "gripper_servo");
 
 
-        min_end_stop = hardwareMap.get(TouchSensor.class, "min_end_stop");
+        min_end_stop = hardwareMap.get(DigitalChannel.class, "min_end_stop");
 
         max_end_stop = hardwareMap.get(DigitalChannel.class, "max_end_stop");
         max_end_stop.setMode(DigitalChannel.Mode.INPUT);
@@ -296,23 +299,28 @@ public class FtcManual extends OpMode {
 
         if (gamepad2.dpad_up) {
             if (max_end_stop.getState() == true) {
-                helper_class_object.move_arm_without_encoder(arm_motor, arm_power);
+                helper_class_object.move_arm_without_encoder(arm_up_motor, arm_power);
+                helper_class_object.move_arm_without_encoder(arm_down_motor, arm_power);
+
 
             } else {
-                helper_class_object.move_arm_without_encoder(arm_motor, stop_power);
+                helper_class_object.move_arm_without_encoder(arm_up_motor, stop_power);
+                helper_class_object.move_arm_without_encoder(arm_down_motor, stop_power);
 
             }
         } else if (gamepad2.dpad_down) {
-            if (!min_end_stop.isPressed()) {
-                helper_class_object.move_arm_without_encoder(arm_motor, -arm_power);
-
+            if (!min_end_stop.getState() == true) {
+                helper_class_object.move_arm_without_encoder(arm_up_motor, -arm_power);
+                helper_class_object.move_arm_without_encoder(arm_down_motor, -arm_power);
             } else {
-                helper_class_object.move_arm_without_encoder(arm_motor, stop_power);
+                helper_class_object.move_arm_without_encoder(arm_up_motor, stop_power);
+                helper_class_object.move_arm_without_encoder(arm_down_motor, stop_power);
 
             }
 
         } else {
-            helper_class_object.move_arm_without_encoder(arm_motor, stop_power);
+            helper_class_object.move_arm_without_encoder(arm_up_motor, stop_power);
+            helper_class_object.move_arm_without_encoder(arm_down_motor, stop_power);
 
         }
 

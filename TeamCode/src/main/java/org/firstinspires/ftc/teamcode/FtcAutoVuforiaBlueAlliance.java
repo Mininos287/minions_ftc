@@ -40,9 +40,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
+@Disabled                         // Comment this out to add to the opmode list
 
 @Autonomous(name="FtcAutoVuforiaBlueAlliance" , group = "FTC")
-@Disabled                         // Comment this out to add to the opmode list
 
 public class FtcAutoVuforiaBlueAlliance extends  LinearOpMode{
 

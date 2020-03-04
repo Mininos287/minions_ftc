@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
+@Disabled
 
 @TeleOp(name = "ahmed tarek",group = "FTC")
 public class test_forward extends OpMode {
