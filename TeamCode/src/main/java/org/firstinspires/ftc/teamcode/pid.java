@@ -343,43 +343,78 @@ public class pid extends LinearOpMode{
 while (opModeIsActive()) {
 
             if (gamepad1.dpad_up) {
-                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,50,100,4,true,false);
+                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,5 ,100,5,true,false);
 
              } else if (gamepad1.dpad_down) {
-                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,50,-100,4,true,false);
+                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,5,-100,5,true,false);
 
-            } else if (gamepad1.dpad_right) {
-                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,100,3,true,false);
+            }  else if (gamepad1.b) {
+                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,5,100,5,true,false);
 
-            } else if (gamepad1.dpad_left) {
-                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,-100,3,true,false);
-
+            } else if (gamepad1.x) {
+                acc_move_deacc_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,5,-100,5,true,false);
             }
 
 
         }
 
     }
+//
+//public  void acc_move_deacc_with_pid(DcMotor left_back_motor, DcMotor left_front_motor, DcMotor right_back_motor,
+//                                     DcMotor right_front_motor, double distance , double power,int num_of_stages ,boolean read_gyro_angel,boolean berak_at_end){
+//
+//        for(int stage =1 ; stage <= num_of_stages ; ++stage){
+//            if(stage == 1){
+//                move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
+//                distance/num_of_stages ,power/num_of_stages,read_gyro_angel,false);
+//            }else if(stage < num_of_stages){
+//                move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
+//                        distance/num_of_stages ,((power/num_of_stages)*(stage)),true,false);
+//            }else {
+//                move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
+//                        distance/num_of_stages ,power,true,false);
+//            }
+//        }
+//
+//        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
+//                0 ,0,true,berak_at_end);
+//}
 
-public  void acc_move_deacc_with_pid(DcMotor left_back_motor, DcMotor left_front_motor, DcMotor right_back_motor,
+
+    public  void acc_move_deacc_with_pid(DcMotor left_back_motor, DcMotor left_front_motor, DcMotor right_back_motor,
                                      DcMotor right_front_motor, double distance , double power,int num_of_stages ,boolean read_gyro_angel,boolean berak_at_end){
 
-        for(int stage =1 ; stage <= num_of_stages ; ++stage){
+        for(int stage =1 ; stage <= num_of_stages ; stage++){
             if(stage == 1){
                 move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
-                distance/num_of_stages ,power/num_of_stages,read_gyro_angel,false);
-            }else if(stage < num_of_stages){
+                        distance/num_of_stages ,power/num_of_stages,read_gyro_angel,false);
+            }else if(stage ==2){
                 move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
-                        distance/num_of_stages ,((power/num_of_stages)*(stage)),true,false);
-            }else {
+                        distance/num_of_stages ,3*power/num_of_stages,true,false);
+            }
+            else if (stage==3)
+            {
                 move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
                         distance/num_of_stages ,power,true,false);
             }
+            else if (stage==4)
+            {
+                move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
+                        distance/num_of_stages ,3*power/num_of_stages,true,false);
+            }
+            else if (stage==5)
+            {
+                move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
+                        distance/num_of_stages ,power/num_of_stages,true,false);
+            }
+
         }
 
         move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,
                 0 ,0,true,berak_at_end);
 }
+
+
     public void move_with_pid(DcMotor left_back_motor, DcMotor left_front_motor, DcMotor right_back_motor,
                               DcMotor right_front_motor, double distance , double power,boolean read_gyro_angel,boolean berak_at_end) {
 
@@ -415,7 +450,7 @@ public  void acc_move_deacc_with_pid(DcMotor left_back_motor, DcMotor left_front
             int right_front_motor_target_ticks = right_front_motor.getCurrentPosition() + helper_class_object.cm_to_ticks(distance);
             double error = 0 ;
             double last_error = 0;
-            double KP = 1.7;
+            double KP = 1.65;
             double KI = 0;  //.001
             double KD = 0;  //.2
             double probational=0 ;
@@ -439,9 +474,7 @@ public  void acc_move_deacc_with_pid(DcMotor left_back_motor, DcMotor left_front
                 right_front_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(right_power),-100,100));
                 sleep(1);
                 last_error = error ;
-                telemetry.addData("LEFT_POWER and RIGHT_POWER","%d %d",
-                        left_back_motor.getCurrentPosition(),right_back_motor.getCurrentPosition());
-                telemetry.update();
+
             }
 //            if (berak_at_end == true){
 //                left_back_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -482,7 +515,7 @@ public  void acc_move_deacc_with_pid(DcMotor left_back_motor, DcMotor left_front
             int right_front_motor_target_ticks = right_front_motor.getCurrentPosition() - helper_class_object.cm_to_ticks(distance);
             double error = 0 ;
             double last_error = 0;
-            double KP = 3.51;
+            double KP = 1.65;
             double KI = 0;  //.001
             double KD = 0;  //.2
             double probational=0 ;
@@ -506,9 +539,7 @@ public  void acc_move_deacc_with_pid(DcMotor left_back_motor, DcMotor left_front
                 right_front_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(right_power),-100,100));
                 sleep(1);
                 last_error = error ;
-                telemetry.addData("LEFT_POWER and RIGHT_POWER","%d %d",
-                        left_back_motor.getCurrentPosition(),right_back_motor.getCurrentPosition());
-                telemetry.update();
+
             }
 
 //            if (berak_at_end == true){
@@ -567,6 +598,10 @@ public  void acc_move_deacc_with_pid(DcMotor left_back_motor, DcMotor left_front
             right_front_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
         }
 
+        telemetry.addData("DIFF in Angle = ","%f",
+                gyro_angel-gyro_start);
+        telemetry.update();
+        sleep(2000);
     }
 
 
@@ -574,6 +609,7 @@ public  void acc_move_deacc_with_pid(DcMotor left_back_motor, DcMotor left_front
 
     public void move_side_with_pid(DcMotor left_back_motor,DcMotor left_front_motor,
                                    DcMotor right_back_motor,DcMotor right_front_motor,double distance , double power,boolean read_gyro_angel){
+
         left_back_motor.setDirection(DcMotor.Direction.REVERSE);
         left_front_motor.setDirection(DcMotor.Direction.FORWARD);
         right_back_motor.setDirection(DcMotor.Direction.REVERSE);
