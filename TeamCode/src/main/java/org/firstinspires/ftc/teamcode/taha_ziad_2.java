@@ -33,9 +33,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
-@Autonomous(name = "test_pid_arab",group = "Ftc")
+@Autonomous(name = "taha_zeiad",group = "Ftc")
 
-public class taha_ziad extends LinearOpMode{
+public class taha_ziad_2 extends LinearOpMode{
 
     private DcMotor left_back_motor = null;
     private DcMotor left_front_motor = null;
@@ -373,20 +373,45 @@ public class taha_ziad extends LinearOpMode{
 
 while (opModeIsActive()) {
     if (gamepad1.dpad_up){
-        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,50,100,true);
-    }
-    else if (gamepad1.dpad_left){
         move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,100,true);
     }
-    if (gamepad1.dpad_down){
-        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,50,-100,true);
+    else if (gamepad1.dpad_left){
+        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,10,100,true);
+    }
+    else if (gamepad1.dpad_down){
+        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,5,100,true);
     }
     else if (gamepad1.dpad_right){
-        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,20,-100,true);
+        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,4.5,100,true);
   }
+    else if (gamepad1.y){
+        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,4,100,true);
+    }
+    else if (gamepad1.b){
+        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,3.5,100,true);
+    }
+    else if (gamepad1.a){
+        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,3,100,true);
+    }
+    else if (gamepad1.x){
+        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,2.5,100,true);
+    }
+    else if (gamepad1.left_bumper){
+        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,2,100,true);
+    }
+    else if (gamepad1.left_trigger==1){
+        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,1.5,100,true);
+    }
+    else if (gamepad1.right_bumper){
+        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,1,100,true);
+    }
+    else if (gamepad1.right_trigger==1){
+        move_with_pid(left_back_motor,left_front_motor,right_back_motor,right_front_motor,0.5,100,true);
+    }
 
 
-        }
+
+}
     }
 
 
@@ -431,39 +456,82 @@ while (opModeIsActive()) {
             int right_front_motor_target_ticks = right_front_motor.getCurrentPosition() + helper_class_object.cm_to_ticks(distance);
             double error = 0 ;
             double last_error = 0;
-            double KP = 1.7;
+            double KP = 5;
             double KI = 0;  //.001
             double KD = 0;  //.2
             double probational=0 ;
             double derivative=0 ;
             double integral=0 ;
-            int accconst = 50/left_back_motor_target_ticks;
+            double accconst = (80*5)/((double)left_back_motor_target_ticks);
+            double leftpowerchange = 0;
+            double rightpowerchange= 0;
+            double leftpoweracc=0;
+            double rightpoweracc=0;
             while ((left_back_motor.getCurrentPosition() < left_back_motor_target_ticks) &&
                     (left_front_motor.getCurrentPosition() < left_front_motor_target_ticks)
                     && (right_back_motor.getCurrentPosition() < right_back_motor_target_ticks) &&
-                    (right_front_motor.getCurrentPosition() < right_front_motor_target_ticks))
+                    (right_front_motor.getCurrentPosition() < right_front_motor_target_ticks)&& opModeIsActive())
             {
                 imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
                 error= gyro_angel - gyro_start;
                 probational = error ;
                 integral = integral + error ;
                 derivative = error - last_error;
-                left_power = power + ( (probational * KP ) + (integral*KI) + (derivative*KD) ) ;
-                right_power = power - ( (probational * KP ) + (integral*KI) + (derivative*KD) ) ;
+
 
                 if( (left_back_motor.getCurrentPosition() < (left_back_motor_target_ticks)/5) &&
                         (left_front_motor.getCurrentPosition() < (left_front_motor_target_ticks)/5)
                         && (right_back_motor.getCurrentPosition() < (right_back_motor_target_ticks)/5) &&
                         (right_front_motor.getCurrentPosition() < (right_front_motor_target_ticks)/5) ){
+                    leftpowerchange=accconst*left_back_motor.getCurrentPosition();
+                    rightpowerchange=right_back_motor.getCurrentPosition()*accconst;
+                    leftpoweracc=20+leftpowerchange;
+                    rightpoweracc=20+rightpowerchange;
 
-                    left_back_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(50+(left_back_motor.getCurrentPosition()*accconst)),-100,100));
-                    left_front_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(50+(left_front_motor.getCurrentPosition()*accconst)),-100,100));
-                    right_back_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(50+(right_back_motor.getCurrentPosition()*accconst)),-100,100));
-                    right_front_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(50+(right_back_motor.getCurrentPosition()*accconst)),-100,100));
+                    left_power = leftpoweracc + ( (probational * KP ) + (integral*KI) + (derivative*KD) ) ;
+                    right_power = rightpoweracc - ( (probational * KP ) + (integral*KI) + (derivative*KD) ) ;
 
+
+                    left_back_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(left_power),-100,100));
+                    left_front_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(left_power),-100,100));
+                    right_back_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(right_power),-100,100));
+                    right_front_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(right_power),-100,100));
+                    telemetry.addData("left current and left target","%d %d",
+                            left_back_motor.getCurrentPosition(),left_back_motor_target_ticks/5);
+                    telemetry.addData("leftpoweracdc","  %f ",leftpoweracc);
+                    telemetry.addData("rightpoweracdc","  %f ",rightpoweracc);
+                    telemetry.update();
 
                 }
+               else if((left_back_motor.getCurrentPosition() > (left_back_motor_target_ticks*4)/5) &&
+                        (left_front_motor.getCurrentPosition() >(left_front_motor_target_ticks*4)/5)
+                        && (right_back_motor.getCurrentPosition() > (right_back_motor_target_ticks*4)/5) &&
+                        (right_front_motor.getCurrentPosition() > (right_front_motor_target_ticks*4)/5)){
+                    leftpowerchange=accconst*(left_back_motor_target_ticks-left_back_motor.getCurrentPosition());
+                    rightpowerchange=(right_back_motor_target_ticks-right_back_motor.getCurrentPosition())*accconst;
+                    leftpoweracc=20+leftpowerchange;
+                    rightpoweracc=20+rightpowerchange;
+
+                    left_power = leftpoweracc + ( (probational * KP ) + (integral*KI) + (derivative*KD) ) ;
+                    right_power = rightpoweracc - ( (probational * KP ) + (integral*KI) + (derivative*KD) ) ;
+
+
+                    left_back_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(left_power),-100,100));
+                    left_front_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(left_power),-100,100));
+                    right_back_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(right_power),-100,100));
+                    right_front_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(right_power),-100,100));
+                    telemetry.addData("left current and left target","%d %d",
+                            left_back_motor.getCurrentPosition(),left_back_motor_target_ticks-left_back_motor.getCurrentPosition());
+                    telemetry.addData("leftpoweracdc","  %f ",leftpowerchange);
+                    telemetry.addData("rightpoweracdc","  %f ",rightpowerchange);
+                    telemetry.update();
+                }
                 else{
+
+                    left_power = power + ( (probational * KP ) + (integral*KI) + (derivative*KD) ) ;
+                    right_power = power - ( (probational * KP ) + (integral*KI) + (derivative*KD) ) ;
+
+
                 left_back_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(left_power),-100,100));
                 left_front_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(left_power),-100,100));
                 right_back_motor.setPower(Range.clip(helper_class_object.dc_motor_power_adapter(right_power),-100,100));
@@ -471,10 +539,16 @@ while (opModeIsActive()) {
                 }
                 sleep(1);
                 last_error = error ;
-                telemetry.addData("LEFT_POWER and RIGHT_POWER","%d %d",
-                        left_back_motor.getCurrentPosition(),right_back_motor.getCurrentPosition());
+                telemetry.addData("left current and left target","%d %d",
+                        left_back_motor.getCurrentPosition(),left_back_motor_target_ticks-left_back_motor.getCurrentPosition());
+                telemetry.addData("leftpoweracdc","  %f ",leftpowerchange);
+                telemetry.addData("rightpoweracdc","  %f ",rightpowerchange);
                 telemetry.update();
             }
+            left_back_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            left_front_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            right_back_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            right_front_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             left_back_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
             left_front_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
             right_back_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
@@ -501,7 +575,7 @@ while (opModeIsActive()) {
             while ((left_back_motor.getCurrentPosition() > left_back_motor_target_ticks) &&
                     (left_front_motor.getCurrentPosition() > left_front_motor_target_ticks)
                     && (right_back_motor.getCurrentPosition() > right_back_motor_target_ticks) &&
-                    (right_front_motor.getCurrentPosition() > right_front_motor_target_ticks))
+                    (right_front_motor.getCurrentPosition() > right_front_motor_target_ticks)&& opModeIsActive())
             {
                 imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
                 error = gyro_angel - gyro_start;
@@ -520,6 +594,10 @@ while (opModeIsActive()) {
                         left_back_motor.getCurrentPosition(),right_back_motor.getCurrentPosition());
                 telemetry.update();
             }
+            left_back_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            left_front_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            right_back_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            right_front_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             left_back_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
             left_front_motor.setPower(helper_class_object.dc_motor_power_adapter(0));
             right_back_motor.setPower(helper_class_object.dc_motor_power_adapter(0));

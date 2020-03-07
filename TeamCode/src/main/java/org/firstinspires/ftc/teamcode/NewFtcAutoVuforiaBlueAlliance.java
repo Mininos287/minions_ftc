@@ -133,7 +133,7 @@ public class NewFtcAutoVuforiaBlueAlliance extends  LinearOpMode{
     private  double num_of_trials = 0 ;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode( ) {
         left_back_motor = hardwareMap.get(DcMotor.class, "left_back_motor");
         left_front_motor = hardwareMap.get(DcMotor.class, "left_front_motor");
         right_back_motor = hardwareMap.get(DcMotor.class, "right_back_motor");

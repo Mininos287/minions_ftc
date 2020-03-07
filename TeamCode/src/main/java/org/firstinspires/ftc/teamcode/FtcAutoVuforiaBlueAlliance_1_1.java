@@ -647,7 +647,7 @@ while (opModeIsActive()) {
             while ((left_back_motor.getCurrentPosition() < left_back_motor_target_ticks) &&
                     (left_front_motor.getCurrentPosition() < left_front_motor_target_ticks)
                     && (right_back_motor.getCurrentPosition() < right_back_motor_target_ticks) &&
-                    (right_front_motor.getCurrentPosition() < right_front_motor_target_ticks))
+                    (right_front_motor.getCurrentPosition() < right_front_motor_target_ticks) && opModeIsActive())
             {
                 imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
                 error= gyro_angel - gyro_start;
