@@ -32,6 +32,8 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.vuforia.CameraDevice;
+import com.vuforia.Vuforia;
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -50,7 +52,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * is explained below.
  */
 @TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-@Disabled
+//@Disabled
 public class ConceptTensorFlowObjectDetection extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
@@ -69,7 +71,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
      * and paste it in to your code on the next line, between the double quotes.
      */
     private static final String VUFORIA_KEY =
-            " -- YOUR NEW VUFORIA KEY GOES HERE  --- ";
+            "AYtwReX/////AAABmYoVHtmyZEmSs4DBYiwrM8Q97eHe+rvhAouFjczpsGpqBeGml7GDbt3zXG3w13XiSaa3WwL++gETRyiXsgsAeyTjTdGQy8jPiZrdBk6fAZfyQ367p2cdAur+o9F94baNynVGAKh2TEvfIixpjCAiOE9rniWGY9P8ZcuXyFSoNvSYt54J+ImOFFB/pdUYjWYLYYyx+j13s4dhkvDMZl3i/Z/bouvTA8SvoTjPlhiSayDGrp/N6S0NoAzUB9ciVCsuZeVlKhfqAPO5kkpacHHXrgOCxBhHsTiZgUfa1Y6Tc2KFyXbYiL0i0ZriYO2DvOf+XT6NPdGfc+jqhHhI6324Na23xuuzcZo+NzjVX46eXz0M";
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -82,6 +84,8 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
      * Detection engine.
      */
     private TFObjectDetector tfod;
+
+
 
     @Override
     public void runOpMode() {
@@ -148,6 +152,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection = CameraDirection.BACK;
+
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
